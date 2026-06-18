@@ -27,7 +27,8 @@ try:
     _GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
     if _GEMINI_KEY:
         genai.configure(api_key=_GEMINI_KEY)
-        _gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+        _gemini_model = genai.GenerativeModel("gemini-2.5-flash")
+
         GEMINI_AVAILABLE = True
     else:
         GEMINI_AVAILABLE = False
