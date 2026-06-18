@@ -101,7 +101,7 @@
     }
   ],
   "problem_first": "Suppose you receive user data as text:\n'  Alice,25,NYC  '\n\nYou need to:\n1. Remove extra spaces\n2. Split by comma\n3. Get the name (first part)\n4. Convert to uppercase\n\nWithout string methods, this would be very complex.\nWith Python strings:\n\ndata = '  Alice,25,NYC  '\ndata = data.strip()           # 'Alice,25,NYC'\nparts = data.split(',')       # ['Alice', '25', 'NYC']\nname = parts[0].upper()       # 'ALICE'\n\nPython has 40+ built-in string methods for exactly this!",
-  "why_matters": "Strings are everywhere in programming:\n🌐 Web: parse URLs, HTML, JSON responses\n📊 Data: clean and process CSV data\n🔐 Security: validate passwords, sanitize input\n🤖 NLP: text processing, sentiment analysis\n📧 Email: parse and format messages\n\nMastering strings = mastering data processing.",
+  "why_matters": "Strings are everywhere in programming:\n🌐🌐 Web: parse URLs, HTML, JSON responses\n📊 Data: clean and process CSV data\n🔐 Security: validate passwords, sanitize input\n🤖 NLP: text processing, sentiment analysis\n📧 Email: parse and format messages\n\nMastering strings = mastering data processing.",
   "important_points": [
     "⭐ Strings are IMMUTABLE — you cannot change a character. s[0]='J' raises TypeError",
     "⭐ String methods return NEW strings — they don't modify the original",

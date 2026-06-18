@@ -627,7 +627,7 @@
       "slug": "sentiment-analyzer",
       "title": "Sentiment Analyzer",
       "icon": "&#x1F60A;",
-      "desc": "Analyze text sentiment using ML and visualize results",
+      "desc": "Analyze text sentiment using🤖 ML and visualize results",
       "tags": [
         "NLTK",
         "scikit-learn",
@@ -641,7 +641,7 @@
       "slug": "real-time-dashboard",
       "title": "Real-Time Dashboard",
       "icon": "&#x1F4CA;",
-      "desc": "Live data dashboard with WebSockets and charts",
+      "desc": "Live data dashboard with🌐 WebSockets and charts",
       "tags": [
         "Flask",
         "SocketIO",
@@ -809,7 +809,7 @@
       "slug": "ml-pipeline",
       "title": "ML Training Pipeline",
       "icon": "&#x1F9EA;",
-      "desc": "End-to-end ML pipeline with MLflow tracking",
+      "desc": "End-to-end🤖 ML pipeline with🤖 MLflow tracking",
       "tags": [
         "scikit-learn",
         "MLflow",

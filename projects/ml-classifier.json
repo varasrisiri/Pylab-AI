@@ -38,7 +38,7 @@
     {
       "num": 2,
       "title": "Build Core Features",
-      "desc": "Implement the main functionality of ML Image Classifier.",
+      "desc": "Implement the main functionality of🤖 ML Image Classifier.",
       "code": "# Start with the simplest version\n# Add features one by one\n# Test each feature before moving on",
       "hint": "Build the minimum working version first, then add features."
     },
@@ -60,7 +60,7 @@
       "num": 5,
       "title": "Push to GitHub",
       "desc": "Write README and push your project to GitHub.",
-      "code": "git add .\ngit commit -m 'feat: complete ML Image Classifier'\ngit push origin main",
+      "code": "git add .\ngit commit -m 'feat: complete🤖 ML Image Classifier'\ngit push origin main",
       "hint": "A good README makes your project stand out to recruiters!"
     }
   ],

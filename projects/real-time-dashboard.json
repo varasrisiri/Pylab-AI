@@ -3,7 +3,7 @@
   "title": "Real-Time Dashboard",
   "icon": "&#x1F4CA;",
   "level": "advanced",
-  "desc": "Live data dashboard with WebSockets and charts",
+  "desc": "Live data dashboard with🌐 WebSockets and charts",
   "time": "10-15 hours",
   "tags": [
     "Flask",
@@ -18,7 +18,7 @@
     "Chart.js",
     "Redis"
   ],
-  "what_you_build": "Live data dashboard with WebSockets and charts",
+  "what_you_build": "Live data dashboard with🌐 WebSockets and charts",
   "what_you_learn": [
     "How to use Flask in a real project",
     "Project structure and organization",

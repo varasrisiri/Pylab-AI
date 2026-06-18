@@ -69,7 +69,7 @@
     ]
   },
   "problem_first": "You need to download 5 files. Each takes 2 seconds.\n\nWithout threading (sequential):\ndownload('file1')  # 2s\ndownload('file2')  # 2s\ndownload('file3')  # 2s\n# Total: 10 seconds! 😴\n\nWith threading (parallel):\nt1 = Thread(target=download, args=('file1',))\nt2 = Thread(target=download, args=('file2',))\nt1.start(); t2.start()\n# All 5 files download simultaneously!\n# Total: ~2 seconds! ⚡",
-  "why_matters": "Threading is used for:\n🌐 Web servers: handle multiple requests simultaneously\n📥 Downloads: download multiple files at once\n🖥️ GUI apps: keep UI responsive while processing\n📊 Data: process multiple datasets in parallel",
+  "why_matters": "Threading is used for:\n🌐🌐 Web servers: handle multiple requests simultaneously\n📥 Downloads: download multiple files at once\n🖥️ GUI apps: keep UI responsive while processing\n📊 Data: process multiple datasets in parallel",
   "important_points": [
     "⭐ GIL (Global Interpreter Lock): Python threads can't run Python code truly in parallel",
     "⭐ Threading is best for I/O-bound tasks (network, file, database)",

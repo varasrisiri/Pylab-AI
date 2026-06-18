@@ -71,7 +71,7 @@
     ]
   },
   "problem_first": "Suppose you want to store marks of 50 students.\n\nWithout lists:\nmark1 = 85\nmark2 = 90\nmark3 = 78\n... (47 more variables!)\n\nHow do you find the average? You'd write:\n(mark1+mark2+mark3+...+mark50) / 50\n\nWith a list:\nmarks = [85, 90, 78, 92, 88, ...]  # all 50 in ONE variable\naverage = sum(marks) / len(marks)  # 2 lines!\n\nLists make working with collections of data simple.",
-  "why_matters": "Lists are the most used data structure in Python:\n�� Data Science: datasets are lists of records\n🌐 Web: list of users, products, orders\n🤖 ML: training data, predictions are lists\n🎮 Games: inventory, leaderboard, enemies\n📱 Apps: todo items, messages, contacts\n\nIf you master lists, you master 50% of Python data handling.",
+  "why_matters": "Lists are the most used data structure in Python:\n��📊 Data Science: datasets are lists of records\n🌐🌐 Web: list of users, products, orders\n🤖🤖 ML: training data, predictions are lists\n🎮🎮 Games: inventory, leaderboard, enemies\n📱📱 Apps: todo items, messages, contacts\n\nIf you master lists, you master 50% of Python data handling.",
   "important_points": [
     "⭐ Lists are MUTABLE — you can add, remove, and change items after creation",
     "⭐ Indexing starts at 0: lst[0]=first, lst[-1]=last",

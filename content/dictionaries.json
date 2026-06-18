@@ -70,7 +70,7 @@
     ]
   },
   "problem_first": "Suppose you want to store student information.\n\nWith a list:\nstudent = ['Alice', 25, 'A', 'NYC']\n# How do you know which index is what?\nprint(student[2])  # Is this grade or city? 🤔\n\nWith a dictionary:\nstudent = {'name':'Alice', 'age':25, 'grade':'A', 'city':'NYC'}\nprint(student['grade'])  # Crystal clear! ✅\n\nDictionaries give NAMES to your data — much more readable and maintainable.",
-  "why_matters": "Dictionaries are used everywhere:\n🌐 JSON (web APIs) is essentially a dictionary\n🗄️ Database records are dict-like structures\n🔐 Config files: settings stored as key-value pairs\n🤖 ML: feature names mapped to values\n📊 Counting: word frequency, character count\n\nJSON is the language of the web — and it's just a dictionary!",
+  "why_matters": "Dictionaries are used everywhere:\n🌐 JSON (web APIs) is essentially a dictionary\n🗄️ Database records are dict-like structures\n🔐 Config files: settings stored as key-value pairs\n🤖🤖 ML: feature names mapped to values\n📊 Counting: word frequency, character count\n\nJSON is the language of the web — and it's just a dictionary!",
   "important_points": [
     "⭐ Keys must be IMMUTABLE (strings, numbers, tuples) — lists cannot be keys",
     "⭐ Values can be ANYTHING — including lists, dicts, functions",

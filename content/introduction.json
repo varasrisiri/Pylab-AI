@@ -68,7 +68,7 @@
       }
     ]
   },
-  "problem_first": "You want to build apps, automate tasks, analyze data, or get a job in tech.\n\nBut where do you start? Which language?\n\nPython is the answer because:\n✅ Easiest syntax — reads like English\n✅ Most in-demand language (2024)\n✅ Used in Web, AI, Data Science, Automation\n✅ Huge community and libraries\n\nprint('Hello, World!')  ← Your first Python program!\n\nThat's it. One line. No semicolons, no curly braces, no complexity.",
+  "problem_first": "You want to build apps, automate tasks, analyze data, or get a job in tech.\n\nBut where do you start? Which language?\n\nPython is the answer because:\n✅ Easiest syntax — reads like English\n✅ Most in-demand language (2024)\n✅ Used in🌐 Web, AI,📊 Data Science, Automation\n✅ Huge community and libraries\n\nprint('Hello, World!')  ← Your first Python program!\n\nThat's it. One line. No semicolons, no curly braces, no complexity.",
   "why_matters": "Python is used by:\n🔬 NASA — space exploration\n🎬 Netflix — recommendation engine\n🔍 Google — search algorithms\n📊 Instagram — backend\n🤖 OpenAI — ChatGPT\n\nLearning Python opens doors to ALL of these fields.",
   "important_points": [
     "⭐ Python is INTERPRETED — runs line by line, no compilation needed",

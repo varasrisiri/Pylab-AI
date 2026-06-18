@@ -21,7 +21,7 @@ def get_db():
     conn = sqlite3.connect(DB_PATH, timeout=30, check_same_thread=False)
     return conn
 
-# â”€â”€ Gemini AI setup (optional â€” works without key, falls back to smart mock) â”€
+# ── Gemini AI setup (optional — works without key, falls back to smart mock) ─
 try:
     import google.generativeai as genai
     _GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
@@ -62,7 +62,7 @@ def init_db():
         question_id TEXT,
         question_text TEXT
     )''')
-    # Dashboard â€” projects completed by a user
+    # Dashboard — projects completed by a user
     c.execute('''CREATE TABLE IF NOT EXISTS projects_done (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id TEXT,
@@ -70,7 +70,7 @@ def init_db():
         project_title TEXT,
         completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )''')
-    # Streak / XP tracking â€” created once here, not inside route functions
+    # Streak / XP tracking — created once here, not inside route functions
     c.execute('''CREATE TABLE IF NOT EXISTS streaks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id TEXT,
@@ -78,7 +78,7 @@ def init_db():
         xp INTEGER DEFAULT 0,
         problems_solved INTEGER DEFAULT 0
     )''')
-    # Users â€” for login/register
+    # Users — for login/register
     c.execute('''CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -307,7 +307,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
-# â”€â”€ Routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Routes ──────────────────────────────────────────────────────────────────
 
 @app.route("/")
 def home():
@@ -315,7 +315,7 @@ def home():
         return redirect(url_for("login"))
     return render_template("index.html")
 
-# â”€â”€ Auth Routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Auth Routes ──────────────────────────────────────────────────────────────
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -471,7 +471,7 @@ def forgot_password():
 
 @app.route("/guest")
 def guest():
-    """Let users browse without an account â€” sets a guest session."""
+    """Let users browse without an account — sets a guest session."""
     session["user_id"] = "guest"
     return redirect(url_for("home"))
 
@@ -505,7 +505,7 @@ def profile():
     return render_template("profile.html",
         username=user[0] if user else user_id,
         email=user[1] if user else "",
-        joined=user[2][:10] if user and user[2] else "â€”",
+        joined=user[2][:10] if user and user[2] else "—",
         display_name=user[3] if user and user[3] else (user[0] if user else user_id),
         bio=user[4] if user and user[4] else "",
         topics_count=topics_count,
@@ -713,7 +713,7 @@ def notes_pdf(topic):
     return Response(html, mimetype="text/html",
                     headers={"Content-Disposition": f"inline; filename={topic}_notes.html"})
 
-# â”€â”€ API Endpoints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── API Endpoints ────────────────────────────────────────────────────────────
 
 @app.route("/api/ai-mentor", methods=["POST"])
 def ai_mentor_api():
@@ -770,7 +770,7 @@ def run_code():
     code = data.get("code", "")
     stdin_data = data.get("stdin", "")
 
-    # Security: block ALL dangerous patterns â€” no whitelisting
+    # Security: block ALL dangerous patterns — no whitelisting
     blocked_patterns = [
         r"\bimport\s+os\b", r"\bimport\s+sys\b", r"\bimport\s+subprocess\b",
         r"\bimport\s+shutil\b", r"\bimport\s+pathlib\b", r"\bimport\s+socket\b",
@@ -1457,7 +1457,7 @@ def full_progress():
 def notebook():
     return render_template("notebook.html")
 
-# â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── Helpers ──────────────────────────────────────────────────────────────────
 
 def load_topic(topic):
     path = os.path.join(BASE_DIR, "content", f"{topic}.json")
@@ -1500,7 +1500,7 @@ def generate_pdf_html(title, content, notes_data):
                 if sub.get('output'):
                     sections.append(f"<pre>Output:\n{sub.get('output','')}</pre>")
                 if sub.get('tip'):
-                    sections.append(f"<div class='tip'>ðŸ’¡ {sub.get('tip','')}</div>")
+                    sections.append(f"<div class='tip'>💡 {sub.get('tip','')}</div>")
         if content.get('edge_cases'):
             sections.append("<h2>Edge Cases</h2><ul>")
             for e in content['edge_cases']:
@@ -1550,12 +1550,12 @@ li{{margin-bottom:.5rem;}}
 </style>
 </head><body>
 <div class="no-print" style="background:#0066cc;color:#fff;padding:1rem;border-radius:8px;margin-bottom:2rem;display:flex;justify-content:space-between;align-items:center;">
-  <strong>ðŸ“„ PyLab AI Notes â€” {title}</strong>
-  <button onclick="window.print()" style="background:#fff;color:#0066cc;border:none;padding:.5rem 1.5rem;border-radius:6px;font-weight:700;cursor:pointer;">ðŸ–¨ï¸ Print / Save as PDF</button>
+  <strong>📄 PyLab AI Notes — {title}</strong>
+  <button onclick="window.print()" style="background:#fff;color:#0066cc;border:none;padding:.5rem 1.5rem;border-radius:6px;font-weight:700;cursor:pointer;">🖨️ Print / Save as PDF</button>
 </div>
 {body}
 <div style="margin-top:3rem;padding-top:1rem;border-top:2px solid #0066cc;text-align:center;color:#666;font-size:.85rem;">
-  Generated by PyLab AI â€” Learn, Experiment, Master Python â­
+  Generated by PyLab AI — Learn, Experiment, Master Python ⭐
 </div>
 </body></html>"""
 
@@ -1611,7 +1611,7 @@ def real_ai_response(code, action):
 
 def mock_ai_response(code, action):
     responses = {
-        "explain": f"""ðŸ¤– **AI Code Explanation**
+        "explain": f"""🤖 **AI Code Explanation**
 
 Here's what your code does step by step:
 
@@ -1626,9 +1626,9 @@ Here's what your code does step by step:
 
 **Key concepts used:** Variables, Control Flow, Functions
 
-ðŸ’¡ **Tip:** Understanding the flow of execution is key to mastering Python!""",
+💡 **Tip:** Understanding the flow of execution is key to mastering Python!""",
 
-        "error": f"""ðŸ” **Error Analysis**
+        "error": f"""🔍 **Error Analysis**
 
 Scanning your code for issues...
 
@@ -1640,9 +1640,9 @@ Scanning your code for issues...
 
 **Common Fix:** Run `python -m py_compile your_file.py` to check syntax errors.
 
-âœ… **Best Practice:** Use a linter like `pylint` or `flake8` for automatic error detection.""",
+✅ **Best Practice:** Use a linter like `pylint` or `flake8` for automatic error detection.""",
 
-        "hint": f"""ðŸ’¡ **Logic Hint**
+        "hint": f"""💡 **Logic Hint**
 
 Without giving away the full solution, here's how to think about this:
 
@@ -1651,11 +1651,11 @@ Without giving away the full solution, here's how to think about this:
 **Step 3:** Think about which Python structures fit best (loop? condition? function?)
 **Step 4:** Write pseudocode first, then convert to Python
 
-**Hint:** Think about the edge cases â€” what happens with empty input or extreme values?
+**Hint:** Think about the edge cases — what happens with empty input or extreme values?
 
-ðŸŽ¯ **Challenge yourself:** Can you solve it in fewer lines?""",
+🎯 **Challenge yourself:** Can you solve it in fewer lines?""",
 
-        "improve": f"""âš¡ **Code Optimization Suggestions**
+        "improve": f"""⚡ **Code Optimization Suggestions**
 
 Here's how to make your code more Pythonic:
 
@@ -1682,9 +1682,9 @@ for i, item in enumerate(my_list):
     print(i, item)
 ```
 
-ðŸš€ **Performance Tip:** Profile your code with `cProfile` to find bottlenecks!""",
+🚀 **Performance Tip:** Profile your code with `cProfile` to find bottlenecks!""",
 
-        "optimize": f"""ðŸ”¥ **Beginner â†’ Optimized Conversion**
+        "optimize": f"""🔥 **Beginner → Optimized Conversion**
 
 **Your approach (beginner style):**
 ```python
@@ -1700,12 +1700,12 @@ for i, item in enumerate(my_list):
 ```
 
 **Why this is better:**
-- âœ… Fewer lines of code
-- âœ… Better readability
-- âœ… Uses Python's built-in optimizations
-- âœ… Interview-ready code quality
+- ✅ Fewer lines of code
+- ✅ Better readability
+- ✅ Uses Python's built-in optimizations
+- ✅ Interview-ready code quality
 
-ðŸ“š **Learn more:** Study Python's built-in functions â€” they're highly optimized in C!"""
+📚 **Learn more:** Study Python's built-in functions — they're highly optimized in C!"""
     }
     return responses.get(action, responses["explain"])
 
@@ -1741,22 +1741,22 @@ def ai_answer_question(question, topic=""):
             return result
 
     # Generic answer for unknown questions
-    return f"""ðŸ¤– **PyLab AI Mentor â€” Answer**
+    return f"""🤖 **PyLab AI Mentor — Answer**
 
 **Your Question:** {question}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ðŸ’¡ **Simple Answer:**
+💡 **Simple Answer:**
 Great question! Let me break this down step by step.
 
 {get_generic_answer(question)}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
-ðŸŽ¯ **Want a deeper explanation?**
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 **Want a deeper explanation?**
 Try asking: "Explain [topic] with dry run" or "What is [concept]?"
 
-ðŸ“š **Related Topics:** Check the Learn section for full topic coverage.
+📚 **Related Topics:** Check the Learn section for full topic coverage.
 """
 
 
@@ -1772,18 +1772,18 @@ Here's how to think about it:
 3. See a simple example
 4. Practice with small problems
 
-ðŸ‘‰ Go to **Learn â†’ {topic.title()}** for the complete explanation with dry run!"""
+👉 Go to **Learn → {topic.title()}** for the complete explanation with dry run!"""
 
     if "how to" in q or "how do" in q:
         return """**Step-by-step approach:**
 
-1. ðŸ§  Understand what you want to achieve
-2. ðŸ“ Write pseudocode first (plain English)
-3. ðŸ’» Convert to Python syntax
-4. ï¿½ï¿½ Test with simple inputs
-5. âš¡ Optimize if needed
+1. 🧠 Understand what you want to achieve
+2. 📝 Write pseudocode first (plain English)
+3. 💻 Convert to Python syntax
+4. �� Test with simple inputs
+5. ⚡ Optimize if needed
 
-ðŸ’¡ **Tip:** Break the problem into smaller parts. Solve each part separately."""
+💡 **Tip:** Break the problem into smaller parts. Solve each part separately."""
 
     if "difference between" in q:
         return """**Comparison approach:**
@@ -1793,16 +1793,16 @@ When comparing two concepts, ask:
 - When do you USE each one?
 - What are the LIMITATIONS of each?
 
-ðŸ“š Check the Learn section for detailed comparisons with examples!"""
+📚 Check the Learn section for detailed comparisons with examples!"""
 
     if "error" in q or "bug" in q or "not working" in q:
         return """**Debugging approach:**
 
-1. ðŸ” Read the error message carefully â€” it tells you EXACTLY what's wrong
-2. ðŸ“ Find the line number mentioned in the error
-3. âœ… Check: indentation, spelling, missing colons, wrong types
-4. ðŸ§ª Use the **Find Errors** button above to analyze your code
-5. ðŸ’¡ Add print() statements to trace values
+1. 🔍 Read the error message carefully — it tells you EXACTLY what's wrong
+2. 📍 Find the line number mentioned in the error
+3. ✅ Check: indentation, spelling, missing colons, wrong types
+4. 🧪 Use the **Find Errors** button above to analyze your code
+5. 💡 Add print() statements to trace values
 
 **Most common Python errors:**
 - IndentationError → Wrong spaces/tabs
@@ -1823,73 +1823,72 @@ Try the **Experiment Lab** for hands-on practice."""
 
 
 def format_perfect_explanation(data, question=""):
-    return f"""ðŸ¤– **PyLab AI Mentor â€” Perfect Explanation**
+    return f"""🤖 **PyLab AI Mentor — Perfect Explanation**
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**1. ðŸ’¡ THE PROBLEM FIRST**
+**1. 💡 THE PROBLEM FIRST**
 {data["problem"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**2. ðŸ§  SIMPLE IDEA**
+**2. 🧠 SIMPLE IDEA**
 {data["simple_idea"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**3. ðŸ  REAL-LIFE EXAMPLE**
+**3. 🏠 REAL-LIFE EXAMPLE**
 {data["real_life"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**4. ðŸ§¾ SYNTAX**
+**4. 📜 SYNTAX**
 ```python
 {data["syntax"]}
 ```
 
-**5. ðŸ’» CODE EXAMPLE**
+**5. 💻 CODE EXAMPLE**
 ```python
 {data["code"]}
 ```
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**6. ðŸ” LINE-BY-LINE BREAKDOWN**
+**6. 🔍 LINE-BY-LINE BREAKDOWN**
 {data["line_by_line"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**7. ðŸ§  DRY RUN (Step-by-Step Execution)**
+**7. 🧠 DRY RUN (Step-by-Step Execution)**
 {data["dry_run"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**8. âš ï¸ COMMON MISTAKES**
+**8. ⚠️ COMMON MISTAKES**
 {data["mistakes"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**9. ðŸ§© PRACTICE QUESTIONS**
+**9. 🧩 PRACTICE QUESTIONS**
 {data["practice"]}
 
-â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+---
 
-**10. ðŸš€ WHY THIS MATTERS**
+**10. 🚀 WHY THIS MATTERS**
 {data["why_matters"]}
 """
-
-
 def ai_dry_run(code):
     """Generate a line-by-line dry run of the given code."""
     if not code.strip():
-        return "âŒ Please paste your code first, then click Dry Run."
+        return "❌ Please paste your code first, then click Dry Run."
 
     if GEMINI_AVAILABLE:
         prompt = (
-            f"You are a Python execution trace engine. Analyze the following code and write a step-by-step dry run. "
-            f"For each statement executed, write the line number, the code, and explain exactly what Python is doing "
-            f"(what variables are assigned, condition checks, outputs). "
-            f"Also show the final state of all variables at the end. Keep it structured and easy for beginners.\n\n"
+            f"You are the PyLab AI Execution Tracer. Analyze the following code and write a step-by-step dry run.\n"
+            f"For each statement executed, write the line number, code line, and explain exactly what Python is doing in 1 short sentence.\n"
+            f"Include variable states, conditional evaluations, and stdout outputs.\n"
+            f"CRITICAL: Keep explanations brief and visual using emojis. Never write long paragraphs.\n"
+            f"Also show the final state of all variables in a simple list, and conclude with a quick, fun logic challenge question based on the code!\n\n"
             f"Code:\n```python\n{code}\n```"
         )
         result = call_gemini(prompt)
@@ -1897,7 +1896,7 @@ def ai_dry_run(code):
             return result
 
     lines = code.strip().split("\n")
-    result = ["ðŸ§  **DRY RUN â€” Step-by-Step Execution**", "",
+    result = ["🧠 **DRY RUN — Step-by-Step Execution**", "",
               "I will trace through your code line by line, showing exactly what Python does:", ""]
 
     result.append("```")
@@ -1910,7 +1909,7 @@ def ai_dry_run(code):
     for i, line in enumerate(lines, 1):
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
-            result.append(f"  {i:2d} | {line[:22]:<22} | # Comment / blank line â€” skipped")
+            result.append(f"  {i:2d} | {line[:22]:<22} | # Comment / blank line — skipped")
             continue
 
         explanation = analyze_line(stripped, variables, i)
@@ -1918,24 +1917,22 @@ def ai_dry_run(code):
 
     result.append("```")
     result.append("")
-    result.append("â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”")
+    result.append("---")
     result.append("")
-    result.append("**ðŸ“Š Variable State After Execution:**")
+    result.append("**📊 Variable State After Execution:**")
     if variables:
         for var, val in variables.items():
-            result.append(f"  â€¢ `{var}` = `{val}`")
+            result.append(f"  • `{var}` = `{val}`")
     else:
-        result.append("  No variables tracked (complex code â€” run it in the Editor!)")
+        result.append("  No variables tracked (complex code — run it in the Editor!)")
 
     result.append("")
-    result.append("**ðŸ’¡ Key Observations:**")
+    result.append("**💡 Key Observations:**")
     result.append(get_code_observations(code))
     result.append("")
-    result.append("ðŸŽ¯ **Try it yourself:** Click **â–¶ Run** in the Editor to see the actual output!")
+    result.append("🎯 **Try it yourself:** Click **▶ Run** in the Editor to see the actual output!")
 
     return "\n".join(result)
-
-
 def analyze_line(line, variables, line_num):
     """Analyze a single line of Python code."""
     import re
@@ -1964,7 +1961,7 @@ def analyze_line(line, variables, line_num):
     # while loop
     if line.startswith("while "):
         cond = line.replace("while ", "").replace(":", "").strip()
-        return f"Check condition: `{cond}` â€” if True, run loop body"
+        return f"Check condition: `{cond}` — if True, run loop body"
 
     # if statement
     if line.startswith("if "):
@@ -1978,22 +1975,22 @@ def analyze_line(line, variables, line_num):
 
     # else
     if line.startswith("else:"):
-        return "All above conditions were False â€” run this block"
+        return "All above conditions were False — run this block"
 
     # def
     if line.startswith("def "):
         fname = line.replace("def ", "").split("(")[0]
-        return f"Define function `{fname}` â€” stored in memory, not executed yet"
+        return f"Define function `{fname}` — stored in memory, not executed yet"
 
     # class
     if line.startswith("class "):
         cname = line.replace("class ", "").split("(")[0].replace(":", "")
-        return f"Define class `{cname}` â€” blueprint created"
+        return f"Define class `{cname}` — blueprint created"
 
     # return
     if line.startswith("return "):
         val = line.replace("return ", "").strip()
-        return f"Return `{val}` to the caller â€” function ends here"
+        return f"Return `{val}` to the caller — function ends here"
 
     # import
     if line.startswith("import ") or line.startswith("from "):
@@ -2015,19 +2012,19 @@ def analyze_line(line, variables, line_num):
 def get_code_observations(code):
     obs = []
     if "for " in code and "range" in code:
-        obs.append("  â€¢ Uses a for loop with range() â€” iterates a fixed number of times")
+        obs.append("  • Uses a for loop with range() — iterates a fixed number of times")
     if "while " in code:
-        obs.append("  â€¢ Uses a while loop â€” runs until condition becomes False")
+        obs.append("  • Uses a while loop — runs until condition becomes False")
     if "def " in code:
-        obs.append("  â€¢ Defines a function â€” reusable block of code")
+        obs.append("  • Defines a function — reusable block of code")
     if "if " in code:
-        obs.append("  â€¢ Uses conditional logic â€” makes decisions")
+        obs.append("  • Uses conditional logic — makes decisions")
     if "return " in code:
-        obs.append("  â€¢ Function returns a value")
+        obs.append("  • Function returns a value")
     if "class " in code:
-        obs.append("  â€¢ Defines a class â€” OOP blueprint")
+        obs.append("  • Defines a class — OOP blueprint")
     if not obs:
-        obs.append("  â€¢ Simple sequential code â€” executes line by line")
+        obs.append("  • Simple sequential code — executes line by line")
     return "\n".join(obs)
 
 
@@ -2039,12 +2036,16 @@ def ai_perfect_explanation(topic):
 
     if GEMINI_AVAILABLE:
         prompt = (
-            f"You are a friendly Python tutor. Generate a comprehensive 10-step explanation for the topic '{topic}' "
-            f"following this exact Markdown format. Use emojis and clear structure:\n\n"
+            f"You are a friendly, energetic PyLab AI Python Coach. Generate a comprehensive 10-step explanation for the topic '{topic}' "
+            f"following this exact Markdown format. Use emojis and clear structure. \n"
+            f"CRITICAL FORMATTING RULES:\n"
+            f"1. Every section description MUST be extremely short, visual, and scannable.\n"
+            f"2. NO long paragraphs. Keep all explanatory paragraphs to 1-2 sentences max. Use bullet points and bold terms.\n"
+            f"3. Conclude the final section with a fun interactive challenge/quiz question for the student.\n\n"
             f"🤖 **PyLab AI Mentor — Perfect Explanation**\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"**1. 💡 THE PROBLEM FIRST**\n"
-            f"[Describe a realistic problem why we need this topic/concept. Keep it beginner friendly]\n\n"
+            f"[Describe a realistic problem why we need this topic/concept. Keep it beginner friendly, max 2 sentences]\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"**2. 🧠 SIMPLE IDEA**\n"
             f"[Explain the core concept in 1-2 simple sentences for a child]\n\n"
@@ -2062,10 +2063,10 @@ def ai_perfect_explanation(topic):
             f"```\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"**6. 🔍 LINE-BY-LINE BREAKDOWN**\n"
-            f"[Explain each line of the code example above]\n\n"
+            f"[Explain each line of the code example above, max 1 sentence per line]\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"**7. 🧠 DRY RUN (Step-by-Step Execution)**\n"
-            f"[Simulate how Python executes the code example line by line showing variable states/outputs]\n\n"
+            f"[Simulate how Python executes the code example line by line showing variable states/outputs, keep it extremely brief]\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             f"**8. ⚠️ COMMON MISTAKES**\n"
             f"[List 2-3 common syntax or logical errors with code blocks showing what NOT to do]\n\n"
@@ -2075,8 +2076,8 @@ def ai_perfect_explanation(topic):
             f"Medium: [Question]\n"
             f"Hard: [Question]\n\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            f"**10. 🚀 WHY THIS MATTERS**\n"
-            f"[Describe real-world use cases (e.g. game dev, database, web apps, machine learning)]"
+            f"**10. 🚀 WHY THIS MATTERS & CHALLENGE**\n"
+            f"[Describe real-world use cases (e.g. game dev, database, web apps, machine learning). Conclude with a fun interactive challenge/quiz question for the student]"
         )
         result = call_gemini(prompt)
         if result:
@@ -2085,43 +2086,42 @@ def ai_perfect_explanation(topic):
     return ai_answer_question(f"Explain {topic}", topic)
 
 
-# â”€â”€ Topic Knowledge Base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 TOPIC_EXPLANATIONS = {
     "loop": {
-        "problem": "Suppose you want to print numbers from 1 to 100...\nWill you write 100 print statements? ðŸ˜…\n\nprint(1)\nprint(2)\nprint(3)\n... (97 more lines)\n\nThat's crazy! There must be a better way. That's where LOOPS come in.",
+        "problem": "Suppose you want to print numbers from 1 to 100...\nWill you write 100 print statements? 😅\n\nprint(1)\nprint(2)\nprint(3)\n... (97 more lines)\n\nThat's crazy! There must be a better way. That's where LOOPS come in.",
         "simple_idea": "A loop means: **repeat something again and again automatically.**\n\nInstead of writing the same code 100 times, you write it ONCE and tell Python how many times to repeat it.",
-        "real_life": "ðŸ½ï¸ Eating breakfast EVERY morning (same action, repeated daily)\nâ° Alarm rings EVERY day at 7 AM\nðŸ“‹ Teacher takes attendance for EVERY student\nðŸ”„ Washing machine runs the SAME cycle repeatedly\n\nAll of these are loops in real life!",
+        "real_life": "🍽️ Eating breakfast EVERY morning (same action, repeated daily)\n⏰ Alarm rings EVERY day at 7 AM\n📋 Teacher takes attendance for EVERY student\n🔄 Washing machine runs the SAME cycle repeatedly\n\nAll of these are loops in real life!",
         "syntax": "# For loop\nfor i in range(1, 6):\n    print(i)\n\n# While loop\ncount = 1\nwhile count <= 5:\n    print(count)\n    count += 1",
         "code": "# Print 1 to 5 using for loop\nfor i in range(1, 6):\n    print(i)\n\n# Same using while loop\ncount = 1\nwhile count <= 5:\n    print(count)\n    count += 1",
-        "line_by_line": "`for` â†’ keyword that starts the loop\n`i` â†’ variable that holds current value (changes each time)\n`range(1, 6)` â†’ generates numbers 1, 2, 3, 4, 5 (6 is NOT included)\n`print(i)` â†’ prints the current value of i\n\nThe indented block runs for EACH value of i.",
-        "dry_run": "Iteration 1: i = 1 â†’ print(1) â†’ Output: 1\nIteration 2: i = 2 â†’ print(2) â†’ Output: 2\nIteration 3: i = 3 â†’ print(3) â†’ Output: 3\nIteration 4: i = 4 â†’ print(4) â†’ Output: 4\nIteration 5: i = 5 â†’ print(5) â†’ Output: 5\nLoop ends (range exhausted)",
-        "mistakes": "âŒ range(1, 5) gives 1,2,3,4 â€” NOT 5! Use range(1, 6) for 1 to 5\nâŒ Forgetting to increment in while loop â†’ infinite loop!\nâŒ Wrong indentation â†’ IndentationError\nâŒ Using = instead of == in while condition",
+        "line_by_line": "`for` → keyword that starts the loop\n`i` → variable that holds current value (changes each time)\n`range(1, 6)` → generates numbers 1, 2, 3, 4, 5 (6 is NOT included)\n`print(i)` → prints the current value of i\n\nThe indented block runs for EACH value of i.",
+        "dry_run": "Iteration 1: i = 1 → print(1) → Output: 1\nIteration 2: i = 2 → print(2) → Output: 2\nIteration 3: i = 3 → print(3) → Output: 3\nIteration 4: i = 4 → print(4) → Output: 4\nIteration 5: i = 5 → print(5) → Output: 5\nLoop ends (range exhausted)",
+        "mistakes": "❌ range(1, 5) gives 1,2,3,4 — NOT 5! Use range(1, 6) for 1 to 5\n❌ Forgetting to increment in while loop → infinite loop!\n❌ Wrong indentation → IndentationError\n❌ Using = instead of == in while condition",
         "practice": "Easy: Print numbers 1 to 10\nEasy: Print even numbers from 1 to 20\nMedium: Calculate sum of 1 to 100\nMedium: Print multiplication table of 7\nHard: Find all prime numbers from 1 to 100",
-        "why_matters": "Loops are used EVERYWHERE:\nðŸŽ® Games: game loop runs 60 times per second\nðŸ“Š Data: process millions of records\nðŸŒ Web: handle thousands of requests\nðŸ¤– AI: train models over millions of examples\n\nWithout loops, programming would be impossible!"
+        "why_matters": "Loops are used EVERYWHERE:\n🎮 Games: game loop runs 60 times per second\n📊 Data: process millions of records\n🌐 Web: handle thousands of requests\n🤖 AI: train models over millions of examples\n\nWithout loops, programming would be impossible!"
     },
     "function": {
-        "problem": "Suppose you need to calculate area of rectangle in 10 different places in your program...\nWill you write the same formula 10 times?\n\narea = length * width  (line 10)\narea = length * width  (line 50)\narea = length * width  (line 100)\n\nWhat if the formula changes? You'd have to update 10 places! ðŸ˜±",
-        "simple_idea": "A function is a **reusable block of code** with a name.\n\nWrite it ONCE â†’ Use it ANYWHERE â†’ Change it in ONE place.\n\nThink of it as a recipe: write the recipe once, cook it anytime!",
-        "real_life": "ðŸ• Pizza recipe: written once, used every time you make pizza\nðŸ“± Calculator app: press + button â†’ same addition function runs\nðŸ§ ATM: withdraw button â†’ same withdrawal function every time\nðŸ”‘ Login: same authentication function for every user",
+        "problem": "Suppose you need to calculate area of rectangle in 10 different places in your program...\nWill you write the same formula 10 times?\n\narea = length * width  (line 10)\narea = length * width  (line 50)\narea = length * width  (line 100)\n\nWhat if the formula changes? You'd have to update 10 places! 😱",
+        "simple_idea": "A function is a **reusable block of code** with a name.\n\nWrite it ONCE → Use it ANYWHERE → Change it in ONE place.\n\nThink of it as a recipe: write the recipe once, cook it anytime!",
+        "real_life": "🍕 Pizza recipe: written once, used every time you make pizza\n📱 Calculator app: press + button → same addition function runs\n🏧 ATM: withdraw button → same withdrawal function every time\n🔑 Login: same authentication function for every user",
         "syntax": "def function_name(parameter1, parameter2):\n    # code here\n    return result\n\n# Call it\nresult = function_name(value1, value2)",
         "code": "def calculate_area(length, width):\n    area = length * width\n    return area\n\n# Use it multiple times\nprint(calculate_area(5, 3))   # 15\nprint(calculate_area(10, 4))  # 40\nprint(calculate_area(7, 2))   # 14",
-        "line_by_line": "`def` â†’ keyword to define a function\n`calculate_area` â†’ name of the function (you choose this)\n`(length, width)` â†’ parameters (inputs the function needs)\n`area = length * width` â†’ the actual calculation\n`return area` â†’ send the result back to the caller\n\nWhen you call `calculate_area(5, 3)`: length=5, width=3",
-        "dry_run": "Call: calculate_area(5, 3)\n  â†’ length = 5, width = 3\n  â†’ area = 5 * 3 = 15\n  â†’ return 15\nResult: 15 is printed\n\nCall: calculate_area(10, 4)\n  â†’ length = 10, width = 4\n  â†’ area = 10 * 4 = 40\n  â†’ return 40\nResult: 40 is printed",
-        "mistakes": "âŒ Calling function before defining it\nâŒ Forgetting return â†’ function returns None\nâŒ Wrong number of arguments\nâŒ Using variable outside function scope\nâŒ def greet(name, msg='Hi', title): â€” non-default after default!",
+        "line_by_line": "`def` → keyword to define a function\n`calculate_area` → name of the function (you choose this)\n`(length, width)` → parameters (inputs the function needs)\n`area = length * width` → the actual calculation\n`return area` → send the result back to the caller\n\nWhen you call `calculate_area(5, 3)`: length=5, width=3",
+        "dry_run": "Call: calculate_area(5, 3)\n  → length = 5, width = 3\n  → area = 5 * 3 = 15\n  → return 15\nResult: 15 is printed\n\nCall: calculate_area(10, 4)\n  → length = 10, width = 4\n  → area = 10 * 4 = 40\n  → return 40\nResult: 40 is printed",
+        "mistakes": "❌ Calling function before defining it\n❌ Forgetting return → function returns None\n❌ Wrong number of arguments\n❌ Using variable outside function scope\n❌ def greet(name, msg='Hi', title): — non-default after default!",
         "practice": "Easy: Write a function to find square of a number\nEasy: Write a function to check even/odd\nMedium: Write a function to find factorial\nMedium: Write a function to check palindrome\nHard: Write a recursive function for Fibonacci",
-        "why_matters": "Functions are the building blocks of ALL programs:\nðŸ—ï¸ Every app is made of hundreds of functions\nðŸ”„ DRY principle: Don't Repeat Yourself\nðŸ§ª Easy to test individual pieces\nðŸ‘¥ Teams can work on different functions simultaneously"
+        "why_matters": "Functions are the building blocks of ALL programs:\n🏗️ Every app is made of hundreds of functions\n🔄 DRY principle: Don't Repeat Yourself\n🧪 Easy to test individual pieces\n👥 Teams can work on different functions simultaneously"
     },
     "list": {
-        "problem": "Suppose you want to store marks of 50 students...\nWill you create 50 variables?\n\nmark1 = 85\nmark2 = 90\nmark3 = 78\n... (47 more)\n\nAnd how will you find the average? ðŸ˜°",
-        "simple_idea": "A list is a **container that holds multiple values in one variable.**\n\nLike a shopping bag â€” one bag, many items inside!",
-        "real_life": "ðŸ›’ Shopping list: [milk, eggs, bread, butter]\nðŸ“± Contacts list: [Alice, Bob, Charlie]\nðŸŽµ Playlist: [Song1, Song2, Song3]\nðŸ“Š Student marks: [85, 90, 78, 92, 88]",
+        "problem": "Suppose you want to store marks of 50 students...\nWill you create 50 variables?\n\nmark1 = 85\nmark2 = 90\nmark3 = 78\n... (47 more)\n\nAnd how will you find the average? 😰",
+        "simple_idea": "A list is a **container that holds multiple values in one variable.**\n\nLike a shopping bag — one bag, many items inside!",
+        "real_life": "🛒 Shopping list: [milk, eggs, bread, butter]\n📱 Contacts list: [Alice, Bob, Charlie]\n🎵 Playlist: [Song1, Song2, Song3]\n📊 Student marks: [85, 90, 78, 92, 88]",
         "syntax": "# Create list\nmy_list = [item1, item2, item3]\n\n# Access items (index starts at 0!)\nmy_list[0]   # first item\nmy_list[-1]  # last item\nmy_list[1:3] # items at index 1 and 2",
         "code": "marks = [85, 90, 78, 92, 88]\n\nprint(marks[0])      # 85 (first)\nprint(marks[-1])     # 88 (last)\nprint(len(marks))    # 5 (count)\nprint(sum(marks))    # 433 (total)\nprint(sum(marks)/len(marks))  # 86.6 (average)\n\nmarks.append(95)     # add new mark\nmarks.sort()         # sort ascending\nprint(marks)",
-        "line_by_line": "`marks = [85, 90, 78, 92, 88]` â†’ creates list with 5 numbers\n`marks[0]` â†’ index 0 = first item = 85\n`marks[-1]` â†’ negative index = from end = 88\n`len(marks)` â†’ counts items = 5\n`sum(marks)` â†’ adds all = 433\n`marks.append(95)` â†’ adds 95 at the end\n`marks.sort()` â†’ arranges in order",
-        "dry_run": "marks = [85, 90, 78, 92, 88]\n         â†‘   â†‘   â†‘   â†‘   â†‘\nIndex:   0   1   2   3   4\n\nmarks[0] â†’ look at index 0 â†’ 85\nmarks[-1] â†’ count from end â†’ index 4 â†’ 88\nlen(marks) â†’ count items â†’ 5\nsum(marks) â†’ 85+90+78+92+88 â†’ 433",
-        "mistakes": "âŒ marks[5] on a 5-item list â†’ IndexError! (valid: 0 to 4)\nâŒ Confusing list and tuple: [] vs ()\nâŒ Modifying list while iterating over it\nâŒ list1 = list2 copies reference, not values! Use list2 = list1.copy()",
+        "line_by_line": "`marks = [85, 90, 78, 92, 88]` → creates list with 5 numbers\n`marks[0]` → index 0 = first item = 85\n`marks[-1]` → negative index = from end = 88\n`len(marks)` → counts items = 5\n`sum(marks)` → adds all = 433\n`marks.append(95)` → adds 95 at the end\n`marks.sort()` → arranges in order",
+        "dry_run": "marks = [85, 90, 78, 92, 88]\n         ↑   ↑   ↑   ↑   ↑\nIndex:   0   1   2   3   4\n\nmarks[0] → look at index 0 → 85\nmarks[-1] → count from end → index 4 → 88\nlen(marks) → count items → 5\nsum(marks) → 85+90+78+92+88 → 433",
+        "mistakes": "❌ marks[5] on a 5-item list → IndexError! (valid: 0 to 4)\n❌ Confusing list and tuple: [] vs ()\n❌ Modifying list while iterating over it\n❌ list1 = list2 copies reference, not values! Use list2 = list1.copy()",
         "practice": "Easy: Create list of 5 fruits, print first and last\nEasy: Find sum and average of a list\nMedium: Remove duplicates from a list\nMedium: Sort list without using sort()\nHard: Find second largest element",
-        "why_matters": "Lists are used in EVERY Python program:\nðŸ“Š Store data from databases\nðŸ¤– ML: training data is stored in lists/arrays\nðŸŒ Web: list of users, products, orders\nðŸ“± Apps: todo list, contacts, messages"
+        "why_matters": "Lists are used in EVERY Python program:\n📊 Store data from databases\n🤖 ML: training data is stored in lists/arrays\n🌐 Web: list of users, products, orders\n📱 Apps: todo list, contacts, messages"
     }
 }
 
@@ -2194,10 +2194,10 @@ The error message tells you EXACTLY what went wrong:
 - What Python expected vs what it got
 
 **Step 2: Common Project Errors**
-- `ModuleNotFoundError` â†’ pip install the missing library
-- `FileNotFoundError` â†’ check file path, use os.path.join()
-- `KeyError` â†’ check dict key exists with .get()
-- `AttributeError` â†’ check object type before calling method
+- `ModuleNotFoundError` → pip install the missing library
+- `FileNotFoundError` → check file path, use os.path.join()
+- `KeyError` → check dict key exists with .get()
+- `AttributeError` → check object type before calling method
 
 **Step 3: Debug Strategy**
 ```python
@@ -2246,18 +2246,18 @@ pip install -r requirements.txt
 
 ```
 {project_name.lower().replace(" ","-")}/
-â”œâ”€â”€ main.py              # Entry point
-â”œâ”€â”€ requirements.txt     # Dependencies
-â”œâ”€â”€ README.md           # Documentation
-â”œâ”€â”€ .gitignore          # Git ignore file
-â”œâ”€â”€ src/                # Source code
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ models.py       # Data models
-â”‚   â”œâ”€â”€ utils.py        # Helper functions
-â”‚   â””â”€â”€ config.py       # Configuration
-â”œâ”€â”€ tests/              # Test files
-â”‚   â””â”€â”€ test_main.py
-â””â”€â”€ data/               # Data files (if needed)
+├── main.py              # Entry point
+├── requirements.txt     # Dependencies
+├── README.md           # Documentation
+├── .gitignore          # Git ignore file
+├── src/                # Source code
+│   ├── __init__.py
+│   ├── models.py       # Data models
+│   ├── utils.py        # Helper functions
+│   └── config.py       # Configuration
+├── tests/              # Test files
+│   └── test_main.py
+└── data/               # Data files (if needed)
 ```
 
 **requirements.txt example:**
@@ -2310,7 +2310,7 @@ Great question! Here's how I can help with your project:
 - "How do I connect to a database?"
 - "How do I deploy this project?"
 
-I'm here to guide you, not give you the full code â€” that's how you actually learn! &#x1F4AA;"""
+I'm here to guide you, not give you the full code — that's how you actually learn! &#x1F4AA;"""
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000, use_reloader=False)

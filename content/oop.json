@@ -124,7 +124,7 @@
     }
   ],
   "problem_first": "Suppose you are building a school management system.\n\nWithout OOP:\nstudent1_name = 'Alice'\nstudent1_age = 20\nstudent1_grade = 'A'\n\nstudent2_name = 'Bob'\nstudent2_age = 21\nstudent2_grade = 'B'\n\n# 100 students = 300 variables! 😱\n\nWith OOP:\nclass Student:\n    def __init__(self, name, age, grade):\n        self.name = name\n        self.age = age\n        self.grade = grade\n\ns1 = Student('Alice', 20, 'A')\ns2 = Student('Bob', 21, 'B')\n# 100 students = 100 objects, same class!",
-  "why_matters": "OOP is used in EVERY large application:\n🌐 Web frameworks: Django, Flask use classes everywhere\n🎮 Games: Player, Enemy, Weapon are all classes\n🤖 ML: sklearn models are classes (fit, predict methods)\n🏦 Banking: Account, Transaction, Customer classes\n📱 GUI: Button, Window, Form are all objects\n\nWithout OOP, large programs become impossible to manage.",
+  "why_matters": "OOP is used in EVERY large application:\n🌐🌐 Web frameworks: Django, Flask use classes everywhere\n🎮🎮 Games: Player, Enemy, Weapon are all classes\n🤖🤖 ML: sklearn models are classes (fit, predict methods)\n🏦 Banking: Account, Transaction, Customer classes\n📱 GUI: Button, Window, Form are all objects\n\nWithout OOP, large programs become impossible to manage.",
   "important_points": [
     "⭐ Class is a BLUEPRINT; Object is an INSTANCE created from that blueprint",
     "⭐ __init__ is the constructor — runs automatically when you create an object",

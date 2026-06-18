@@ -69,7 +69,7 @@
     ]
   },
   "problem_first": "Your program asks user to enter a number.\nUser types 'hello' instead.\n\nWithout exception handling:\nnum = int(input())  # ValueError: invalid literal!\n# Program CRASHES! 💥\n\nWith exception handling:\ntry:\n    num = int(input())\nexcept ValueError:\n    print('Please enter a valid number')\n# Program continues gracefully ✅",
-  "why_matters": "Exception handling is what separates amateur code from production code:\n🌐 Web apps: handle bad requests without crashing\n📁 File ops: handle missing files gracefully\n�� APIs: handle network errors\n🗄️ Databases: handle connection failures\n\nA program that crashes on bad input is not production-ready.",
+  "why_matters": "Exception handling is what separates amateur code from production code:\n🌐🌐 Web apps: handle bad requests without crashing\n📁 File ops: handle missing files gracefully\n�� APIs: handle network errors\n🗄️ Databases: handle connection failures\n\nA program that crashes on bad input is not production-ready.",
   "important_points": [
     "⭐ try block: code that might raise an exception",
     "⭐ except block: runs if exception occurs — catches and handles it",

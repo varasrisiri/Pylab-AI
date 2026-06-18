@@ -3,7 +3,7 @@
   "title": "Sentiment Analyzer",
   "icon": "&#x1F60A;",
   "level": "advanced",
-  "desc": "Analyze text sentiment using ML and visualize results",
+  "desc": "Analyze text sentiment using🤖 ML and visualize results",
   "time": "8-10 hours",
   "tags": [
     "NLTK",
@@ -18,7 +18,7 @@
     "Flask",
     "Pandas"
   ],
-  "what_you_build": "Analyze text sentiment using ML and visualize results",
+  "what_you_build": "Analyze text sentiment using🤖 ML and visualize results",
   "what_you_learn": [
     "How to use NLTK in a real project",
     "Project structure and organization",
