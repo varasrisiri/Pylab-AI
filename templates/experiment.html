@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Experiment Lab - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+body{overflow:hidden;}
+.exp-layout{display:grid;grid-template-columns:280px 1fr 1fr;height:calc(100vh - 64px);gap:0;}
+.exp-sidebar{background:var(--bg-sidebar);border-right:1px solid var(--border-color);overflow-y:auto;display:flex;flex-direction:column;}
+.exp-sidebar::-webkit-scrollbar{width:4px;}
+.exp-sidebar-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border-color);background:var(--bg-secondary);}
+.exp-sidebar-title{font-size:.9rem;font-weight:700;color:var(--accent-primary);font-family:Fira Code,monospace;}
+.exp-category{margin-bottom:.25rem;}
+.exp-cat-title{padding:.5rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);font-weight:600;}
+.exp-item{display:flex;align-items:center;gap:.6rem;padding:.5rem 1.25rem;font-size:.85rem;color:var(--text-secondary);cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
+.exp-item:hover,.exp-item.active{background:rgba(0,212,255,.07);color:var(--accent-primary);border-left-color:var(--accent-primary);}
+.exp-item-icon{font-size:1rem;width:20px;text-align:center;}
+.exp-editor{display:flex;flex-direction:column;border-right:1px solid var(--border-color);}
+.exp-output{display:flex;flex-direction:column;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);flex-shrink:0;}
+.panel-title{font-size:.85rem;font-weight:600;color:var(--accent-primary);font-family:Fira Code,monospace;}
+.panel-actions{display:flex;gap:.5rem;}
+#expCode{flex:1;background:var(--bg-code);color:#abb2bf;border:none;padding:1.25rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;resize:none;outline:none;tab-size:4;overflow-y:auto;}
+.output-area{flex:1;background:#011627;padding:1.25rem;font-family:Fira Code,monospace;font-size:.88rem;line-height:1.7;overflow-y:auto;white-space:pre-wrap;word-break:break-word;}
+.output-line{margin-bottom:.1rem;}
+.output-line.error{color:#ff6b6b;}
+.output-line.success{color:#00ff88;}
+.output-line.info{color:#00d4ff;}
+.output-line.normal{color:#abb2bf;}
+.run-btn{background:var(--accent-secondary);color:#000;border:none;padding:.5rem 1.25rem;border-radius:8px;font-weight:700;cursor:pointer;font-size:.88rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;}
+.run-btn:hover{transform:scale(1.05);}
+.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.ctrl-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-color);padding:.4rem .85rem;border-radius:8px;cursor:pointer;font-size:.82rem;transition:all .2s;}
+.ctrl-btn:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
+.line-numbers{background:var(--bg-code);color:var(--text-muted);padding:1.25rem .5rem 1.25rem .75rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;text-align:right;user-select:none;border-right:1px solid var(--border-color);min-width:40px;overflow:hidden;flex-shrink:0;}
+.editor-inner{display:flex;flex:1;overflow:hidden;}
+.status-bar{display:flex;align-items:center;gap:1rem;padding:.3rem 1rem;background:var(--bg-secondary);border-top:1px solid var(--border-color);font-size:.75rem;color:var(--text-muted);font-family:Fira Code,monospace;flex-shrink:0;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-secondary);}
+.status-dot.running{background:var(--accent-warning);animation:pulse-dot .8s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.exp-desc{padding:1rem 1.25rem;background:rgba(0,212,255,.04);border-bottom:1px solid var(--border-color);font-size:.82rem;color:var(--text-secondary);line-height:1.5;flex-shrink:0;}
+.exp-desc strong{color:var(--accent-primary);}
+.stdin-row{background:var(--bg-card);border-top:1px solid var(--border-color);padding:.5rem 1rem;display:flex;align-items:center;gap:.5rem;flex-shrink:0;}
+.stdin-row label{font-size:.78rem;color:var(--text-muted);white-space:nowrap;}
+.stdin-input{flex:1;background:var(--bg-code);border:1px solid var(--border-color);color:var(--text-primary);padding:.35rem .75rem;border-radius:6px;font-family:Fira Code,monospace;font-size:.82rem;outline:none;}
+.stdin-input:focus{border-color:var(--accent-primary);}
+@media(max-width:1024px){.exp-layout{grid-template-columns:1fr 1fr;}.exp-sidebar{display:none;}}
+@media(max-width:768px){.exp-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr;}body{overflow:auto;}}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content" style="margin-top:64px;">
+<div class="exp-layout">
+
+  <!-- SIDEBAR: Experiment Categories -->
+  <aside class="exp-sidebar">
+    <div class="exp-sidebar-header">
+      <div class="exp-sidebar-title">&#x1F9EA; Experiment Lab</div>
+      <div style="font-size:.75rem;color:var(--text-muted);margin-top:.25rem;">Click any experiment to load it</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F7E2; Basics</div>
+      <div class="exp-item active" onclick="loadExp('hello_world')"><span class="exp-item-icon">&#x1F44B;</span>Hello World</div>
+      <div class="exp-item" onclick="loadExp('variables')"><span class="exp-item-icon">&#x1F4E6;</span>Variables</div>
+      <div class="exp-item" onclick="loadExp('datatypes')"><span class="exp-item-icon">&#x1F522;</span>Data Types</div>
+      <div class="exp-item" onclick="loadExp('operators')"><span class="exp-item-icon">&#x2795;</span>Operators</div>
+      <div class="exp-item" onclick="loadExp('input_output')"><span class="exp-item-icon">&#x2328;&#xFE0F;</span>Input / Output</div>
+      <div class="exp-item" onclick="loadExp('type_conversion')"><span class="exp-item-icon">&#x1F504;</span>Type Conversion</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x2753; Conditionals</div>
+      <div class="exp-item" onclick="loadExp('if_else')"><span class="exp-item-icon">&#x2194;&#xFE0F;</span>if / elif / else</div>
+      <div class="exp-item" onclick="loadExp('ternary')"><span class="exp-item-icon">&#x26A1;</span>Ternary Operator</div>
+      <div class="exp-item" onclick="loadExp('nested_if')"><span class="exp-item-icon">&#x1F4CA;</span>Nested Conditions</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F504; Loops</div>
+      <div class="exp-item" onclick="loadExp('for_loop')"><span class="exp-item-icon">&#x1F501;</span>for Loop</div>
+      <div class="exp-item" onclick="loadExp('while_loop')"><span class="exp-item-icon">&#x1F503;</span>while Loop</div>
+      <div class="exp-item" onclick="loadExp('break_continue')"><span class="exp-item-icon">&#x23ED;&#xFE0F;</span>break / continue</div>
+      <div class="exp-item" onclick="loadExp('nested_loops')"><span class="exp-item-icon">&#x1F300;</span>Nested Loops</div>
+      <div class="exp-item" onclick="loadExp('patterns')"><span class="exp-item-icon">&#x2B50;</span>Pattern Printing</div>
+      <div class="exp-item" onclick="loadExp('list_comp')"><span class="exp-item-icon">&#x26A1;</span>List Comprehension</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F9E9; Functions</div>
+      <div class="exp-item" onclick="loadExp('basic_func')"><span class="exp-item-icon">&#x1F527;</span>Basic Functions</div>
+      <div class="exp-item" onclick="loadExp('args_kwargs')"><span class="exp-item-icon">&#x1F4E5;</span>*args / **kwargs</div>
+      <div class="exp-item" onclick="loadExp('lambda_func')"><span class="exp-item-icon">&#x03BB;</span>Lambda Functions</div>
+      <div class="exp-item" onclick="loadExp('recursion')"><span class="exp-item-icon">&#x1F300;</span>Recursion</div>
+      <div class="exp-item" onclick="loadExp('closures')"><span class="exp-item-icon">&#x1F512;</span>Closures</div>
+      <div class="exp-item" onclick="loadExp('decorators')"><span class="exp-item-icon">&#x1F3A8;</span>Decorators</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F4CB; Data Structures</div>
+      <div class="exp-item" onclick="loadExp('lists_exp')"><span class="exp-item-icon">&#x1F4CB;</span>Lists</div>
+      <div class="exp-item" onclick="loadExp('tuples_exp')"><span class="exp-item-icon">&#x1F4CC;</span>Tuples</div>
+      <div class="exp-item" onclick="loadExp('dicts_exp')"><span class="exp-item-icon">&#x1F4D6;</span>Dictionaries</div>
+      <div class="exp-item" onclick="loadExp('sets_exp')"><span class="exp-item-icon">&#x1F9EE;</span>Sets</div>
+      <div class="exp-item" onclick="loadExp('strings_exp')"><span class="exp-item-icon">&#x1F524;</span>Strings</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F3D7;&#xFE0F; OOP</div>
+      <div class="exp-item" onclick="loadExp('classes')"><span class="exp-item-icon">&#x1F3D7;&#xFE0F;</span>Classes</div>
+      <div class="exp-item" onclick="loadExp('inheritance')"><span class="exp-item-icon">&#x1F9EC;</span>Inheritance</div>
+      <div class="exp-item" onclick="loadExp('polymorphism')"><span class="exp-item-icon">&#x1F3AD;</span>Polymorphism</div>
+      <div class="exp-item" onclick="loadExp('encapsulation')"><span class="exp-item-icon">&#x1F512;</span>Encapsulation</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F4CA; Algorithms</div>
+      <div class="exp-item" onclick="loadExp('sorting')"><span class="exp-item-icon">&#x1F4CA;</span>Sorting Algorithms</div>
+      <div class="exp-item" onclick="loadExp('searching')"><span class="exp-item-icon">&#x1F50D;</span>Searching</div>
+      <div class="exp-item" onclick="loadExp('fibonacci_exp')"><span class="exp-item-icon">&#x1F4C8;</span>Fibonacci</div>
+      <div class="exp-item" onclick="loadExp('prime_exp')"><span class="exp-item-icon">&#x1F522;</span>Prime Numbers</div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-cat-title">&#x1F4DD; Free Experiment</div>
+      <div class="exp-item" onclick="loadExp('free')"><span class="exp-item-icon">&#x270F;&#xFE0F;</span>Write Your Own</div>
+    </div>
+  </aside>
+
+  <!-- EDITOR PANEL -->
+  <div class="exp-editor">
+    <div class="panel-header">
+      <div class="panel-title" id="expTitle">&#x1F9EA; Hello World</div>
+      <div class="panel-actions">
+        <button class="ctrl-btn" onclick="clearExp()">&#x1F5D1; Clear</button>
+        <button class="run-btn" id="runBtn" onclick="runExp()">&#x25B6; Run</button>
+      </div>
+    </div>
+    <div class="exp-desc" id="expDesc">
+      <strong>Experiment:</strong> Your first Python program. Every programmer starts here!
+    </div>
+    <div class="editor-inner">
+      <div class="line-numbers" id="lineNumbers">1</div>
+      <textarea id="expCode" spellcheck="false"></textarea>
+    </div>
+    <div class="stdin-row">
+      <label>&#x2328;&#xFE0F; stdin:</label>
+      <input type="text" id="stdinInput" class="stdin-input" placeholder="Input values for input() calls...">
+    </div>
+    <div class="status-bar">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Ready — Ctrl+Enter to run</span>
+      <span style="margin-left:auto" id="cursorPos">Ln 1, Col 1</span>
+    </div>
+  </div>
+
+  <!-- OUTPUT PANEL -->
+  <div class="exp-output">
+    <div class="panel-header">
+      <div class="panel-title">&#x1F4E4; Output</div>
+      <div class="panel-actions">
+        <button class="ctrl-btn" onclick="clearOutput()">Clear</button>
+        <button class="ctrl-btn" onclick="copyOutput()">&#x1F4CB; Copy</button>
+      </div>
+    </div>
+    <div class="output-area" id="outputArea">
+      <div class="output-line info">&#x1F9EA; PyLab AI Experiment Lab</div>
+      <div class="output-line info">&#x2139;&#xFE0F;  Select an experiment from the sidebar</div>
+      <div class="output-line normal">&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</div>
+    </div>
+    <div class="status-bar">
+      <span id="execTime"></span>
+      <span style="margin-left:auto" id="outputLines">0 lines</span>
+    </div>
+  </div>
+
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script src="/static/js/experiments.js"></script>
+</body></html>

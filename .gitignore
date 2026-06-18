@@ -1,0 +1,22 @@
+# Environment variables (contains your Supabase and Google keys)
+.env
+
+# Local SQLite Database
+database.db
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Editor and IDE configurations
+.vscode/
+.idea/
+
+# Logs
+*.log

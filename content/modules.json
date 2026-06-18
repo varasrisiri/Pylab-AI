@@ -1,0 +1,111 @@
+{
+  "title": "Modules and Packages",
+  "icon": "package",
+  "level": "intermediate",
+  "simple_definition": "Modules are Python files you can import to reuse code. Packages are folders of modules.",
+  "technical_definition": "A module is a .py file. Python standard library has 200+ modules. pip installs third-party packages.",
+  "analogy": "Modules are like toolboxes — import the one with the tools you need.",
+  "syntax": "import math\nfrom datetime import datetime\nimport os\nimport random\n\nmath.sqrt(16)\ndatetime.now()\nos.getcwd()\nrandom.randint(1, 10)",
+  "example_desc": "Practical examples demonstrating Modules and Packages.",
+  "code_example": "import math\nimport random\nfrom datetime import datetime\nimport os\n\nprint(math.sqrt(16))\nprint(math.pi)\nprint(math.ceil(3.2))\nprint(math.floor(3.9))\n\nprint(random.randint(1, 10))\nprint(random.choice(['a', 'b', 'c']))\nprint(random.shuffle([1,2,3,4,5]))\n\nnow = datetime.now()\nprint(now.strftime('%Y-%m-%d'))\n\nprint(os.getcwd())\nprint(os.path.exists('app.py'))",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Modules and Packages",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Modules and Packages is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Modules and Packages",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Modules and Packages",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Modules and Packages",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "You need to calculate square root, generate random numbers, and get current date.\n\nWithout modules, you'd have to write all this from scratch!\n\nWith modules:\nimport math\nimport random\nfrom datetime import datetime\n\nprint(math.sqrt(16))      # 4.0\nprint(random.randint(1,10))  # random number\nprint(datetime.now())     # current time\n\nPython's standard library has 200+ modules — don't reinvent the wheel!",
+  "why_matters": "Modules are the foundation of Python's ecosystem:\n📦 pip install → 400,000+ packages on PyPI\n🌐 Flask, Django — web development\n📊 NumPy, Pandas — data science\n🤖 TensorFlow, PyTorch — machine learning\n�� SciPy — scientific computing",
+  "important_points": [
+    "⭐ import module loads the entire module",
+    "⭐ from module import name imports specific items — no module prefix needed",
+    "⭐ import module as alias creates a shorter name: import numpy as np",
+    "⭐ __name__ == '__main__' is True only when file is run directly, not imported",
+    "⭐ Python searches for modules in: current dir → PYTHONPATH → standard library",
+    "⭐ pip install package_name installs third-party packages",
+    "⭐ Virtual environments (venv) isolate project dependencies"
+  ],
+  "dry_run": {
+    "title": "Dry Run: from math import sqrt; print(sqrt(25))",
+    "steps": [
+      {
+        "step": 1,
+        "state": "from math import sqrt",
+        "action": "Python loads math module, extracts sqrt function",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "sqrt available",
+        "action": "sqrt is now in local namespace — no math. prefix needed",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "sqrt(25)",
+        "action": "Call sqrt with argument 25",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "return 5.0",
+        "action": "sqrt returns 5.0 (float)",
+        "output": "5.0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Editor - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+body{overflow:hidden;}
+.editor-layout{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 64px);gap:0;}
+.editor-panel{display:flex;flex-direction:column;border-right:1px solid var(--border-color);}
+.output-panel{display:flex;flex-direction:column;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);flex-shrink:0;}
+.panel-title{font-size:.85rem;font-weight:600;color:var(--accent-primary);font-family:Fira Code,monospace;display:flex;align-items:center;gap:.5rem;}
+.panel-actions{display:flex;gap:.5rem;}
+#codeArea{flex:1;background:var(--bg-code);color:#abb2bf;border:none;padding:1.25rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;resize:none;outline:none;tab-size:4;overflow-y:auto;}
+.output-area{flex:1;background:#011627;padding:1.25rem;font-family:Fira Code,monospace;font-size:.88rem;line-height:1.7;overflow-y:auto;white-space:pre-wrap;word-break:break-word;}
+.output-line{margin-bottom:.1rem;}
+.output-line.error{color:#ff6b6b;}
+.output-line.success{color:#00ff88;}
+.output-line.info{color:#00d4ff;}
+.output-line.normal{color:#abb2bf;}
+.run-btn{background:var(--accent-secondary);color:#000;border:none;padding:.5rem 1.25rem;border-radius:8px;font-weight:700;cursor:pointer;font-size:.88rem;display:flex;align-items:center;gap:.4rem;transition:all .2s;}
+.run-btn:hover{transform:scale(1.05);box-shadow:var(--glow-secondary);}
+.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.ctrl-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-color);padding:.4rem .85rem;border-radius:8px;cursor:pointer;font-size:.82rem;transition:all .2s;}
+.ctrl-btn:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
+.line-numbers{background:var(--bg-code);color:var(--text-muted);padding:1.25rem .5rem 1.25rem .75rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;text-align:right;user-select:none;border-right:1px solid var(--border-color);min-width:40px;overflow:hidden;flex-shrink:0;}
+.editor-inner{display:flex;flex:1;overflow:hidden;}
+.status-bar{display:flex;align-items:center;gap:1rem;padding:.3rem 1rem;background:var(--bg-secondary);border-top:1px solid var(--border-color);font-size:.75rem;color:var(--text-muted);font-family:Fira Code,monospace;flex-shrink:0;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-secondary);}
+.status-dot.running{background:var(--accent-warning);animation:pulse-dot .8s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.snippets-bar{display:flex;gap:.4rem;padding:.5rem 1rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);overflow-x:auto;flex-shrink:0;}
+.snippet-btn{background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-secondary);padding:.25rem .7rem;border-radius:12px;font-size:.75rem;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:Fira Code,monospace;}
+.snippet-btn:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
+.input-area{background:var(--bg-card);border-top:1px solid var(--border-color);padding:.5rem 1rem;display:flex;align-items:center;gap:.5rem;flex-shrink:0;}
+.input-area label{font-size:.78rem;color:var(--text-muted);white-space:nowrap;}
+.stdin-input{flex:1;background:var(--bg-code);border:1px solid var(--border-color);color:var(--text-primary);padding:.35rem .75rem;border-radius:6px;font-family:Fira Code,monospace;font-size:.82rem;outline:none;}
+.stdin-input:focus{border-color:var(--accent-primary);}
+@media(max-width:768px){.editor-layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr;}body{overflow:auto;}}
+.editor-layout.visualizer-active { grid-template-columns: 1.15fr 0.85fr 1fr; }
+@media(max-width:1200px){ .editor-layout.visualizer-active { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto auto; } }
+.visualizer-panel { display: flex; flex-direction: column; background: var(--bg-secondary); border-left: 1px solid var(--border-color); overflow: hidden; }
+.viz-playback-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: var(--bg-card); border-bottom: 1px solid var(--border-color); }
+.viz-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); font-family: Fira Code, monospace; padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; transition: all 0.2s; }
+.viz-btn:hover { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); }
+.viz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+#vizPlayBtn { background: var(--accent-secondary); color: #000; border-color: var(--accent-secondary); font-weight: bold; }
+#vizPlayBtn:hover { box-shadow: var(--glow-secondary); }
+.viz-playback-bar input[type="range"] { flex: 1; accent-color: var(--accent-primary); cursor: pointer; }
+.viz-content { flex: 1; display: grid; grid-template-rows: 1.2fr 1fr; overflow: hidden; }
+.viz-code-section { display: flex; flex-direction: column; border-bottom: 1px solid var(--border-color); overflow: hidden; }
+.viz-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding: 0.4rem 1rem; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--border-color); letter-spacing: 0.05em; }
+.viz-code-wrapper { flex: 1; overflow-y: auto; font-family: Fira Code, monospace; font-size: 0.85rem; line-height: 1.7; background: #011627; padding: 1rem; position: relative; }
+.viz-code-line { display: flex; padding: 0.1rem 0; border-radius: 4px; }
+.viz-line-num { width: 30px; color: var(--text-muted); text-align: right; padding-right: 0.75rem; user-select: none; font-size: 0.8rem; }
+.viz-line-content { flex: 1; white-space: pre; }
+.viz-code-line.active-line { background: rgba(0, 212, 255, 0.15); border-left: 3px solid var(--accent-primary); }
+.viz-code-line.active-line .viz-line-num { color: var(--accent-primary); font-weight: bold; }
+.viz-code-line.active-line .viz-line-content { color: #fff; }
+.viz-state-section { display: flex; flex-direction: column; overflow: hidden; }
+.viz-variables-table-wrapper { flex: 1; overflow-y: auto; background: var(--bg-code); }
+.viz-variables-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left; }
+.viz-variables-table th { padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+.viz-variables-table td { padding: 0.45rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-family: Fira Code, monospace; }
+.viz-variables-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+.no-vars { text-align: center; color: var(--text-muted); padding: 2rem !important; font-style: italic; }
+.viz-stdout-box { height: 80px; background: #011627; border-top: 1px solid var(--border-color); padding: 0.75rem 1rem; font-family: Fira Code, monospace; font-size: 0.8rem; color: var(--accent-secondary); overflow-y: auto; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/visualizer" class="nav-link" style="color:var(--accent-primary)">⚡ Visualizer</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content" style="margin-top:64px;">
+<div class="editor-layout" id="editorLayout">
+  <div class="editor-panel">
+    <div class="panel-header">
+      <div class="panel-title">📝 main.py</div>
+      <div class="panel-actions">
+        <input type="file" id="fileUploadInput" accept=".py" style="display:none;" onchange="handleFileUpload(event)">
+        <button class="ctrl-btn" onclick="document.getElementById('fileUploadInput').click()">📤 Upload</button>
+        <button class="ctrl-btn" onclick="clearEditor()">🗑 Clear</button>
+        <button class="ctrl-btn" onclick="formatCode()">✨ Format</button>
+        <button class="ctrl-btn" id="visualizeBtn" onclick="visualizeCode()" style="background:var(--bg-card);color:var(--accent-primary);border-color:var(--accent-primary);margin-right:0.25rem;">⚡ Visualize</button>
+        <button class="run-btn" id="runBtn" onclick="runCode()">▶ Run</button>
+      </div>
+    </div>
+    <div class="snippets-bar">
+      <span style="font-size:.75rem;color:var(--text-muted);align-self:center;flex-shrink:0;">Snippets:</span>
+      <button class="snippet-btn" onclick="insertSnippet('hello')">Hello World</button>
+      <button class="snippet-btn" onclick="insertSnippet('forloop')">for loop</button>
+      <button class="snippet-btn" onclick="insertSnippet('whileloop')">while loop</button>
+      <button class="snippet-btn" onclick="insertSnippet('function')">function</button>
+      <button class="snippet-btn" onclick="insertSnippet('classdef')">class</button>
+      <button class="snippet-btn" onclick="insertSnippet('listcomp')">list comp</button>
+      <button class="snippet-btn" onclick="insertSnippet('trycatch')">try/except</button>
+      <button class="snippet-btn" onclick="insertSnippet('fibonacci')">fibonacci</button>
+      <button class="snippet-btn" onclick="insertSnippet('sorting')">sorting</button>
+      <button class="snippet-btn" onclick="insertSnippet('fileio')">file I/O</button>
+    </div>
+    <div class="editor-inner">
+      <div class="line-numbers" id="lineNumbers">1</div>
+      <textarea id="codeArea" spellcheck="false" placeholder="# Write your Python code here..."></textarea>
+    </div>
+    <div class="input-area">
+      <label>⌨️ stdin:</label>
+      <input type="text" id="stdinInput" class="stdin-input" placeholder="Input values (for input() calls)...">
+    </div>
+    <div class="status-bar">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Ready — Ctrl+Enter to run</span>
+      <span style="margin-left:auto" id="cursorPos">Ln 1, Col 1</span>
+      <span>Python 3</span>
+    </div>
+  </div>
+  <div class="output-panel">
+    <div class="panel-header">
+      <div class="panel-title">📤 Output</div>
+      <div class="panel-actions">
+        <button class="ctrl-btn" onclick="clearOutput()">Clear</button>
+        <button class="ctrl-btn" onclick="copyOutput()">📋 Copy</button>
+      </div>
+    </div>
+    <div class="output-area" id="outputArea">
+      <div class="output-line info">🐍 PyLab AI Code Editor</div>
+      <div class="output-line info">ℹ️  Write code left, click Run or Ctrl+Enter</div>
+      <div class="output-line normal">──────────────────────────────</div>
+    </div>
+    <div class="status-bar">
+      <span id="execTime"></span>
+      <span style="margin-left:auto" id="outputLines">0 lines</span>
+    </div>
+  </div>
+  <!-- Visualizer Panel -->
+  <div class="visualizer-panel" id="visualizerPanel" style="display:none;">
+    <div class="panel-header">
+      <div class="panel-title">⚡ Trace: Step <span id="currentStep">0</span>/<span id="totalSteps">0</span></div>
+      <div class="panel-actions">
+        <button class="ctrl-btn" onclick="toggleVisualizer()" title="Close Visualizer">✕ Close</button>
+      </div>
+    </div>
+    <div class="viz-playback-bar">
+      <button class="viz-btn" id="vizFirstBtn" onclick="vizGoToStep(0)" title="First Step">|◀</button>
+      <button class="viz-btn" id="vizPrevBtn" onclick="vizPrevStep()" title="Previous Step">◀</button>
+      <button class="viz-btn" id="vizPlayBtn" onclick="vizTogglePlay()" title="Play / Pause">▶ Play</button>
+      <button class="viz-btn" id="vizNextBtn" onclick="vizNextStep()" title="Next Step">▶</button>
+      <button class="viz-btn" id="vizLastBtn" onclick="vizGoToStep(-1)" title="Last Step">▶|</button>
+      <input type="range" id="vizRangeSlider" min="0" max="0" value="0" oninput="vizOnSliderChange(this.value)">
+    </div>
+    <div class="viz-content">
+      <div class="viz-code-section">
+        <div class="viz-section-title">Execution Path</div>
+        <div class="viz-code-wrapper" id="vizCodeContainer"></div>
+      </div>
+      <div class="viz-state-section">
+        <div class="viz-section-title">Variables Watch</div>
+        <div class="viz-variables-table-wrapper">
+          <table class="viz-variables-table">
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Type</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody id="vizVariablesBody">
+              <tr>
+                <td colspan="3" class="no-vars">No local variables initialized yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="viz-section-title">Stdout up to step</div>
+        <div class="viz-stdout-box" id="vizStdoutBox"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+const snippets = {
+  hello: "# Hello World\nprint('Hello, World!')\nprint('Welcome to PyLab AI!')\n\nname = 'Python'\nprint(f'Hello from {name}!')",
+  forloop: "# For Loop\nfruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(fruit)\n\nfor i in range(1, 6):\n    print(f'Number: {i}')\n\nfor i, fruit in enumerate(fruits):\n    print(f'{i}: {fruit}')",
+  whileloop: "# While Loop\ncount = 1\nwhile count <= 5:\n    print(f'Count: {count}')\n    count += 1\nprint('Done!')",
+  function: "# Functions\ndef greet(name, greeting='Hello'):\n    return f'{greeting}, {name}!'\n\ndef add(a, b):\n    return a + b\n\nprint(greet('Alice'))\nprint(greet('Bob', 'Hi'))\nprint(add(3, 5))",
+  classdef: "# Class\nclass Animal:\n    def __init__(self, name, sound):\n        self.name = name\n        self.sound = sound\n    def speak(self):\n        return f'{self.name} says {self.sound}'\n\nclass Dog(Animal):\n    def __init__(self, name):\n        super().__init__(name, 'Woof!')\n\ndog = Dog('Rex')\nprint(dog.speak())\nprint(isinstance(dog, Animal))",
+  listcomp: "# List Comprehensions\nnumbers = list(range(1, 11))\nsquares = [x**2 for x in numbers]\nprint('Squares:', squares)\nevens = [x for x in numbers if x % 2 == 0]\nprint('Evens:', evens)\nword_len = {w: len(w) for w in ['python', 'java', 'go']}\nprint('Lengths:', word_len)",
+  trycatch: "# Exception Handling\ndef safe_divide(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        return 'Cannot divide by zero'\n    except TypeError as e:\n        return f'Type error: {e}'\n    else:\n        return f'Result: {result}'\n    finally:\n        print('Attempted division')\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
+  fibonacci: "# Fibonacci\ndef fibonacci(n):\n    if n <= 0: return []\n    if n == 1: return [0]\n    fib = [0, 1]\n    while len(fib) < n:\n        fib.append(fib[-1] + fib[-2])\n    return fib\n\nprint(fibonacci(10))\n\ndef fib_gen(limit):\n    a, b = 0, 1\n    while a < limit:\n        yield a\n        a, b = b, a + b\n\nprint(list(fib_gen(100)))",
+  sorting: "# Sorting\nnums = [64, 34, 25, 12, 22, 11, 90]\nprint(sorted(nums))\nprint(sorted(nums, reverse=True))\n\nstudents = [('Alice', 85), ('Bob', 92), ('Charlie', 78)]\nby_grade = sorted(students, key=lambda s: s[1], reverse=True)\nprint(by_grade)\n\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\nprint(bubble_sort([64, 34, 25, 12, 22]))",
+  fileio: "# File I/O is restricted in the sandbox.\n# Here's how file I/O works conceptually:\n\n# Writing to a file:\n# with open('test.txt', 'w') as f:\n#     f.write('Hello, PyLab!\\n')\n\n# Reading from a file:\n# with open('test.txt', 'r') as f:\n#     print(f.read())\n\n# Since direct file access is blocked in the sandbox,\n# practice file I/O locally or use string buffers:\n\nimport io  # StringIO is a safe in-memory file substitute\nbuffer = io.StringIO()\nbuffer.write('Line 1: Hello\\n')\nbuffer.write('Line 2: Python\\n')\nbuffer.write('Line 3: PyLab AI\\n')\nbuffer.seek(0)\nfor i, line in enumerate(buffer, 1):\n    print(f'Line {i}: {line.strip()}')"
+};
+
+function insertSnippet(name) {
+  const code = snippets[name];
+  if (code) {
+    document.getElementById('codeArea').value = code;
+    updateLineNumbers();
+  }
+}
+
+function updateLineNumbers() {
+  const ta = document.getElementById('codeArea');
+  const lines = ta.value.split('\n').length;
+  document.getElementById('lineNumbers').textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+}
+
+async function runCode() {
+  const code = document.getElementById('codeArea').value.trim();
+  const stdin = document.getElementById('stdinInput').value;
+  if (!code) return;
+
+  const btn = document.getElementById('runBtn');
+  const dot = document.getElementById('statusDot');
+  const output = document.getElementById('outputArea');
+
+  btn.disabled = true;
+  btn.innerHTML = '&#x23F3; Running...';
+  dot.classList.add('running');
+  document.getElementById('statusText').textContent = 'Running...';
+
+  const startTime = Date.now();
+
+  const sep = document.createElement('div');
+  sep.className = 'output-line normal';
+  sep.textContent = '─'.repeat(30) + ' ' + new Date().toLocaleTimeString() + ' ' + '─'.repeat(5);
+  output.appendChild(sep);
+
+  try {
+    const res = await fetch('/api/run-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code, stdin})
+    });
+    const data = await res.json();
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+
+    if (data.output) {
+      data.output.split('\n').forEach(line => {
+        const div = document.createElement('div');
+        div.className = 'output-line normal';
+        div.textContent = line;
+        output.appendChild(div);
+      });
+    }
+    if (data.error) {
+      data.error.split('\n').forEach(line => {
+        if (line.trim()) {
+          const div = document.createElement('div');
+          div.className = 'output-line error';
+          div.textContent = line;
+          output.appendChild(div);
+        }
+      });
+    }
+    if (!data.error) {
+      const done = document.createElement('div');
+      done.className = 'output-line success';
+      done.textContent = '✓ Finished in ' + elapsed + 's';
+      output.appendChild(done);
+    }
+    document.getElementById('execTime').textContent = 'Executed in ' + elapsed + 's';
+    document.getElementById('outputLines').textContent = output.querySelectorAll('.output-line').length + ' lines';
+  } catch(e) {
+    const div = document.createElement('div');
+    div.className = 'output-line error';
+    div.textContent = 'Error: ' + e.message;
+    output.appendChild(div);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '&#x25B6; Run';
+    dot.classList.remove('running');
+    document.getElementById('statusText').textContent = 'Ready — Ctrl+Enter to run';
+    output.scrollTop = output.scrollHeight;
+  }
+}
+
+function clearEditor() { document.getElementById('codeArea').value = ''; updateLineNumbers(); }
+function clearOutput() { document.getElementById('outputArea').innerHTML = '<div class="output-line info">Output cleared.</div>'; }
+function copyOutput() { navigator.clipboard.writeText(document.getElementById('outputArea').innerText).then(() => showToast('Copied!')); }
+function formatCode() {
+  const ta = document.getElementById('codeArea');
+  ta.value = ta.value.split('\n').map(l => l.replace(/\t/g, '    ')).join('\n');
+  showToast('Formatted!');
+}
+
+async function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  try {
+    const res = await fetch('/api/upload-file', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'success') {
+      document.getElementById('codeArea').value = data.content;
+      updateLineNumbers();
+      showToast(data.message);
+    } else {
+      showToast(data.error || 'Upload failed');
+    }
+  } catch (e) {
+    showToast('Upload error: ' + e.message);
+  } finally {
+    event.target.value = '';
+  }
+}
+
+document.getElementById('codeArea').addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = this.selectionStart;
+    this.value = this.value.substring(0, s) + '    ' + this.value.substring(this.selectionEnd);
+    this.selectionStart = this.selectionEnd = s + 4;
+    updateLineNumbers();
+  }
+  if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); runCode(); }
+});
+
+document.getElementById('codeArea').addEventListener('input', updateLineNumbers);
+document.getElementById('codeArea').addEventListener('scroll', function() {
+  document.getElementById('lineNumbers').scrollTop = this.scrollTop;
+});
+document.getElementById('codeArea').addEventListener('keyup', function() {
+  const text = this.value.substring(0, this.selectionStart);
+  const lines = text.split('\n');
+  document.getElementById('cursorPos').textContent = 'Ln ' + lines.length + ', Col ' + (lines[lines.length-1].length + 1);
+});
+
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('pylab-editor-code');
+  if (saved) { document.getElementById('codeArea').value = saved; localStorage.removeItem('pylab-editor-code'); }
+  else { document.getElementById('codeArea').value = snippets.hello; }
+  updateLineNumbers();
+});
+
+let vizSteps = [];
+let vizCurrentIdx = -1;
+let vizIsPlaying = false;
+let vizPlayInterval = null;
+
+async function visualizeCode() {
+  const code = document.getElementById('codeArea').value.trim();
+  if (!code) {
+    showToast('Please write or select some code first.', 'error');
+    return;
+  }
+  localStorage.setItem('visualizerCode', code);
+  window.location.href = '/visualizer';
+}
+
+function toggleVisualizer() {
+  const panel = document.getElementById('visualizerPanel');
+  const layout = document.getElementById('editorLayout');
+  vizStopPlay();
+  panel.style.display = 'none';
+  layout.classList.remove('visualizer-active');
+}
+
+function vizRenderCodeLines(code) {
+  const container = document.getElementById('vizCodeContainer');
+  container.innerHTML = '';
+  const lines = code.split('\n');
+  lines.forEach((line, index) => {
+    const lineNum = index + 1;
+    const div = document.createElement('div');
+    div.className = 'viz-code-line';
+    div.id = `viz-line-${lineNum}`;
+    
+    const numSpan = document.createElement('span');
+    numSpan.className = 'viz-line-num';
+    numSpan.textContent = lineNum;
+    
+    const contentSpan = document.createElement('span');
+    contentSpan.className = 'viz-line-content';
+    contentSpan.textContent = line || ' '; // Keep empty lines visible
+    
+    div.appendChild(numSpan);
+    div.appendChild(contentSpan);
+    container.appendChild(div);
+  });
+}
+
+function vizGoToStep(index) {
+  if (vizSteps.length === 0) return;
+  
+  if (index === -1) {
+    index = vizSteps.length - 1;
+  }
+  
+  if (index < 0 || index >= vizSteps.length) return;
+  
+  vizCurrentIdx = index;
+  
+  document.getElementById('currentStep').textContent = vizCurrentIdx + 1;
+  document.getElementById('totalSteps').textContent = vizSteps.length;
+  
+  const slider = document.getElementById('vizRangeSlider');
+  slider.max = vizSteps.length - 1;
+  slider.value = vizCurrentIdx;
+  
+  const step = vizSteps[vizCurrentIdx];
+  
+  document.querySelectorAll('.viz-code-line').forEach(el => el.classList.remove('active-line'));
+  const activeLineEl = document.getElementById(`viz-line-${step.line}`);
+  if (activeLineEl) {
+    activeLineEl.classList.add('active-line');
+    activeLineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  
+  const varBody = document.getElementById('vizVariablesBody');
+  varBody.innerHTML = '';
+  
+  const varKeys = Object.keys(step.locals || {});
+  if (varKeys.length === 0) {
+    varBody.innerHTML = `<tr><td colspan="3" class="no-vars">No local variables initialized yet.</td></tr>`;
+  } else {
+    varKeys.sort().forEach(key => {
+      const val = step.locals[key];
+      const typeStr = typeof val;
+      
+      const tr = document.createElement('tr');
+      
+      const nameTd = document.createElement('td');
+      nameTd.style.color = 'var(--accent-primary)';
+      nameTd.textContent = key;
+      
+      const typeTd = document.createElement('td');
+      typeTd.style.color = 'var(--text-muted)';
+      typeTd.textContent = typeStr;
+      
+      const valTd = document.createElement('td');
+      valTd.style.color = 'var(--accent-secondary)';
+      valTd.textContent = typeof val === 'object' ? JSON.stringify(val) : String(val);
+      
+      tr.appendChild(nameTd);
+      tr.appendChild(typeTd);
+      tr.appendChild(valTd);
+      varBody.appendChild(tr);
+    });
+  }
+  
+  document.getElementById('vizStdoutBox').textContent = step.stdout || '(no stdout yet)';
+  
+  if (step.event === 'exception' && step.exception) {
+    const errorAlert = document.createElement('tr');
+    errorAlert.innerHTML = `<td colspan="3" style="color:#ff6b6b;background:rgba(255,107,107,0.1);font-weight:bold;text-align:center;padding:0.5rem;">🚨 ${step.exception}</td>`;
+    varBody.appendChild(errorAlert);
+    document.getElementById('vizStdoutBox').textContent += `\nTraceback error: ${step.exception}`;
+  }
+
+  document.getElementById('vizPrevBtn').disabled = (vizCurrentIdx === 0);
+  document.getElementById('vizFirstBtn').disabled = (vizCurrentIdx === 0);
+  document.getElementById('vizNextBtn').disabled = (vizCurrentIdx === vizSteps.length - 1);
+  document.getElementById('vizLastBtn').disabled = (vizCurrentIdx === vizSteps.length - 1);
+}
+
+function vizPrevStep() {
+  if (vizCurrentIdx > 0) {
+    vizGoToStep(vizCurrentIdx - 1);
+  }
+}
+
+function vizNextStep() {
+  if (vizCurrentIdx < vizSteps.length - 1) {
+    vizGoToStep(vizCurrentIdx + 1);
+  } else {
+    vizStopPlay();
+  }
+}
+
+function vizOnSliderChange(val) {
+  vizGoToStep(parseInt(val));
+}
+
+function vizTogglePlay() {
+  if (vizIsPlaying) {
+    vizStopPlay();
+  } else {
+    vizStartPlay();
+  }
+}
+
+function vizStartPlay() {
+  vizIsPlaying = true;
+  document.getElementById('vizPlayBtn').innerHTML = '⏸ Pause';
+  document.getElementById('vizPlayBtn').style.background = 'var(--accent-warning)';
+  
+  if (vizCurrentIdx === vizSteps.length - 1) {
+    vizGoToStep(0);
+  }
+  
+  vizPlayInterval = setInterval(() => {
+    vizNextStep();
+  }, 1000);
+}
+
+function vizStopPlay() {
+  vizIsPlaying = false;
+  document.getElementById('vizPlayBtn').innerHTML = '▶ Play';
+  document.getElementById('vizPlayBtn').style.background = 'var(--accent-secondary)';
+  if (vizPlayInterval) {
+    clearInterval(vizPlayInterval);
+    vizPlayInterval = null;
+  }
+}
+</script>
+</body></html>

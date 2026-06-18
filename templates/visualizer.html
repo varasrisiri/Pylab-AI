@@ -1,0 +1,1530 @@
+{% extends "base.html" %}
+{% block title %}Code Visualizer — PyLab AI ⭐{% endblock %}
+
+{% block head %}
+<style>
+.viz-container {
+    max-width: 1300px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+.viz-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.viz-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+.viz-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* Glassmorphism Configuration Card */
+.config-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 2rem;
+    backdrop-filter: blur(8px);
+}
+.topic-search-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+.topic-input {
+    flex: 1;
+    background: var(--bg-code);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-family: Inter, sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s;
+}
+.topic-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow-primary);
+}
+.viz-btn-primary {
+    background: var(--accent-primary);
+    color: #000;
+    border: none;
+    padding: 0.8rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.viz-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow-primary);
+}
+.viz-btn-secondary {
+    background: var(--accent-secondary);
+    color: #000;
+    border: none;
+    padding: 0.8rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.viz-btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow-secondary);
+}
+.topic-chips {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.topic-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.topic-chip:hover {
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    background: rgba(0, 212, 255, 0.08);
+}
+
+/* Editor Section */
+.editor-wrapper {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-code);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+.line-numbers-gutter {
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--text-muted);
+    padding: 1.25rem 0.5rem 1.25rem 1rem;
+    font-family: Fira Code, monospace;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    text-align: right;
+    user-select: none;
+    border-right: 1px solid var(--border-color);
+    min-width: 45px;
+    flex-shrink: 0;
+}
+#editorCodeArea {
+    flex: 1;
+    background: transparent;
+    color: #abb2bf;
+    border: none;
+    padding: 1.25rem;
+    font-family: Fira Code, monospace;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    resize: vertical;
+    min-height: 250px;
+    outline: none;
+    tab-size: 4;
+}
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+.viz-ctrl-btn {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.viz-ctrl-btn:hover {
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+/* Visualizer Active Session Layout */
+.session-panel {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    animation: fadeInUp 0.4s ease;
+}
+@media (max-width: 992px) {
+    .session-panel {
+        grid-template-columns: 1fr;
+    }
+}
+.session-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+}
+.session-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+.session-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Playback bar styles */
+.playback-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+}
+.playback-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: Fira Code, monospace;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+.playback-btn:hover:not(:disabled) {
+    background: var(--accent-primary);
+    color: #000;
+    border-color: var(--accent-primary);
+}
+.playback-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+#playPauseBtn {
+    background: var(--accent-secondary);
+    color: #000;
+    border-color: var(--accent-secondary);
+    min-width: 90px;
+}
+#playPauseBtn:hover {
+    box-shadow: var(--glow-secondary);
+}
+.playback-slider {
+    flex: 1;
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+    height: 6px;
+    border-radius: 4px;
+}
+.playback-info {
+    font-family: Fira Code, monospace;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.speed-select {
+    background: var(--bg-code);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    font-family: Inter, sans-serif;
+    font-size: 0.82rem;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Code Display Section */
+.viz-code-display {
+    background: #011627;
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 480px;
+    font-family: Fira Code, monospace;
+    font-size: 0.92rem;
+    line-height: 1.8;
+}
+.viz-code-row {
+    display: flex;
+    border-radius: 4px;
+    padding: 0.1rem 0;
+    transition: all 0.25s;
+}
+.viz-row-num {
+    width: 35px;
+    color: var(--text-muted);
+    text-align: right;
+    padding-right: 1rem;
+    user-select: none;
+    font-size: 0.82rem;
+}
+.viz-row-content {
+    flex: 1;
+    white-space: pre;
+}
+.viz-code-row.active-step {
+    background: rgba(0, 212, 255, 0.16);
+    border-left: 4px solid var(--accent-primary);
+    box-shadow: inset 4px 0 10px rgba(0, 212, 255, 0.1);
+}
+.viz-code-row.active-step .viz-row-num {
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+.viz-code-row.active-step .viz-row-content {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+/* Explanation Card block */
+.explanation-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    animation: fadeIn 0.3s ease;
+}
+.explanation-title {
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Variable Watch list */
+.variables-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--border-color);
+}
+.variables-table-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 250px;
+    background: var(--bg-code);
+}
+.variables-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+.variables-table th {
+    padding: 0.6rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.15);
+}
+.variables-table td {
+    padding: 0.6rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-family: Fira Code, monospace;
+}
+.variables-table tr {
+    transition: background-color 0.2s;
+}
+.variables-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+.var-row-updated {
+    animation: pulseRow 0.8s ease-out;
+}
+@keyframes pulseRow {
+    0% { background-color: rgba(0, 255, 136, 0.2); }
+    100% { background-color: transparent; }
+}
+
+/* Terminal output area */
+.terminal-section {
+    display: flex;
+    flex-direction: column;
+}
+.terminal-screen {
+    height: 120px;
+    background: #011627;
+    padding: 1rem 1.25rem;
+    font-family: Fira Code, monospace;
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+    overflow-y: auto;
+    white-space: pre-wrap;
+    border-top: 1px solid var(--border-color);
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Graphical Canvas Styles - Stack and Heap Memory Model */
+.viz-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 1.5rem;
+    width: 100%;
+    align-items: start;
+    animation: fadeIn 0.4s ease;
+}
+@media (max-width: 992px) {
+    .viz-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.viz-stack-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-right: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-right: 1rem;
+    min-height: 200px;
+}
+@media (max-width: 992px) {
+    .viz-stack-column {
+        border-right: none;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+    }
+}
+.viz-heap-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 200px;
+    justify-content: center;
+}
+
+/* Call Stack Frames */
+.viz-frame-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+}
+.viz-frame-box.active-frame {
+    border-color: var(--accent-primary);
+    box-shadow: var(--glow-primary);
+    background: rgba(0, 212, 255, 0.02);
+}
+.viz-frame-header {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: Fira Code, monospace;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+}
+.viz-frame-box.active-frame .viz-frame-header {
+    color: var(--accent-primary);
+    background: rgba(0, 212, 255, 0.05);
+}
+.viz-frame-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Fira Code, monospace;
+    font-size: 0.82rem;
+    text-align: left;
+}
+.viz-frame-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.viz-frame-table tr:last-child td {
+    border-bottom: none;
+}
+.viz-var-name {
+    color: var(--accent-secondary);
+    font-weight: bold;
+    width: 40%;
+}
+.viz-var-val-cell {
+    color: var(--text-primary);
+}
+
+/* Reference Link Badge */
+.viz-ref-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid currentColor;
+    background: rgba(255, 255, 255, 0.03);
+    cursor: default;
+}
+
+/* Heap Objects */
+.viz-heap-obj-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: all 0.3s ease;
+    animation: scaleIn 0.3s ease;
+}
+.viz-heap-obj-header {
+    font-family: Fira Code, monospace;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.viz-heap-obj-type-tag {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* List Arrays */
+.viz-array {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.viz-array-cell-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.viz-array-index {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: Fira Code, monospace;
+    margin-bottom: 0.25rem;
+}
+.viz-array-cell {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border-color);
+    font-family: Fira Code, monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    transition: background-color 0.3s;
+}
+.viz-array-cell-wrapper:last-child .viz-array-cell {
+    border-right: none;
+}
+.viz-pointer-indicator {
+    position: absolute;
+    bottom: -32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--accent-primary);
+    font-family: Fira Code, monospace;
+    font-size: 0.78rem;
+    font-weight: bold;
+    animation: bouncePointer 0.8s infinite alternate;
+    z-index: 10;
+}
+.viz-pointer-arrow-up {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+@keyframes bouncePointer {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+}
+
+/* Linked Nodes */
+.viz-linked-list {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+.viz-node-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.viz-node-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Fira Code, monospace;
+    font-weight: bold;
+    color: #fff;
+    transition: all 0.3s;
+}
+.viz-node-pointer-tag {
+    position: absolute;
+    top: -32px;
+    background: var(--accent-primary);
+    color: #000;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    font-family: Fira Code, monospace;
+    box-shadow: var(--shadow-card);
+    z-index: 10;
+    white-space: nowrap;
+}
+.viz-node-pointer-tag::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: var(--accent-primary) transparent;
+}
+.viz-link-arrow {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: bold;
+}
+
+/* Dictionaries & Key-Value Grids */
+.viz-dict-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.4rem 1.2rem;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    font-family: Fira Code, monospace;
+    font-size: 0.8rem;
+    width: fit-content;
+}
+.viz-dict-key {
+    color: var(--accent-secondary);
+    font-weight: bold;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding-right: 0.8rem;
+}
+.viz-dict-val {
+    color: var(--text-primary);
+}
+
+/* Placeholder Empty State */
+.viz-placeholder-view {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    max-width: 450px;
+    margin: 0 auto;
+}
+.viz-placeholder-icon {
+    font-size: 3.2rem;
+    animation: bouncePlaceholder 1.5s infinite alternate ease-in-out;
+}
+@keyframes bouncePlaceholder {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="viz-container">
+    <div class="viz-header">
+        <h1>⚡ Dynamic Code Visualizer</h1>
+        <p>Type a topic to generate code, or paste your own script to dry-run it step-by-step.</p>
+    </div>
+
+    <!-- Code Input Card -->
+    <div class="config-card">
+        <div class="topic-search-row">
+            <input type="text" id="topicInput" class="topic-input" placeholder="Enter a Python topic (e.g. loops, recursion, lists, bubble sort)...">
+            <button class="viz-btn-secondary" id="generateBtn" onclick="generateTopicCode()">
+                <span>✨</span> Generate Code
+            </button>
+        </div>
+
+        <div class="topic-chips">
+            <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center; margin-right: 0.4rem;">Suggested Topics:</span>
+            <div class="topic-chip" onclick="selectTopic('for loop')">Loops</div>
+            <div class="topic-chip" onclick="selectTopic('function')">Functions</div>
+            <div class="topic-chip" onclick="selectTopic('list')">Lists</div>
+            <div class="topic-chip" onclick="selectTopic('recursion')">Recursion</div>
+            <div class="topic-chip" onclick="selectTopic('fibonacci')">Fibonacci</div>
+            <div class="topic-chip" onclick="selectTopic('bubble sort')">Bubble Sort</div>
+        </div>
+
+        <!-- Custom Code Editor Panel -->
+        <div class="editor-wrapper">
+            <div class="line-numbers-gutter" id="gutterLineNumbers">1</div>
+            <textarea id="editorCodeArea" spellcheck="false" placeholder="# Paste your Python code here or generate a topic sample..."></textarea>
+        </div>
+
+        <!-- Standard Input (stdin) for mock inputs -->
+        <div style="margin-bottom: 1.25rem;">
+            <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; font-family: Fira Code, monospace; text-align: left;">⌨️ Standard Input (stdin):</label>
+            <input type="text" id="stdinInput" class="topic-input" style="font-family: Fira Code, monospace; padding: 0.6rem 1rem;" placeholder="Values for input() calls, separated by spaces or newlines (e.g. 10 20)...">
+        </div>
+
+        <div class="editor-actions">
+            <button class="viz-ctrl-btn" onclick="clearVisualizerEditor()">🗑️ Clear</button>
+            <button class="viz-ctrl-btn" onclick="formatVisualizerCode()">✨ Format</button>
+            <button class="viz-btn-primary" id="startSessionBtn" onclick="startVisualizerSession()">
+                <span>⚡</span> Start Visualizing
+            </button>
+        </div>
+    </div>
+
+    <!-- Graphical Visualization Canvas Card -->
+    <div class="session-card" id="graphicalVizCard" style="display: none; margin-bottom: 1.5rem; animation: fadeInUp 0.4s ease;">
+        <div class="session-header">
+            <div class="session-title">🖥️ Visual Memory Canvas</div>
+        </div>
+        <div id="graphicalVizCanvas" style="min-height: 220px; padding: 2rem; background: #011627; display: flex; flex-direction: column; gap: 1.5rem; align-items: center; justify-content: center; overflow-x: auto; position: relative; border-top: 1px solid var(--border-color);">
+            <div style="color: var(--text-muted); font-style: italic;">No variables to display visually.</div>
+        </div>
+    </div>
+
+    <!-- Interactive Dry Run Session Panels -->
+    <div class="session-panel" id="sessionPanel" style="display: none;">
+        <!-- Left Panel: The Code Step Runner -->
+        <div class="session-card">
+            <div class="session-header">
+                <div class="session-title">💻 Step-by-Step Code Execution</div>
+                <div class="playback-info">Step <span id="lblCurrentStep">0</span> of <span id="lblTotalSteps">0</span></div>
+            </div>
+            
+            <!-- Playback Control Toolbar -->
+            <div class="playback-bar">
+                <button class="playback-btn" id="btnFirst" onclick="goToStep(0)" title="Jump to start">|◀</button>
+                <button class="playback-btn" id="btnPrev" onclick="prevStep()" title="Previous step">◀</button>
+                <button class="playback-btn" id="playPauseBtn" onclick="togglePlay()" title="Auto play trace">▶ Play</button>
+                <button class="playback-btn" id="btnNext" onclick="nextStep()" title="Next step">▶</button>
+                <button class="playback-btn" id="btnLast" onclick="goToStep(-1)" title="Jump to end">▶|</button>
+                
+                <input type="range" id="stepRangeSlider" class="playback-slider" min="0" max="0" value="0" oninput="onSliderDrag(this.value)">
+                
+                <select id="speedSelector" class="speed-select" onchange="changePlaySpeed(this.value)">
+                    <option value="1500">Normal (1.5s)</option>
+                    <option value="800">Fast (0.8s)</option>
+                    <option value="2500">Slow (2.5s)</option>
+                </select>
+            </div>
+
+            <!-- Visualizer Code Container -->
+            <div class="viz-code-display" id="vizCodeBlock">
+                <!-- Lines populated by Javascript -->
+            </div>
+        </div>
+
+        <!-- Right Panel: Variables + Step Explanations + Terminal Output -->
+        <div class="session-card">
+            <!-- Active Step Explanation Card -->
+            <div class="session-header">
+                <div class="session-title">💡 Step Logic Analysis</div>
+            </div>
+            <div class="explanation-card">
+                <div class="explanation-title">⚙️ Line Breakdown</div>
+                <div id="stepExplanationText">Starting visualization session...</div>
+            </div>
+
+            <!-- Variables Watch -->
+            <div class="variables-section">
+                <div class="session-header" style="border-top: 1px solid var(--border-color);">
+                    <div class="session-title">📊 Variable Watch</div>
+                </div>
+                <div class="variables-table-wrapper">
+                    <table class="variables-table">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="variablesTableBody">
+                            <tr>
+                                <td colspan="3" class="no-vars" style="text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic;">
+                                    No active variables in current scope.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Console Output -->
+            <div class="terminal-section">
+                <div class="session-header" style="border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.25);">
+                    <div class="session-title">🖥️ Program Output</div>
+                </div>
+                <div class="terminal-screen" id="consoleOutputScreen"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let steps = [];
+let currentStepIdx = -1;
+let autoPlayActive = false;
+let playInterval = null;
+let playIntervalDuration = 1500;
+let previousLocals = {};
+
+function clearVisualizerEditor() {
+    document.getElementById('editorCodeArea').value = '';
+    updateGutterLines();
+}
+
+function formatVisualizerCode() {
+    const ta = document.getElementById('editorCodeArea');
+    ta.value = ta.value.split('\n').map(l => l.replace(/\t/g, '    ')).join('\n');
+    showToast('Code Formatted!');
+}
+
+function updateGutterLines() {
+    const ta = document.getElementById('editorCodeArea');
+    const lines = ta.value.split('\n').length;
+    document.getElementById('gutterLineNumbers').textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+}
+
+function selectTopic(topic) {
+    document.getElementById('topicInput').value = topic;
+    generateTopicCode();
+}
+
+async function generateTopicCode() {
+    const topic = document.getElementById('topicInput').value.trim();
+    if (!topic) {
+        showToast('Please enter a topic first.', 'error');
+        return;
+    }
+
+    const genBtn = document.getElementById('generateBtn');
+    genBtn.disabled = true;
+    genBtn.innerHTML = '⚡ Generating...';
+
+    try {
+        const res = await fetch('/api/get-topic-code', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({topic})
+        });
+        const data = await res.json();
+        if (data.code) {
+            document.getElementById('editorCodeArea').value = data.code;
+            updateGutterLines();
+            showToast(`Generated code sample for ${topic}!`, 'success');
+        } else {
+            showToast(data.error || 'Failed to generate code sample.', 'error');
+        }
+    } catch(e) {
+        showToast('Connection error generating code.', 'error');
+    } finally {
+        genBtn.disabled = false;
+        genBtn.innerHTML = '✨ Generate Code';
+    }
+}
+
+async function startVisualizerSession() {
+    const code = document.getElementById('editorCodeArea').value.trim();
+    if (!code) {
+        showToast('Please write or generate code first.', 'error');
+        return;
+    }
+    const stdin = document.getElementById('stdinInput').value;
+
+    const sessionBtn = document.getElementById('startSessionBtn');
+    sessionBtn.disabled = true;
+    sessionBtn.innerHTML = '⚡ Setting Up...';
+    stopPlay();
+
+    try {
+        const res = await fetch('/api/visualize-code', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({code, stdin})
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            showToast(data.error, 'error');
+            return;
+        }
+
+        steps = data.steps || [];
+        if (steps.length === 0) {
+            showToast('No execution steps captured.', 'info');
+            return;
+        }
+
+        previousLocals = {};
+        document.getElementById('sessionPanel').style.display = 'grid';
+        
+        renderCodeView(code);
+        goToStep(0);
+        showToast('Dynamic dry-run session started!', 'success');
+        
+        // Auto scroll to visualizer panel
+        document.getElementById('sessionPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+    } catch(e) {
+        showToast('Failed to start trace: ' + e.message, 'error');
+    } finally {
+        sessionBtn.disabled = false;
+        sessionBtn.innerHTML = '⚡ Start Visualizing';
+    }
+}
+
+function renderCodeView(code) {
+    const block = document.getElementById('vizCodeBlock');
+    block.innerHTML = '';
+    const lines = code.split('\n');
+    lines.forEach((line, index) => {
+        const lineNum = index + 1;
+        const row = document.createElement('div');
+        row.className = 'viz-code-row';
+        row.id = `viz-row-${lineNum}`;
+
+        const numCell = document.createElement('span');
+        numCell.className = 'viz-row-num';
+        numCell.textContent = lineNum;
+
+        const contentCell = document.createElement('span');
+        contentCell.className = 'viz-row-content';
+        contentCell.textContent = line || ' ';
+
+        row.appendChild(numCell);
+        row.appendChild(contentCell);
+        block.appendChild(row);
+    });
+}
+
+function goToStep(index) {
+    if (steps.length === 0) return;
+
+    if (index === -1) {
+        index = steps.length - 1;
+    }
+
+    if (index < 0 || index >= steps.length) return;
+
+    currentStepIdx = index;
+
+    // Update Step Counters
+    document.getElementById('lblCurrentStep').textContent = currentStepIdx + 1;
+    document.getElementById('lblTotalSteps').textContent = steps.length;
+
+    // Update Slider
+    const slider = document.getElementById('stepRangeSlider');
+    slider.max = steps.length - 1;
+    slider.value = currentStepIdx;
+
+    const step = steps[currentStepIdx];
+
+    // Highlight active code row
+    document.querySelectorAll('.viz-code-row').forEach(row => row.classList.remove('active-step'));
+    const activeRow = document.getElementById(`viz-row-${step.line}`);
+    if (activeRow) {
+        activeRow.classList.add('active-step');
+        activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Set Explanation
+    document.getElementById('stepExplanationText').textContent = step.explanation || `Executing line ${step.line}...`;
+
+    // Render local variables watch list
+    renderVariables(step.locals || {});
+
+    // Draw graphical canvas representation
+    drawStateCanvas(step);
+
+    // Set program output screen
+    document.getElementById('consoleOutputScreen').textContent = step.stdout || '(no stdout output yet)';
+
+    // Handle exceptions
+    if (step.event === 'exception' && step.exception) {
+        document.getElementById('stepExplanationText').innerHTML = `<span style="color:#ff4757;font-weight:bold;">🚨 Exception Raised!</span><br>${step.exception}`;
+        document.getElementById('consoleOutputScreen').textContent += `\nTraceback Error: ${step.exception}`;
+    }
+
+    // Disable buttons accordingly
+    document.getElementById('btnFirst').disabled = (currentStepIdx === 0);
+    document.getElementById('btnPrev').disabled = (currentStepIdx === 0);
+    document.getElementById('btnNext').disabled = (currentStepIdx === steps.length - 1);
+    document.getElementById('btnLast').disabled = (currentStepIdx === steps.length - 1);
+}
+
+function renderVariables(currentLocals) {
+    const tbody = document.getElementById('variablesTableBody');
+    tbody.innerHTML = '';
+
+    const keys = Object.keys(currentLocals);
+    if (keys.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="no-vars" style="text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic;">No active variables in current scope.</td></tr>`;
+        previousLocals = {};
+        return;
+    }
+
+    keys.sort().forEach(key => {
+        const val = currentLocals[key];
+        const prevVal = previousLocals[key];
+        const isUpdated = prevVal !== undefined && prevVal !== val;
+        
+        const tr = document.createElement('tr');
+        if (isUpdated) {
+            tr.className = 'var-row-updated';
+        }
+
+        const nameTd = document.createElement('td');
+        nameTd.style.color = 'var(--accent-primary)';
+        nameTd.textContent = key;
+
+        const typeTd = document.createElement('td');
+        typeTd.style.color = 'var(--text-muted)';
+        typeTd.textContent = typeof val;
+
+        const valTd = document.createElement('td');
+        valTd.style.color = 'var(--accent-secondary)';
+        valTd.textContent = typeof val === 'object' ? JSON.stringify(val) : String(val);
+
+        tr.appendChild(nameTd);
+        tr.appendChild(typeTd);
+        tr.appendChild(valTd);
+        tbody.appendChild(tr);
+    });
+
+    previousLocals = {...currentLocals};
+}
+
+function prevStep() {
+    if (currentStepIdx > 0) {
+        goToStep(currentStepIdx - 1);
+    }
+}
+
+function nextStep() {
+    if (currentStepIdx < steps.length - 1) {
+        goToStep(currentStepIdx + 1);
+    } else {
+        stopPlay();
+    }
+}
+
+function onSliderDrag(val) {
+    goToStep(parseInt(val));
+}
+
+function togglePlay() {
+    if (autoPlayActive) {
+        stopPlay();
+    } else {
+        startPlay();
+    }
+}
+
+function startPlay() {
+    autoPlayActive = true;
+    document.getElementById('playPauseBtn').innerHTML = '⏸ Pause';
+    document.getElementById('playPauseBtn').style.background = 'var(--accent-warning)';
+
+    if (currentStepIdx === steps.length - 1) {
+        goToStep(0);
+    }
+
+    playInterval = setInterval(() => {
+        nextStep();
+    }, playIntervalDuration);
+}
+
+function stopPlay() {
+    autoPlayActive = false;
+    document.getElementById('playPauseBtn').innerHTML = '▶ Play';
+    document.getElementById('playPauseBtn').style.background = 'var(--accent-secondary)';
+    if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+    }
+}
+
+function changePlaySpeed(speedVal) {
+    playIntervalDuration = parseInt(speedVal);
+    if (autoPlayActive) {
+        stopPlay();
+        startPlay();
+    }
+}
+
+// Bind Code textarea updates
+document.getElementById('editorCodeArea').addEventListener('input', updateGutterLines);
+document.getElementById('editorCodeArea').addEventListener('scroll', function() {
+    document.getElementById('gutterLineNumbers').scrollTop = this.scrollTop;
+});
+
+// Tab indentation helper in editor
+document.getElementById('editorCodeArea').addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        const s = this.selectionStart;
+        this.value = this.value.substring(0, s) + '    ' + this.value.substring(this.selectionEnd);
+        this.selectionStart = this.selectionEnd = s + 4;
+        updateGutterLines();
+    }
+});
+
+function drawStateCanvas(step) {
+    const canvasCard = document.getElementById('graphicalVizCard');
+    const canvas = document.getElementById('graphicalVizCanvas');
+    canvas.innerHTML = '';
+    
+    // Always make sure card is shown when a visualization is active
+    canvasCard.style.display = 'block';
+
+    if (!step) {
+        canvas.innerHTML = `
+            <div class="viz-placeholder-view">
+                <div class="viz-placeholder-icon">🚀</div>
+                <div style="font-weight: 700; font-size: 1.1rem; color: var(--accent-primary);">Ready to Trace</div>
+                <div style="font-size: 0.88rem; color: var(--text-muted);">Click <strong>▶ Next</strong> or <strong>▶ Play</strong> to see variables and memory state structures rendered in real-time.</div>
+            </div>
+        `;
+        return;
+    }
+
+    const locals = step.locals || {};
+    const stack = step.stack || [];
+
+    // Let's create the layout grid: Stack (left) and Heap (right)
+    const layoutGrid = document.createElement('div');
+    layoutGrid.className = 'viz-layout-grid';
+
+    const stackCol = document.createElement('div');
+    stackCol.className = 'viz-stack-column';
+
+    const heapCol = document.createElement('div');
+    heapCol.className = 'viz-heap-column';
+
+    layoutGrid.appendChild(stackCol);
+    layoutGrid.appendChild(heapCol);
+    canvas.appendChild(layoutGrid);
+
+    // Color palette for references
+    const colors = [
+        { border: '#00d4ff', bg: 'rgba(0, 212, 255, 0.06)', text: '#00d4ff', shadow: 'rgba(0, 212, 255, 0.3)' },
+        { border: '#00ff88', bg: 'rgba(0, 255, 136, 0.06)', text: '#00ff88', shadow: 'rgba(0, 255, 136, 0.3)' },
+        { border: '#9b59b6', bg: 'rgba(155, 89, 182, 0.06)', text: '#9b59b6', shadow: 'rgba(155, 89, 182, 0.3)' },
+        { border: '#e67e22', bg: 'rgba(230, 126, 34, 0.06)', text: '#e67e22', shadow: 'rgba(230, 126, 34, 0.3)' },
+        { border: '#ff4757', bg: 'rgba(255, 71, 87, 0.06)', text: '#ff4757', shadow: 'rgba(255, 71, 87, 0.3)' },
+        { border: '#f1c40f', bg: 'rgba(241, 196, 15, 0.06)', text: '#f1c40f', shadow: 'rgba(241, 196, 15, 0.3)' }
+    ];
+    let colorIdx = 0;
+    const refColorMap = new Map(); // Map object ID or reference label to a color spec
+
+    function getRefColor(key) {
+        if (!refColorMap.has(key)) {
+            refColorMap.set(key, colors[colorIdx % colors.length]);
+            colorIdx++;
+        }
+        return refColorMap.get(key);
+    }
+
+    // Identify references and separate scalars
+    const heapObjectsToDraw = []; // List of { id, label, type, value, color }
+    const activeFrameLocals = locals;
+
+    // We also want to check for potential loop index variables (integers)
+    const indexPointers = {}; // varName -> integer value
+
+    // 1. Draw Call Stack Frames
+    const stackToDraw = [...stack];
+    // If the tracer did not provide a stack, mock one using the current line and active locals
+    if (stackToDraw.length === 0) {
+        stackToDraw.push({
+            name: '<module>',
+            line: step.line,
+            locals: locals
+        });
+    }
+
+    stackToDraw.forEach((frame, frameIdx) => {
+        const frameBox = document.createElement('div');
+        frameBox.className = 'viz-frame-box';
+        const isActive = (frameIdx === stackToDraw.length - 1);
+        if (isActive) {
+            frameBox.classList.add('active-frame');
+        }
+
+        const header = document.createElement('div');
+        header.className = 'viz-frame-header';
+        if (isActive) header.classList.add('active-header');
+        header.innerHTML = `<span>📂 Frame: ${frame.name}()</span> <span style="font-size:0.75rem; opacity:0.7;">Line ${frame.line}</span>`;
+        frameBox.appendChild(header);
+
+        const table = document.createElement('table');
+        table.className = 'viz-frame-table';
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        const frameLocals = frame.locals || {};
+        const varKeys = Object.keys(frameLocals);
+
+        if (varKeys.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="2" style="color:var(--text-muted); font-style:italic; text-align:center; padding:0.75rem;">No local variables</td></tr>`;
+        } else {
+            varKeys.sort().forEach(varName => {
+                const val = frameLocals[varName];
+                
+                // Check if it's an index variable (integer) to point to arrays
+                if (Number.isInteger(val)) {
+                    indexPointers[varName] = val;
+                }
+
+                const tr = document.createElement('tr');
+                const nameTd = document.createElement('td');
+                nameTd.className = 'viz-var-name';
+                nameTd.textContent = varName;
+
+                const valTd = document.createElement('td');
+                valTd.className = 'viz-var-val-cell';
+
+                // Determine if it is a reference type (list, tuple, dict, set, class object)
+                const isArrayVal = Array.isArray(val);
+                const isObjVal = (val && typeof val === 'object');
+
+                if (isArrayVal || isObjVal) {
+                    // It is a reference type
+                    const refId = isObjVal && val.hasOwnProperty('__id__') ? val.__id__ : `ref_${frame.name}_${varName}`;
+                    const colorSpec = getRefColor(refId);
+
+                    const typeName = isArrayVal ? 'list' : (val.hasOwnProperty('__class__') ? val.__class__ : 'dict');
+                    
+                    valTd.innerHTML = `
+                        <span class="viz-ref-link" style="color: ${colorSpec.border}; border-color: ${colorSpec.border}; background: ${colorSpec.bg}; box-shadow: 0 0 5px ${colorSpec.shadow}">
+                            ref ➔ [${typeName}]
+                        </span>
+                    `;
+
+                    // Push to heap objects to draw (if not already added)
+                    if (!heapObjectsToDraw.some(obj => obj.id === refId)) {
+                        heapObjectsToDraw.push({
+                            id: refId,
+                            label: varName,
+                            type: typeName,
+                            value: val,
+                            color: colorSpec
+                        });
+                    }
+                } else {
+                    // Scalar value
+                    valTd.textContent = String(val);
+                    valTd.style.color = 'var(--accent-secondary)';
+                }
+
+                tr.appendChild(nameTd);
+                tr.appendChild(valTd);
+                tbody.appendChild(tr);
+            });
+        }
+
+        frameBox.appendChild(table);
+        // Prepend frames so the newest frame is at the top of the stack
+        if (stackCol.firstChild) {
+            stackCol.insertBefore(frameBox, stackCol.firstChild);
+        } else {
+            stackCol.appendChild(frameBox);
+        }
+    });
+
+    // 2. Draw Heap Column Objects
+    if (heapObjectsToDraw.length === 0) {
+        heapCol.innerHTML = `
+            <div style="color: var(--text-muted); font-style: italic; text-align: center; padding: 2rem;">
+                Heap is empty.<br><span style="font-size:0.75rem;">(Complex objects/lists will render here)</span>
+            </div>
+        `;
+    } else {
+        heapObjectsToDraw.forEach(obj => {
+            const card = document.createElement('div');
+            card.className = 'viz-heap-obj-card';
+            card.style.borderColor = obj.color.border;
+            card.style.boxShadow = `0 4px 15px rgba(0,0,0,0.2), 0 0 10px ${obj.color.shadow}`;
+
+            const header = document.createElement('div');
+            header.className = 'viz-heap-obj-header';
+            header.innerHTML = `<span class="viz-heap-obj-type-tag" style="background:${obj.color.border}; color:#000;">${obj.type.toUpperCase()}</span> <span style="color:${obj.color.border}; font-weight:bold;">${obj.label}</span>`;
+            card.appendChild(header);
+
+            // RENDER BY TYPE:
+            if (obj.type === 'list' || Array.isArray(obj.value)) {
+                // RENDER LIST/ARRAY
+                const arrayDiv = document.createElement('div');
+                arrayDiv.className = 'viz-array';
+                arrayDiv.style.borderColor = obj.color.border;
+
+                const values = Array.isArray(obj.value) ? obj.value : [];
+                values.forEach((cellVal, cellIdx) => {
+                    const cellWrapper = document.createElement('div');
+                    cellWrapper.className = 'viz-array-cell-wrapper';
+
+                    const idxDiv = document.createElement('div');
+                    idxDiv.className = 'viz-array-index';
+                    idxDiv.textContent = cellIdx;
+                    cellWrapper.appendChild(idxDiv);
+
+                    const cell = document.createElement('div');
+                    cell.className = 'viz-array-cell';
+                    cell.style.borderColor = obj.color.border;
+                    cell.textContent = typeof cellVal === 'object' ? JSON.stringify(cellVal) : String(cellVal);
+                    cellWrapper.appendChild(cell);
+
+                    // Check if any integer variables point to this cell index
+                    const activePointers = [];
+                    for (let pName in indexPointers) {
+                        if (indexPointers[pName] === cellIdx) {
+                            activePointers.push(pName);
+                        }
+                    }
+
+                    if (activePointers.length > 0) {
+                        const ptr = document.createElement('div');
+                        ptr.className = 'viz-pointer-indicator';
+                        ptr.style.color = obj.color.border;
+                        ptr.innerHTML = `<div class="viz-pointer-arrow-up">▲</div><div>${activePointers.join(', ')}</div>`;
+                        cellWrapper.appendChild(ptr);
+                    }
+
+                    arrayDiv.appendChild(cellWrapper);
+                });
+                
+                // Wrap in scroll container
+                const scrollWrapper = document.createElement('div');
+                scrollWrapper.style.overflowX = 'auto';
+                scrollWrapper.style.paddingBottom = '2.2rem'; // Space for pointers
+                scrollWrapper.appendChild(arrayDiv);
+                card.appendChild(scrollWrapper);
+
+            } else if (obj.value.hasOwnProperty('value') && (obj.value.hasOwnProperty('next') || obj.value.hasOwnProperty('left'))) {
+                // RENDER LINKED NODE(S)
+                const listContainer = document.createElement('div');
+                listContainer.className = 'viz-linked-list';
+
+                const chain = [];
+                const visited = new Set();
+                let curr = obj.value;
+
+                while (curr && typeof curr === 'object') {
+                    const nodeId = curr.__id__ || JSON.stringify(curr);
+                    if (visited.has(nodeId)) break;
+                    visited.add(nodeId);
+                    chain.push(curr);
+                    curr = curr.next;
+                }
+
+                chain.forEach((node, idx) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'viz-node-wrapper';
+
+                    // Check if any pointer variables (like curr) point to this node __id__
+                    const pointingVars = [];
+                    for (let key in activeFrameLocals) {
+                        const val = activeFrameLocals[key];
+                        if (val && typeof val === 'object' && val.__id__ === node.__id__) {
+                            pointingVars.push(key);
+                        }
+                    }
+
+                    if (pointingVars.length > 0) {
+                        const pTag = document.createElement('div');
+                        pTag.className = 'viz-node-pointer-tag';
+                        pTag.style.background = obj.color.border;
+                        pTag.style.color = '#000';
+                        pTag.textContent = pointingVars.join(', ');
+                        wrapper.appendChild(pTag);
+                    }
+
+                    const circle = document.createElement('div');
+                    circle.className = 'viz-node-circle';
+                    circle.style.borderColor = obj.color.border;
+                    circle.style.boxShadow = `0 0 10px ${obj.color.shadow}`;
+
+                    const isHeadOrCurrent = pointingVars.some(v => v.includes('curr') || v.includes('head') || v.includes('current'));
+                    if (isHeadOrCurrent) {
+                        circle.style.background = obj.color.bg;
+                        circle.style.borderWidth = '3px';
+                    }
+
+                    const valDisplay = node.hasOwnProperty('value') ? node.value : (node.hasOwnProperty('val') ? node.val : '?');
+                    circle.innerHTML = `<span style="font-size: 1rem; color: #fff;">${valDisplay}</span>`;
+                    wrapper.appendChild(circle);
+                    listContainer.appendChild(wrapper);
+
+                    if (idx < chain.length - 1) {
+                        const arrow = document.createElement('div');
+                        arrow.className = 'viz-link-arrow';
+                        arrow.textContent = '➔';
+                        listContainer.appendChild(arrow);
+                    } else {
+                        const arrow = document.createElement('div');
+                        arrow.className = 'viz-link-arrow';
+                        arrow.style.color = 'var(--text-muted)';
+                        arrow.textContent = '➔ ∅';
+                        listContainer.appendChild(arrow);
+                    }
+                });
+
+                card.appendChild(listContainer);
+
+            } else {
+                // RENDER DICTIONARY OR CUSTOM OBJECT
+                const dictGrid = document.createElement('div');
+                dictGrid.className = 'viz-dict-grid';
+                dictGrid.style.borderColor = obj.color.border;
+
+                let entries = [];
+                for (let k in obj.value) {
+                    if (k.startsWith('__')) continue;
+                    entries.push({ k, v: obj.value[k] });
+                }
+
+                if (entries.length === 0) {
+                    dictGrid.innerHTML = `<span style="color:var(--text-muted); font-style:italic;">Empty dict</span>`;
+                } else {
+                    entries.forEach(entry => {
+                        const keyDiv = document.createElement('div');
+                        keyDiv.className = 'viz-dict-key';
+                        keyDiv.textContent = entry.k;
+
+                        const valDiv = document.createElement('div');
+                        valDiv.className = 'viz-dict-val';
+                        valDiv.textContent = typeof entry.v === 'object' ? JSON.stringify(entry.v) : String(entry.v);
+
+                        dictGrid.appendChild(keyDiv);
+                        dictGrid.appendChild(valDiv);
+                    });
+                }
+                card.appendChild(dictGrid);
+            }
+
+            heapCol.appendChild(card);
+        });
+    }
+}
+
+// Load default sample or localStorage code on mount
+window.addEventListener('DOMContentLoaded', () => {
+    const codeFromStorage = localStorage.getItem('visualizerCode');
+    if (codeFromStorage) {
+        document.getElementById('editorCodeArea').value = codeFromStorage;
+        localStorage.removeItem('visualizerCode');
+        updateGutterLines();
+        // Automatically start the visualizing session
+        setTimeout(() => {
+            startVisualizerSession();
+        }, 300);
+    } else {
+        document.getElementById('editorCodeArea').value = `# Try this sample code first!\nnumbers = [1, 2, 3]\nfor num in numbers:\n    squared = num ** 2\n    print(f"Num {num} squared is {squared}")\n`;
+        updateGutterLines();
+    }
+});
+</script>
+{% endblock %}

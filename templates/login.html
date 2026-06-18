@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if mode == 'register' %}Create Account{% elif mode == 'forgot' %}Reset Password{% else %}Login{% endif %} — PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-primary);
+    font-family:Inter,sans-serif;
+    padding:1rem;
+  }
+
+  .auth-card{
+    background:var(--gradient-card);
+    border:1px solid var(--border-color);
+    border-radius:24px;
+    padding:2.5rem 2rem;
+    width:100%;
+    max-width:420px;
+    box-shadow:var(--shadow-card);
+    animation:fadeUp .4s ease;
+  }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+  .auth-logo{
+    text-align:center;
+    margin-bottom:1.75rem;
+  }
+  .auth-logo .snake{font-size:2.8rem;}
+  .auth-logo h1{
+    font-size:1.6rem;
+    font-weight:800;
+    color:var(--text-heading);
+    margin-top:.4rem;
+  }
+  .auth-logo h1 span{color:var(--accent-primary);}
+  .auth-logo p{font-size:.82rem;color:var(--text-muted);margin-top:.25rem;}
+
+  .tab-row{
+    display:flex;
+    background:var(--bg-secondary);
+    border-radius:12px;
+    padding:.25rem;
+    margin-bottom:1.75rem;
+    gap:.25rem;
+  }
+  .tab-row a{
+    flex:1;
+    text-align:center;
+    padding:.55rem;
+    border-radius:9px;
+    font-size:.85rem;
+    font-weight:600;
+    color:var(--text-muted);
+    text-decoration:none;
+    transition:all .2s;
+  }
+  .tab-row a.active{
+    background:var(--accent-primary);
+    color:#000;
+  }
+
+  .form-group{margin-bottom:1.1rem;}
+  .form-group label{
+    display:block;
+    font-size:.8rem;
+    font-weight:600;
+    color:var(--text-secondary);
+    margin-bottom:.4rem;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .form-group input{
+    width:100%;
+    background:var(--bg-code);
+    border:1px solid var(--border-color);
+    border-radius:10px;
+    padding:.7rem 1rem;
+    color:var(--text-primary);
+    font-size:.92rem;
+    font-family:Inter,sans-serif;
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .form-group input:focus{
+    border-color:var(--accent-primary);
+    box-shadow:0 0 0 3px rgba(0,212,255,.12);
+  }
+  .form-group input::placeholder{color:var(--text-muted);}
+
+  .input-icon-wrap{position:relative;}
+  .input-icon-wrap .icon{
+    position:absolute;
+    left:.85rem;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:1rem;
+    pointer-events:none;
+  }
+  .input-icon-wrap input{padding-left:2.4rem;}
+
+  .toggle-pw{
+    position:absolute;
+    right:.85rem;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-size:1rem;
+    color:var(--text-muted);
+  }
+
+  .error-box{
+    background:rgba(255,71,87,.12);
+    border:1px solid rgba(255,71,87,.35);
+    border-radius:10px;
+    padding:.65rem 1rem;
+    color:#ff6b6b;
+    font-size:.84rem;
+    margin-bottom:1.1rem;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+  }
+
+  .submit-btn{
+    width:100%;
+    background:var(--accent-primary);
+    color:#000;
+    border:none;
+    border-radius:12px;
+    padding:.8rem;
+    font-size:.95rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:all .2s;
+    margin-top:.25rem;
+    font-family:Inter,sans-serif;
+  }
+  .submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:var(--glow-primary);
+  }
+  .submit-btn:active{transform:translateY(0);}
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+    margin:1.25rem 0;
+    color:var(--text-muted);
+    font-size:.78rem;
+  }
+  .divider::before,.divider::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--border-color);
+  }
+
+  .guest-btn{
+    width:100%;
+    background:transparent;
+    border:1px solid var(--border-color);
+    border-radius:12px;
+    padding:.7rem;
+    color:var(--text-secondary);
+    font-size:.88rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .2s;
+    text-decoration:none;
+    display:block;
+    text-align:center;
+    font-family:Inter,sans-serif;
+  }
+  .guest-btn:hover{
+    border-color:var(--accent-secondary);
+    color:var(--accent-secondary);
+  }
+
+  .password-strength{
+    height:4px;
+    border-radius:2px;
+    margin-top:.4rem;
+    background:var(--bg-secondary);
+    overflow:hidden;
+    display:none;
+  }
+  .strength-bar{height:100%;width:0;border-radius:2px;transition:width .3s,background .3s;}
+
+  .strength-label{
+    font-size:.72rem;
+    margin-top:.25rem;
+    color:var(--text-muted);
+    display:none;
+  }
+
+  .bg-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  .auth-card{position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+
+<div class="auth-card">
+  <div class="auth-logo">
+    <div class="snake">🐍</div>
+    <h1>PyLab <span>AI</span></h1>
+    <p>Learn, Experiment, Master Python ⭐</p>
+  </div>
+
+  <!-- Login / Register tabs -->
+  {% if mode != 'forgot' %}
+  <div class="tab-row">
+    <a href="/login"  class="{% if mode != 'register' %}active{% endif %}">🔑 Login</a>
+    <a href="/register" class="{% if mode == 'register' %}active{% endif %}">✨ Register</a>
+  </div>
+  {% else %}
+  <div style="text-align:center;margin-bottom:1.5rem;">
+    <div style="font-size:1.5rem;">🔑</div>
+    <div style="font-weight:700;color:var(--text-heading);font-size:1rem;margin-top:.3rem;">Reset Your Password</div>
+    <div style="font-size:.78rem;color:var(--text-muted);margin-top:.2rem;">Enter your username or email to set a new password</div>
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="error-box">⚠️ {{ error }}</div>
+  {% endif %}
+
+  {% if success %}
+  <div style="background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.35);border-radius:10px;padding:.65rem 1rem;color:#2ed573;font-size:.84rem;margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem;">
+    ✅ {{ success }} <a href="/login" style="color:var(--accent-primary);font-weight:700;margin-left:.4rem;text-decoration:none;">Login →</a>
+  </div>
+  {% endif %}
+
+  {% if mode == 'forgot' %}
+  <!-- ── FORGOT PASSWORD FORM ── -->
+  <form method="POST" action="/forgot-password" id="authForm">
+    <div class="form-group">
+      <label>Username or Email</label>
+      <div class="input-icon-wrap">
+        <span class="icon">👤</span>
+        <input type="text" name="identifier" placeholder="Your username or email"
+               required autocomplete="username">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>New Password</label>
+      <div class="input-icon-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" name="new_password" id="pwInput"
+               placeholder="Min 6 characters" required minlength="6"
+               autocomplete="new-password" oninput="checkStrength(this.value)">
+        <button type="button" class="toggle-pw" onclick="togglePw('pwInput',this)">👁️</button>
+      </div>
+      <div class="password-strength" id="strengthBar"><div class="strength-bar" id="strengthFill"></div></div>
+      <div class="strength-label" id="strengthLabel"></div>
+    </div>
+    <div class="form-group">
+      <label>Confirm New Password</label>
+      <div class="input-icon-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" name="confirm" placeholder="Repeat new password"
+               required autocomplete="new-password">
+      </div>
+    </div>
+    <button type="submit" class="submit-btn">🔑 Reset Password</button>
+  </form>
+  <div style="text-align:center;margin-top:1rem;">
+    <a href="/login" style="color:var(--text-muted);font-size:.82rem;text-decoration:none;">← Back to Login</a>
+  </div>
+
+  {% elif mode == 'register' %}
+  <!-- ── REGISTER FORM ── -->
+  <form method="POST" action="/register" id="authForm">
+    <div class="form-group">
+      <label>Username</label>
+      <div class="input-icon-wrap">
+        <span class="icon">👤</span>
+        <input type="text" name="username" placeholder="e.g. pythonlover" required
+               minlength="3" maxlength="30" autocomplete="username"
+               value="{{ request.form.get('username','') }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <div class="input-icon-wrap">
+        <span class="icon">📧</span>
+        <input type="email" name="email" placeholder="you@example.com" required
+               autocomplete="email" value="{{ request.form.get('email','') }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-icon-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" name="password" id="pwInput"
+               placeholder="Min 6 characters" required minlength="6"
+               autocomplete="new-password" oninput="checkStrength(this.value)">
+        <button type="button" class="toggle-pw" onclick="togglePw('pwInput',this)">👁️</button>
+      </div>
+      <div class="password-strength" id="strengthBar"><div class="strength-bar" id="strengthFill"></div></div>
+      <div class="strength-label" id="strengthLabel"></div>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <div class="input-icon-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" name="confirm" placeholder="Repeat password"
+               required autocomplete="new-password">
+      </div>
+    </div>
+    <button type="submit" class="submit-btn">🚀 Create Account</button>
+  </form>
+
+  {% else %}
+  <!-- ── LOGIN FORM ── -->
+  <form method="POST" action="/login{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}" id="authForm">
+    <div class="form-group">
+      <label>Username or Email</label>
+      <div class="input-icon-wrap">
+        <span class="icon">👤</span>
+        <input type="text" name="username" placeholder="Your username or email"
+               required autocomplete="username"
+               value="{{ request.form.get('username','') }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-icon-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" name="password" id="pwInput"
+               placeholder="Your password" required autocomplete="current-password">
+        <button type="button" class="toggle-pw" onclick="togglePw('pwInput',this)">👁️</button>
+      </div>
+    </div>
+    <button type="submit" class="submit-btn">🔑 Login</button>
+    <div style="text-align:right;margin-top:.6rem;">
+      <a href="/forgot-password" style="font-size:.8rem;color:var(--text-muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='var(--text-muted)'">Forgot password?</a>
+    </div>
+  </form>
+  {% endif %}
+
+  <div class="divider">or</div>
+  <a href="/guest" class="guest-btn">👻 Continue as Guest</a>
+</div>
+
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function checkStrength(val) {
+  const bar = document.getElementById('strengthBar');
+  const fill = document.getElementById('strengthFill');
+  const label = document.getElementById('strengthLabel');
+  bar.style.display = 'block';
+  label.style.display = 'block';
+
+  let score = 0;
+  if (val.length >= 6)  score++;
+  if (val.length >= 10) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+
+  const levels = [
+    {w:'20%',  bg:'#ff4757', text:'Very weak'},
+    {w:'40%',  bg:'#ff6348', text:'Weak'},
+    {w:'60%',  bg:'#ffa502', text:'Fair'},
+    {w:'80%',  bg:'#2ed573', text:'Strong'},
+    {w:'100%', bg:'#00d4ff', text:'Very strong'},
+  ];
+  const l = levels[Math.min(score, 4)];
+  fill.style.width = l.w;
+  fill.style.background = l.bg;
+  label.textContent = l.text;
+  label.style.color = l.bg;
+}
+</script>
+</body>
+</html>

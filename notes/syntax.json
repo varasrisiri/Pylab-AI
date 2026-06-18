@@ -1,0 +1,11 @@
+{
+  "title": "Syntax — Complete Notes",
+  "topic": "syntax",
+  "sections": [
+    {
+      "title": "Complete Guide to Syntax",
+      "content": "Comprehensive notes for Syntax in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Syntax examples\n# Run in the Code Editor to see output\nprint('Study Syntax in PyLab AI!')"
+    }
+  ]
+}

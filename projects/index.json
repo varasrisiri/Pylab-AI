@@ -1,0 +1,823 @@
+{
+  "beginner": [
+    {
+      "slug": "calculator",
+      "title": "Calculator App",
+      "icon": "&#x1F9EE;",
+      "desc": "Build a command-line calculator with +, -, *, / operations",
+      "tags": [
+        "basics",
+        "functions",
+        "loops"
+      ],
+      "time": "2-3 hours",
+      "github_template": "python-calculator"
+    },
+    {
+      "slug": "number-guessing",
+      "title": "Number Guessing Game",
+      "icon": "&#x1F3B2;",
+      "desc": "Computer picks a number, user guesses with hints",
+      "tags": [
+        "loops",
+        "conditionals",
+        "random"
+      ],
+      "time": "1-2 hours",
+      "github_template": "number-guessing-game"
+    },
+    {
+      "slug": "todo-cli",
+      "title": "Todo List (CLI)",
+      "icon": "&#x1F4DD;",
+      "desc": "Command-line todo app with add, remove, complete features",
+      "tags": [
+        "lists",
+        "file handling",
+        "functions"
+      ],
+      "time": "3-4 hours",
+      "github_template": "todo-cli-python"
+    },
+    {
+      "slug": "password-generator",
+      "title": "Password Generator",
+      "icon": "&#x1F511;",
+      "desc": "Generate strong passwords with custom length and characters",
+      "tags": [
+        "strings",
+        "random",
+        "functions"
+      ],
+      "time": "1-2 hours",
+      "github_template": "password-generator"
+    },
+    {
+      "slug": "unit-converter",
+      "title": "Unit Converter",
+      "icon": "&#x1F4CF;",
+      "desc": "Convert between units: temperature, length, weight, currency",
+      "tags": [
+        "functions",
+        "dictionaries",
+        "math"
+      ],
+      "time": "2-3 hours",
+      "github_template": "unit-converter"
+    },
+    {
+      "slug": "quiz-app",
+      "title": "Quiz Application",
+      "icon": "&#x2753;",
+      "desc": "Multiple choice quiz with score tracking and timer",
+      "tags": [
+        "lists",
+        "dictionaries",
+        "loops"
+      ],
+      "time": "3-4 hours",
+      "github_template": "quiz-app-python"
+    },
+    {
+      "slug": "contact-book",
+      "title": "Contact Book",
+      "icon": "&#x1F4D6;",
+      "desc": "Store, search, update and delete contacts with file persistence",
+      "tags": [
+        "dictionaries",
+        "file handling",
+        "functions"
+      ],
+      "time": "4-5 hours",
+      "github_template": "contact-book"
+    },
+    {
+      "slug": "rock-paper-scissors",
+      "title": "Rock Paper Scissors",
+      "icon": "&#x270A;",
+      "desc": "Play against the computer with score tracking",
+      "tags": [
+        "conditionals",
+        "random",
+        "loops"
+      ],
+      "time": "1-2 hours",
+      "github_template": "rock-paper-scissors"
+    },
+    {
+      "slug": "bmi-calculator",
+      "title": "BMI Calculator",
+      "icon": "&#x2696;&#xFE0F;",
+      "desc": "Calculate BMI and provide health category with advice",
+      "tags": [
+        "functions",
+        "conditionals",
+        "math"
+      ],
+      "time": "1-2 hours",
+      "github_template": "bmi-calculator"
+    },
+    {
+      "slug": "word-counter",
+      "title": "Word Counter",
+      "icon": "&#x1F4CA;",
+      "desc": "Count words, sentences, paragraphs in text files",
+      "tags": [
+        "strings",
+        "file handling",
+        "dictionaries"
+      ],
+      "time": "2-3 hours",
+      "github_template": "word-counter"
+    },
+    {
+      "slug": "temperature-converter",
+      "title": "Temperature Converter",
+      "icon": "&#x1F321;&#xFE0F;",
+      "desc": "Convert Celsius, Fahrenheit, Kelvin with history",
+      "tags": [
+        "functions",
+        "loops",
+        "math"
+      ],
+      "time": "1-2 hours",
+      "github_template": "temperature-converter"
+    },
+    {
+      "slug": "simple-bank",
+      "title": "Simple Bank Account",
+      "icon": "&#x1F3E6;",
+      "desc": "Deposit, withdraw, check balance with transaction history",
+      "tags": [
+        "OOP",
+        "functions",
+        "file handling"
+      ],
+      "time": "3-4 hours",
+      "github_template": "bank-account-python"
+    },
+    {
+      "slug": "hangman",
+      "title": "Hangman Game",
+      "icon": "&#x1F3AF;",
+      "desc": "Classic word guessing game with ASCII art",
+      "tags": [
+        "strings",
+        "lists",
+        "loops"
+      ],
+      "time": "2-3 hours",
+      "github_template": "hangman-python"
+    },
+    {
+      "slug": "dice-roller",
+      "title": "Dice Roller Simulator",
+      "icon": "&#x1F3B2;",
+      "desc": "Roll dice, track statistics, simulate board games",
+      "tags": [
+        "random",
+        "statistics",
+        "functions"
+      ],
+      "time": "1-2 hours",
+      "github_template": "dice-roller"
+    },
+    {
+      "slug": "alarm-clock",
+      "title": "Alarm Clock",
+      "icon": "&#x23F0;",
+      "desc": "Set alarms, countdown timer with sound notification",
+      "tags": [
+        "datetime",
+        "loops",
+        "functions"
+      ],
+      "time": "2-3 hours",
+      "github_template": "alarm-clock-python"
+    },
+    {
+      "slug": "text-adventure",
+      "title": "Text Adventure Game",
+      "icon": "&#x1F5FA;&#xFE0F;",
+      "desc": "Interactive story game with choices and inventory",
+      "tags": [
+        "dictionaries",
+        "functions",
+        "OOP"
+      ],
+      "time": "4-5 hours",
+      "github_template": "text-adventure"
+    },
+    {
+      "slug": "expense-tracker",
+      "title": "Expense Tracker",
+      "icon": "&#x1F4B0;",
+      "desc": "Track daily expenses with categories and monthly reports",
+      "tags": [
+        "dictionaries",
+        "file handling",
+        "math"
+      ],
+      "time": "3-4 hours",
+      "github_template": "expense-tracker"
+    },
+    {
+      "slug": "library-system",
+      "title": "Library Management",
+      "icon": "&#x1F4DA;",
+      "desc": "Manage books: add, search, borrow, return with due dates",
+      "tags": [
+        "OOP",
+        "lists",
+        "file handling"
+      ],
+      "time": "4-5 hours",
+      "github_template": "library-management"
+    },
+    {
+      "slug": "typing-speed",
+      "title": "Typing Speed Test",
+      "icon": "&#x2328;&#xFE0F;",
+      "desc": "Measure WPM, accuracy with different difficulty levels",
+      "tags": [
+        "strings",
+        "datetime",
+        "functions"
+      ],
+      "time": "2-3 hours",
+      "github_template": "typing-speed-test"
+    },
+    {
+      "slug": "mad-libs",
+      "title": "Mad Libs Generator",
+      "icon": "&#x1F4DD;",
+      "desc": "Fill-in-the-blank story generator with templates",
+      "tags": [
+        "strings",
+        "lists",
+        "file handling"
+      ],
+      "time": "1-2 hours",
+      "github_template": "mad-libs-python"
+    }
+  ],
+  "intermediate": [
+    {
+      "slug": "web-scraper",
+      "title": "Web Scraper",
+      "icon": "&#x1F578;&#xFE0F;",
+      "desc": "Scrape websites for data using BeautifulSoup and requests",
+      "tags": [
+        "requests",
+        "BeautifulSoup",
+        "CSV"
+      ],
+      "time": "4-5 hours",
+      "github_template": "web-scraper-python"
+    },
+    {
+      "slug": "flask-todo-api",
+      "title": "Flask REST API",
+      "icon": "&#x1F376;",
+      "desc": "Full REST API with CRUD operations and SQLite database",
+      "tags": [
+        "Flask",
+        "REST",
+        "SQLite",
+        "JSON"
+      ],
+      "time": "5-6 hours",
+      "github_template": "flask-rest-api"
+    },
+    {
+      "slug": "data-analyzer",
+      "title": "Data Analyzer",
+      "icon": "&#x1F4CA;",
+      "desc": "Analyze CSV datasets with Pandas and visualize with Matplotlib",
+      "tags": [
+        "Pandas",
+        "Matplotlib",
+        "NumPy",
+        "CSV"
+      ],
+      "time": "5-6 hours",
+      "github_template": "data-analyzer"
+    },
+    {
+      "slug": "chat-app",
+      "title": "Chat Application",
+      "icon": "&#x1F4AC;",
+      "desc": "Real-time chat using sockets with multiple users",
+      "tags": [
+        "sockets",
+        "threading",
+        "networking"
+      ],
+      "time": "6-8 hours",
+      "github_template": "python-chat-app"
+    },
+    {
+      "slug": "file-organizer",
+      "title": "File Organizer",
+      "icon": "&#x1F4C1;",
+      "desc": "Auto-organize files by type, date, size with rules",
+      "tags": [
+        "os",
+        "shutil",
+        "pathlib",
+        "automation"
+      ],
+      "time": "3-4 hours",
+      "github_template": "file-organizer"
+    },
+    {
+      "slug": "weather-app",
+      "title": "Weather App",
+      "icon": "&#x26C5;",
+      "desc": "Fetch real weather data from API and display forecasts",
+      "tags": [
+        "requests",
+        "API",
+        "JSON",
+        "datetime"
+      ],
+      "time": "4-5 hours",
+      "github_template": "weather-app-python"
+    },
+    {
+      "slug": "url-shortener",
+      "title": "URL Shortener",
+      "icon": "&#x1F517;",
+      "desc": "Create short URLs with click tracking and analytics",
+      "tags": [
+        "Flask",
+        "SQLite",
+        "hashlib",
+        "API"
+      ],
+      "time": "5-6 hours",
+      "github_template": "url-shortener"
+    },
+    {
+      "slug": "student-management",
+      "title": "Student Management System",
+      "icon": "&#x1F393;",
+      "desc": "Full CRUD system with grades, attendance, reports",
+      "tags": [
+        "OOP",
+        "SQLite",
+        "Pandas",
+        "Flask"
+      ],
+      "time": "8-10 hours",
+      "github_template": "student-management"
+    },
+    {
+      "slug": "image-resizer",
+      "title": "Image Resizer & Editor",
+      "icon": "&#x1F5BC;&#xFE0F;",
+      "desc": "Batch resize, crop, filter images using Pillow",
+      "tags": [
+        "Pillow",
+        "os",
+        "batch processing"
+      ],
+      "time": "4-5 hours",
+      "github_template": "image-resizer"
+    },
+    {
+      "slug": "email-sender",
+      "title": "Email Automation",
+      "icon": "&#x1F4E7;",
+      "desc": "Send bulk emails with templates and attachments",
+      "tags": [
+        "smtplib",
+        "email",
+        "automation"
+      ],
+      "time": "3-4 hours",
+      "github_template": "email-automation"
+    },
+    {
+      "slug": "markdown-blog",
+      "title": "Markdown Blog",
+      "icon": "&#x270D;&#xFE0F;",
+      "desc": "Static blog generator from Markdown files with Flask",
+      "tags": [
+        "Flask",
+        "Markdown",
+        "Jinja2",
+        "CSS"
+      ],
+      "time": "6-8 hours",
+      "github_template": "markdown-blog"
+    },
+    {
+      "slug": "stock-tracker",
+      "title": "Stock Price Tracker",
+      "icon": "&#x1F4C8;",
+      "desc": "Track stock prices, plot charts, set price alerts",
+      "tags": [
+        "requests",
+        "Pandas",
+        "Matplotlib",
+        "API"
+      ],
+      "time": "5-6 hours",
+      "github_template": "stock-tracker"
+    },
+    {
+      "slug": "password-manager",
+      "title": "Password Manager",
+      "icon": "&#x1F510;",
+      "desc": "Encrypted password storage with master password",
+      "tags": [
+        "cryptography",
+        "SQLite",
+        "OOP",
+        "security"
+      ],
+      "time": "6-8 hours",
+      "github_template": "password-manager"
+    },
+    {
+      "slug": "task-scheduler",
+      "title": "Task Scheduler",
+      "icon": "&#x23F1;&#xFE0F;",
+      "desc": "Schedule and automate tasks with cron-like syntax",
+      "tags": [
+        "schedule",
+        "threading",
+        "automation",
+        "datetime"
+      ],
+      "time": "4-5 hours",
+      "github_template": "task-scheduler"
+    },
+    {
+      "slug": "pdf-generator",
+      "title": "PDF Report Generator",
+      "icon": "&#x1F4C4;",
+      "desc": "Generate PDF reports from data with charts and tables",
+      "tags": [
+        "reportlab",
+        "Pandas",
+        "Matplotlib"
+      ],
+      "time": "5-6 hours",
+      "github_template": "pdf-generator"
+    },
+    {
+      "slug": "quiz-api",
+      "title": "Quiz REST API",
+      "icon": "&#x2753;",
+      "desc": "Full quiz API with categories, difficulty, leaderboard",
+      "tags": [
+        "Flask",
+        "SQLite",
+        "REST",
+        "JSON"
+      ],
+      "time": "6-8 hours",
+      "github_template": "quiz-api"
+    },
+    {
+      "slug": "news-aggregator",
+      "title": "News Aggregator",
+      "icon": "&#x1F4F0;",
+      "desc": "Fetch and categorize news from multiple RSS feeds",
+      "tags": [
+        "requests",
+        "feedparser",
+        "Flask",
+        "SQLite"
+      ],
+      "time": "5-6 hours",
+      "github_template": "news-aggregator"
+    },
+    {
+      "slug": "budget-planner",
+      "title": "Budget Planner",
+      "icon": "&#x1F4B3;",
+      "desc": "Track income, expenses, savings goals with charts",
+      "tags": [
+        "Pandas",
+        "Matplotlib",
+        "Flask",
+        "SQLite"
+      ],
+      "time": "6-8 hours",
+      "github_template": "budget-planner"
+    },
+    {
+      "slug": "recipe-app",
+      "title": "Recipe Manager",
+      "icon": "&#x1F373;",
+      "desc": "Store, search, scale recipes with ingredient calculator",
+      "tags": [
+        "Flask",
+        "SQLite",
+        "Jinja2",
+        "search"
+      ],
+      "time": "5-6 hours",
+      "github_template": "recipe-manager"
+    },
+    {
+      "slug": "github-analyzer",
+      "title": "GitHub Profile Analyzer",
+      "icon": "&#x1F419;",
+      "desc": "Analyze GitHub profiles: repos, languages, contributions",
+      "tags": [
+        "requests",
+        "GitHub API",
+        "Pandas",
+        "Matplotlib"
+      ],
+      "time": "4-5 hours",
+      "github_template": "github-analyzer"
+    }
+  ],
+  "advanced": [
+    {
+      "slug": "ml-classifier",
+      "title": "ML Image Classifier",
+      "icon": "&#x1F9E0;",
+      "desc": "Train CNN to classify images using TensorFlow/Keras",
+      "tags": [
+        "TensorFlow",
+        "CNN",
+        "NumPy",
+        "OpenCV"
+      ],
+      "time": "10-15 hours",
+      "github_template": "ml-image-classifier"
+    },
+    {
+      "slug": "chatbot",
+      "title": "AI Chatbot",
+      "icon": "&#x1F916;",
+      "desc": "Build a chatbot with NLP using NLTK or transformers",
+      "tags": [
+        "NLP",
+        "NLTK",
+        "Flask",
+        "transformers"
+      ],
+      "time": "10-15 hours",
+      "github_template": "python-chatbot"
+    },
+    {
+      "slug": "django-ecommerce",
+      "title": "E-Commerce Platform",
+      "icon": "&#x1F6D2;",
+      "desc": "Full e-commerce site with cart, payments, admin",
+      "tags": [
+        "Django",
+        "Stripe",
+        "PostgreSQL",
+        "REST"
+      ],
+      "time": "20-30 hours",
+      "github_template": "django-ecommerce"
+    },
+    {
+      "slug": "face-recognition",
+      "title": "Face Recognition System",
+      "icon": "&#x1F464;",
+      "desc": "Real-time face detection and recognition with OpenCV",
+      "tags": [
+        "OpenCV",
+        "face_recognition",
+        "NumPy",
+        "camera"
+      ],
+      "time": "8-12 hours",
+      "github_template": "face-recognition-python"
+    },
+    {
+      "slug": "stock-predictor",
+      "title": "Stock Price Predictor",
+      "icon": "&#x1F4C9;",
+      "desc": "Predict stock prices using LSTM neural network",
+      "tags": [
+        "TensorFlow",
+        "LSTM",
+        "Pandas",
+        "yfinance"
+      ],
+      "time": "12-15 hours",
+      "github_template": "stock-predictor"
+    },
+    {
+      "slug": "social-network",
+      "title": "Social Network API",
+      "icon": "&#x1F465;",
+      "desc": "Twitter-like API with posts, follows, likes, feed",
+      "tags": [
+        "Django REST",
+        "PostgreSQL",
+        "JWT",
+        "Redis"
+      ],
+      "time": "20-30 hours",
+      "github_template": "social-network-api"
+    },
+    {
+      "slug": "sentiment-analyzer",
+      "title": "Sentiment Analyzer",
+      "icon": "&#x1F60A;",
+      "desc": "Analyze text sentiment using ML and visualize results",
+      "tags": [
+        "NLTK",
+        "scikit-learn",
+        "Flask",
+        "Pandas"
+      ],
+      "time": "8-10 hours",
+      "github_template": "sentiment-analyzer"
+    },
+    {
+      "slug": "real-time-dashboard",
+      "title": "Real-Time Dashboard",
+      "icon": "&#x1F4CA;",
+      "desc": "Live data dashboard with WebSockets and charts",
+      "tags": [
+        "Flask",
+        "SocketIO",
+        "Chart.js",
+        "Redis"
+      ],
+      "time": "10-15 hours",
+      "github_template": "realtime-dashboard"
+    },
+    {
+      "slug": "blockchain",
+      "title": "Blockchain Implementation",
+      "icon": "&#x26D3;&#xFE0F;",
+      "desc": "Build a simple blockchain with proof of work",
+      "tags": [
+        "cryptography",
+        "hashlib",
+        "OOP",
+        "networking"
+      ],
+      "time": "8-12 hours",
+      "github_template": "python-blockchain"
+    },
+    {
+      "slug": "recommendation-engine",
+      "title": "Recommendation Engine",
+      "icon": "&#x1F3AF;",
+      "desc": "Movie/product recommendations using collaborative filtering",
+      "tags": [
+        "scikit-learn",
+        "Pandas",
+        "NumPy",
+        "Flask"
+      ],
+      "time": "10-15 hours",
+      "github_template": "recommendation-engine"
+    },
+    {
+      "slug": "api-gateway",
+      "title": "API Gateway",
+      "icon": "&#x1F6AA;",
+      "desc": "Build a microservices API gateway with rate limiting",
+      "tags": [
+        "Flask",
+        "Redis",
+        "JWT",
+        "Docker"
+      ],
+      "time": "15-20 hours",
+      "github_template": "api-gateway"
+    },
+    {
+      "slug": "data-pipeline",
+      "title": "Data Pipeline",
+      "icon": "&#x1F504;",
+      "desc": "ETL pipeline: extract, transform, load data at scale",
+      "tags": [
+        "Pandas",
+        "SQLAlchemy",
+        "Airflow",
+        "PostgreSQL"
+      ],
+      "time": "15-20 hours",
+      "github_template": "data-pipeline"
+    },
+    {
+      "slug": "web-crawler",
+      "title": "Web Crawler & Search Engine",
+      "icon": "&#x1F578;&#xFE0F;",
+      "desc": "Build a web crawler and simple search engine",
+      "tags": [
+        "Scrapy",
+        "Elasticsearch",
+        "Redis",
+        "async"
+      ],
+      "time": "15-20 hours",
+      "github_template": "web-crawler"
+    },
+    {
+      "slug": "video-streaming",
+      "title": "Video Streaming Server",
+      "icon": "&#x1F3A5;",
+      "desc": "Stream video with Flask, handle chunked transfer",
+      "tags": [
+        "Flask",
+        "OpenCV",
+        "streaming",
+        "async"
+      ],
+      "time": "10-15 hours",
+      "github_template": "video-streaming"
+    },
+    {
+      "slug": "distributed-task",
+      "title": "Distributed Task Queue",
+      "icon": "&#x1F9F5;",
+      "desc": "Celery task queue with Redis broker and monitoring",
+      "tags": [
+        "Celery",
+        "Redis",
+        "Flask",
+        "Docker"
+      ],
+      "time": "12-15 hours",
+      "github_template": "distributed-tasks"
+    },
+    {
+      "slug": "nlp-summarizer",
+      "title": "Text Summarizer",
+      "icon": "&#x1F4DD;",
+      "desc": "Automatic text summarization using transformers",
+      "tags": [
+        "transformers",
+        "BERT",
+        "Flask",
+        "NLP"
+      ],
+      "time": "8-12 hours",
+      "github_template": "text-summarizer"
+    },
+    {
+      "slug": "game-engine",
+      "title": "2D Game Engine",
+      "icon": "&#x1F3AE;",
+      "desc": "Build a simple 2D game engine with Pygame",
+      "tags": [
+        "Pygame",
+        "OOP",
+        "physics",
+        "collision"
+      ],
+      "time": "15-20 hours",
+      "github_template": "2d-game-engine"
+    },
+    {
+      "slug": "compiler",
+      "title": "Mini Compiler/Interpreter",
+      "icon": "&#x2699;&#xFE0F;",
+      "desc": "Build a simple language interpreter with lexer and parser",
+      "tags": [
+        "parsing",
+        "AST",
+        "OOP",
+        "algorithms"
+      ],
+      "time": "20-30 hours",
+      "github_template": "mini-compiler"
+    },
+    {
+      "slug": "kubernetes-monitor",
+      "title": "Kubernetes Monitor",
+      "icon": "&#x2388;&#xFE0F;",
+      "desc": "Monitor K8s clusters with Python and Prometheus",
+      "tags": [
+        "kubernetes",
+        "Prometheus",
+        "Flask",
+        "Docker"
+      ],
+      "time": "15-20 hours",
+      "github_template": "k8s-monitor"
+    },
+    {
+      "slug": "ml-pipeline",
+      "title": "ML Training Pipeline",
+      "icon": "&#x1F9EA;",
+      "desc": "End-to-end ML pipeline with MLflow tracking",
+      "tags": [
+        "scikit-learn",
+        "MLflow",
+        "Pandas",
+        "Docker"
+      ],
+      "time": "15-20 hours",
+      "github_template": "ml-pipeline"
+    }
+  ]
+}

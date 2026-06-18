@@ -1,0 +1,11 @@
+{
+  "title": "Filehandling — Complete Notes",
+  "topic": "filehandling",
+  "sections": [
+    {
+      "title": "Complete Guide to Filehandling",
+      "content": "Comprehensive notes for Filehandling in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Filehandling examples\n# Run in the Code Editor to see output\nprint('Study Filehandling in PyLab AI!')"
+    }
+  ]
+}

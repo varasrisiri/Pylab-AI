@@ -1,0 +1,104 @@
+{
+  "slug": "calculator",
+  "title": "Calculator App",
+  "icon": "&#x1F9EE;",
+  "level": "beginner",
+  "desc": "Build a fully functional command-line calculator with all basic operations, history tracking, and error handling.",
+  "time": "2-3 hours",
+  "tags": [
+    "basics",
+    "functions",
+    "loops",
+    "error handling"
+  ],
+  "concepts_needed": [
+    "Variables",
+    "Functions",
+    "Conditionals",
+    "Loops",
+    "Exception Handling"
+  ],
+  "what_you_build": "A command-line calculator that supports +, -, *, /, %, ** operations with input validation, calculation history, and a clean menu interface.",
+  "what_you_learn": [
+    "How to structure a Python project",
+    "Function design and reusability",
+    "Input validation and error handling",
+    "Loops for continuous operation",
+    "Storing history in a list"
+  ],
+  "github_template": "python-calculator",
+  "github_topics": [
+    "python",
+    "calculator",
+    "beginner",
+    "cli"
+  ],
+  "folder_structure": "calculator/\n├── main.py          # Entry point\n├── calculator.py    # Core logic\n├── history.py       # History management\n├── requirements.txt # (empty for this project)\n└── README.md        # Documentation",
+  "steps": [
+    {
+      "num": 1,
+      "title": "Setup Project Structure",
+      "desc": "Create the folder and files. Initialize git repository.",
+      "code": "# Terminal commands\nmkdir calculator\ncd calculator\ngit init\ntouch main.py calculator.py README.md\n\n# .gitignore\necho '__pycache__/' > .gitignore\necho '*.pyc' >> .gitignore",
+      "hint": "Always initialize git at the START of a project, not the end!"
+    },
+    {
+      "num": 2,
+      "title": "Build Core Calculator Functions",
+      "desc": "Write functions for each operation. Keep them simple and focused.",
+      "code": "# calculator.py\n\ndef add(a, b):\n    return a + b\n\ndef subtract(a, b):\n    return a - b\n\ndef multiply(a, b):\n    return a * b\n\ndef divide(a, b):\n    if b == 0:\n        raise ValueError('Cannot divide by zero!')\n    return a / b\n\ndef power(a, b):\n    return a ** b\n\ndef modulo(a, b):\n    if b == 0:\n        raise ValueError('Cannot modulo by zero!')\n    return a % b\n\n# Map operations to functions\nOPERATIONS = {\n    '+': add,\n    '-': subtract,\n    '*': multiply,\n    '/': divide,\n    '**': power,\n    '%': modulo\n}\n\ndef calculate(a, operator, b):\n    if operator not in OPERATIONS:\n        raise ValueError(f'Unknown operator: {operator}')\n    return OPERATIONS[operator](a, b)",
+      "hint": "Each function does ONE thing. This makes testing and debugging much easier."
+    },
+    {
+      "num": 3,
+      "title": "Add Input Validation",
+      "desc": "Handle bad input gracefully — users will always type something wrong!",
+      "code": "# In main.py\n\ndef get_number(prompt):\n    while True:\n        try:\n            return float(input(prompt))\n        except ValueError:\n            print('Invalid! Please enter a number.')\n\ndef get_operator():\n    valid = ['+', '-', '*', '/', '**', '%']\n    while True:\n        op = input(f'Operator {valid}: ').strip()\n        if op in valid:\n            return op\n        print(f'Invalid! Choose from: {valid}')",
+      "hint": "Use while True + try/except for input validation. This is the standard Python pattern."
+    },
+    {
+      "num": 4,
+      "title": "Build the Main Loop",
+      "desc": "Create the main program loop with menu and history.",
+      "code": "# main.py\nfrom calculator import calculate\n\ndef main():\n    history = []\n    print('=== PyLab Calculator ===')\n    \n    while True:\n        print('\\n1. Calculate')\n        print('2. View History')\n        print('3. Clear History')\n        print('4. Exit')\n        \n        choice = input('\\nChoice: ').strip()\n        \n        if choice == '1':\n            a = get_number('First number: ')\n            op = get_operator()\n            b = get_number('Second number: ')\n            \n            try:\n                result = calculate(a, op, b)\n                entry = f'{a} {op} {b} = {result}'\n                history.append(entry)\n                print(f'Result: {result}')\n            except ValueError as e:\n                print(f'Error: {e}')\n        \n        elif choice == '2':\n            if not history:\n                print('No history yet!')\n            else:\n                print('\\n--- History ---')\n                for i, h in enumerate(history, 1):\n                    print(f'{i}. {h}')\n        \n        elif choice == '3':\n            history.clear()\n            print('History cleared!')\n        \n        elif choice == '4':\n            print('Goodbye!')\n            break\n        \n        else:\n            print('Invalid choice!')\n\nif __name__ == '__main__':\n    main()",
+      "hint": "The if __name__ == '__main__': guard means this only runs when you execute main.py directly, not when imported."
+    },
+    {
+      "num": 5,
+      "title": "Write README and Push to GitHub",
+      "desc": "Document your project and push to GitHub for your portfolio.",
+      "code": "# README.md content:\n# # Python Calculator\n# A command-line calculator built with Python.\n# \n# ## Features\n# - Basic operations: +, -, *, /, **, %\n# - Input validation\n# - Calculation history\n# - Clean menu interface\n# \n# ## How to Run\n# python main.py\n# \n# ## What I Learned\n# - Function design\n# - Error handling\n# - Input validation\n\n# Git commands:\n# git add .\n# git commit -m 'feat: complete calculator with history'\n# git push origin main",
+      "hint": "A good README is what makes recruiters notice your project. Always include: what it does, how to run it, what you learned."
+    }
+  ],
+  "extensions": [
+    "Add scientific functions (sin, cos, sqrt) using math module",
+    "Save history to a file so it persists between sessions",
+    "Add a GUI using tkinter",
+    "Build a web version using Flask",
+    "Add unit tests using pytest"
+  ],
+  "github_readme_template": "# Python Calculator\n\nA command-line calculator with history tracking.\n\n## Features\n- Basic arithmetic: +, -, *, /, **, %\n- Input validation and error handling\n- Calculation history\n\n## Run\n```bash\npython main.py\n```\n\n## Built With\n- Python 3.x\n- No external dependencies",
+  "concepts_needed_links": [
+    {
+      "name": "basics",
+      "url": "/learn/introduction",
+      "external": false
+    },
+    {
+      "name": "functions",
+      "url": "/learn/functions",
+      "external": false
+    },
+    {
+      "name": "loops",
+      "url": "/learn/loops",
+      "external": false
+    },
+    {
+      "name": "error handling",
+      "url": "/learn/exceptions",
+      "external": false
+    }
+  ]
+}

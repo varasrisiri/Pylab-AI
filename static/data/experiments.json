@@ -1,0 +1,177 @@
+{
+  "hello_world": {
+    "title": "Hello World",
+    "desc": "Your first Python program!",
+    "code": "print('Hello, World!')\nprint('Welcome to PyLab AI!')\n\nname = 'Python'\nversion = 3.12\nprint(f'Language: {name} {version}')"
+  },
+  "variables": {
+    "title": "Variables",
+    "desc": "Variables store data. Python is dynamically typed.",
+    "code": "name = 'Alice'\nage = 25\nheight = 5.9\nis_student = True\nnothing = None\n\nprint(name, age, height, is_student, nothing)\nprint(type(name), type(age))\n\nx = y = z = 10\nprint(x, y, z)\n\na, b, c = 1, 2, 3\nprint(a, b, c)\n\na, b = b, a\nprint('Swapped:', a, b)"
+  },
+  "datatypes": {
+    "title": "Data Types",
+    "desc": "int, float, str, bool, None, list, tuple, dict, set",
+    "code": "print(type(42))\nprint(type(3.14))\nprint(type('hello'))\nprint(type(True))\nprint(type(None))\nprint(type([1,2,3]))\nprint(type((1,2)))\nprint(type({'a':1}))\nprint(type({1,2,3}))\n\nprint(int('42'))\nprint(float(42))\nprint(str(42))\nprint(bool(0), bool(1), bool(''), bool('hi'))"
+  },
+  "operators": {
+    "title": "Operators",
+    "desc": "Arithmetic, comparison, logical, assignment operators",
+    "code": "a, b = 15, 4\nprint(a+b, a-b, a*b, a/b, a//b, a%b, a**b)\n\nprint(a>b, a<b, a==b, a!=b)\n\nprint(True and False)\nprint(True or False)\nprint(not True)\n\nx = 10\nx += 5; print(x)\nx -= 3; print(x)\nx *= 2; print(x)\nx //= 3; print(x)"
+  },
+  "input_output": {
+    "title": "Input / Output",
+    "desc": "Getting input from user and displaying output",
+    "code": "# Simulating input (in real app use input())\nname = 'Alice'  # name = input('Enter name: ')\nage = 25        # age = int(input('Enter age: '))\n\nprint('Name:', name)\nprint('Age:', age)\nprint(f'Hello {name}, you are {age} years old!')\nprint('Sum:', 3 + 4)\nprint('Pi:', 3.14159, 'approx')\nprint('A', 'B', 'C', sep='-')\nprint('No newline', end=' ')\nprint('same line')"
+  },
+  "type_conversion": {
+    "title": "Type Conversion",
+    "desc": "Converting between different data types",
+    "code": "# String to number\nnum_str = '42'\nnum_int = int(num_str)\nnum_float = float(num_str)\nprint(num_int + 8)\nprint(num_float + 0.5)\n\n# Number to string\nn = 100\nprint('Value: ' + str(n))\n\n# List/tuple/set conversions\nlst = [1, 2, 2, 3, 3, 3]\nprint(set(lst))\nprint(tuple(lst))\nprint(list(set(lst)))\n\n# Bool conversions\nprint(bool(0), bool(1), bool(-1))\nprint(bool(''), bool('hello'))\nprint(bool([]), bool([1,2]))"
+  },
+  "if_else": {
+    "title": "if / elif / else",
+    "desc": "Conditional statements control program flow",
+    "code": "score = 78\n\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'\nelif score >= 60:\n    grade = 'D'\nelse:\n    grade = 'F'\n\nprint(f'Score: {score} -> Grade: {grade}')\n\nstatus = 'Pass' if score >= 60 else 'Fail'\nprint(status)\n\nage = 20\nhas_id = True\nif age >= 18:\n    if has_id:\n        print('Entry allowed')\n    else:\n        print('Need ID')\nelse:\n    print('Too young')"
+  },
+  "ternary": {
+    "title": "Ternary Operator",
+    "desc": "One-line if-else for simple conditions",
+    "code": "x = 15\nresult = 'positive' if x > 0 else 'non-positive'\nprint(result)\n\nfor n in range(1, 6):\n    print(f'{n} is', 'even' if n % 2 == 0 else 'odd')\n\nnums = [1, -2, 3, -4, 5]\nabs_vals = [n if n >= 0 else -n for n in nums]\nprint(abs_vals)\n\nscore = 75\ngrade = 'A' if score>=90 else 'B' if score>=80 else 'C' if score>=70 else 'F'\nprint(grade)"
+  },
+  "nested_if": {
+    "title": "Nested Conditions",
+    "desc": "Conditions inside conditions for complex logic",
+    "code": "x = 15\ny = 20\n\nif x > 10:\n    if y > 15:\n        print('Both conditions met')\n    else:\n        print('Only x > 10')\nelse:\n    print('x <= 10')\n\n# Login system\nusername = 'admin'\npassword = 'secret'\nlogged_in = True\nrole = 'admin'\n\nif logged_in:\n    if role == 'admin':\n        print('Admin dashboard')\n    elif role == 'user':\n        print('User dashboard')\n    else:\n        print('Guest view')\nelse:\n    print('Please login')"
+  },
+  "for_loop": {
+    "title": "for Loop",
+    "desc": "Iterate over sequences: lists, strings, ranges, dicts",
+    "code": "for i in range(5):\n    print(i, end=' ')\nprint()\n\nfruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(fruit)\n\nfor i, fruit in enumerate(fruits, 1):\n    print(f'{i}. {fruit}')\n\nnames = ['Alice', 'Bob']\nscores = [90, 85]\nfor name, score in zip(names, scores):\n    print(f'{name}: {score}')\n\nstudent = {'name': 'Alice', 'age': 25}\nfor key, val in student.items():\n    print(f'{key}: {val}')"
+  },
+  "while_loop": {
+    "title": "while Loop",
+    "desc": "Repeat while condition is True",
+    "code": "count = 1\nwhile count <= 5:\n    print(count, end=' ')\n    count += 1\nprint()\n\nnum = 1\nwhile True:\n    if num > 5:\n        break\n    print(num, end=' ')\n    num += 1\nprint()\n\nattempts = 0\nwhile attempts < 3:\n    attempts += 1\n    print(f'Attempt {attempts}')\nelse:\n    print('Loop done')\n\nn = 5\nwhile n > 0:\n    print(f'T-{n}')\n    n -= 1\nprint('Liftoff!')"
+  },
+  "break_continue": {
+    "title": "break & continue",
+    "desc": "Control loop flow with break and continue",
+    "code": "numbers = [3, 7, 2, -1, 5, -3, 8]\n\nfor num in numbers:\n    if num < 0:\n        print(f'First negative: {num}')\n        break\n\nprint('Positives only:')\nfor num in numbers:\n    if num < 0:\n        continue\n    print(num, end=' ')\nprint()\n\nprint('Skip multiples of 3:')\nfor i in range(1, 15):\n    if i % 3 == 0:\n        continue\n    print(i, end=' ')"
+  },
+  "nested_loops": {
+    "title": "Nested Loops",
+    "desc": "Loops inside loops for 2D problems",
+    "code": "for i in range(1, 4):\n    for j in range(1, 4):\n        print(f'{i}x{j}={i*j}', end='  ')\n    print()\n\nmatrix = [[1,2,3],[4,5,6],[7,8,9]]\nfor row in matrix:\n    for val in row:\n        print(val, end=' ')\n    print()\n\nfor i in range(3):\n    for j in range(3):\n        if j == 1:\n            break\n        print(f'({i},{j})', end=' ')\n    print()"
+  },
+  "patterns": {
+    "title": "Pattern Printing",
+    "desc": "Classic patterns using nested loops",
+    "code": "n = 5\n\nprint('Right Triangle:')\nfor i in range(1, n+1):\n    print('*' * i)\n\nprint('Inverted:')\nfor i in range(n, 0, -1):\n    print('*' * i)\n\nprint('Pyramid:')\nfor i in range(1, n+1):\n    print(' '*(n-i) + '*'*(2*i-1))\n\nprint('Numbers:')\nfor i in range(1, n+1):\n    for j in range(1, i+1):\n        print(j, end=' ')\n    print()\n\nprint('Floyd Triangle:')\nnum = 1\nfor i in range(1, n+1):\n    for j in range(i):\n        print(num, end=' ')\n        num += 1\n    print()"
+  },
+  "list_comp": {
+    "title": "List Comprehensions",
+    "desc": "Concise way to create lists in one line",
+    "code": "nums = list(range(1, 11))\n\nsquares = [x**2 for x in nums]\nprint('Squares:', squares)\n\nevens = [x for x in nums if x % 2 == 0]\nprint('Evens:', evens)\n\nfruits = ['apple', 'banana', 'cherry']\nupper = [f.upper() for f in fruits]\nprint('Upper:', upper)\n\nmatrix = [[i*j for j in range(1,4)] for i in range(1,4)]\nfor row in matrix:\n    print(row)\n\nnested = [[1,2],[3,4],[5,6]]\nflat = [x for row in nested for x in row]\nprint('Flat:', flat)\n\nword_len = {w: len(w) for w in fruits}\nprint('Lengths:', word_len)"
+  },
+  "basic_func": {
+    "title": "Basic Functions",
+    "desc": "Define and call functions with parameters",
+    "code": "def greet(name, greeting='Hello'):\n    return f'{greeting}, {name}!'\n\nprint(greet('Alice'))\nprint(greet('Bob', 'Hi'))\n\ndef rectangle(length, width):\n    area = length * width\n    perimeter = 2 * (length + width)\n    return area, perimeter\n\na, p = rectangle(5, 3)\nprint(f'Area: {a}, Perimeter: {p}')\n\ndef factorial(n):\n    if n <= 1: return 1\n    return n * factorial(n-1)\n\nprint([factorial(i) for i in range(8)])"
+  },
+  "args_kwargs": {
+    "title": "*args and **kwargs",
+    "desc": "Variable number of arguments",
+    "code": "def add_all(*numbers):\n    print(f'Args: {numbers}')\n    return sum(numbers)\n\nprint(add_all(1, 2, 3))\nprint(add_all(1, 2, 3, 4, 5))\n\ndef profile(**info):\n    for k, v in info.items():\n        print(f'  {k}: {v}')\n\nprofile(name='Alice', age=25, city='NYC')\n\ndef full(req, default='hi', *args, **kwargs):\n    print(f'req={req}, default={default}')\n    print(f'args={args}')\n    print(f'kwargs={kwargs}')\n\nfull('hello', 'world', 1, 2, 3, x=10, y=20)"
+  },
+  "lambda_func": {
+    "title": "Lambda Functions",
+    "desc": "Anonymous one-line functions",
+    "code": "square = lambda x: x**2\nadd = lambda x, y: x + y\nprint(square(5), add(3, 4))\n\nnums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndoubled = list(map(lambda x: x*2, nums))\nevens = list(filter(lambda x: x%2==0, nums))\nprint('Doubled:', doubled)\nprint('Evens:', evens)\n\nfrom functools import reduce\nproduct = reduce(lambda x, y: x*y, [1,2,3,4,5])\nprint('Product:', product)\n\npeople = [('Alice',30),('Bob',25),('Charlie',35)]\nby_age = sorted(people, key=lambda p: p[1])\nprint('By age:', by_age)"
+  },
+  "recursion": {
+    "title": "Recursion",
+    "desc": "Functions that call themselves",
+    "code": "def factorial(n):\n    if n <= 1: return 1\n    return n * factorial(n-1)\n\nprint([factorial(i) for i in range(8)])\n\ndef fib(n):\n    if n <= 1: return n\n    return fib(n-1) + fib(n-2)\n\nprint([fib(i) for i in range(10)])\n\ndef power(base, exp):\n    if exp == 0: return 1\n    return base * power(base, exp-1)\n\nprint(power(2, 10))\n\ndef sum_list(lst):\n    if not lst: return 0\n    return lst[0] + sum_list(lst[1:])\n\nprint(sum_list([1,2,3,4,5]))"
+  },
+  "closures": {
+    "title": "Closures",
+    "desc": "Inner functions that remember enclosing scope",
+    "code": "def make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ndouble = make_multiplier(2)\ntriple = make_multiplier(3)\nprint(double(5), triple(5))\n\ndef counter(start=0):\n    count = [start]\n    def increment(by=1):\n        count[0] += by\n        return count[0]\n    return increment\n\nc = counter(10)\nprint(c())\nprint(c())\nprint(c(5))"
+  },
+  "decorators": {
+    "title": "Decorators",
+    "desc": "Functions that wrap other functions",
+    "code": "import time\nfrom functools import wraps\n\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f'{func.__name__} took {end-start:.4f}s')\n        return result\n    return wrapper\n\ndef logger(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'Calling {func.__name__}')\n        result = func(*args, **kwargs)\n        print(f'Returned: {result}')\n        return result\n    return wrapper\n\n@timer\n@logger\ndef add(a, b):\n    return a + b\n\nadd(3, 5)"
+  },
+  "lists_exp": {
+    "title": "Lists",
+    "desc": "Mutable ordered sequences - most used data structure",
+    "code": "lst = [1, 2, 3, 4, 5]\nprint(lst[0], lst[-1])\nprint(lst[1:3])\nprint(lst[::-1])\n\nlst.append(6)\nlst.insert(0, 0)\nlst.remove(3)\nprint(lst)\n\nprint(len(lst), sum(lst), min(lst), max(lst))\n\nnested = [[1,2],[3,4],[5,6]]\nfor row in nested:\n    print(row)\n\nflat = [x for row in nested for x in row]\nprint(flat)\n\nlst2 = lst.copy()\nlst2.sort(reverse=True)\nprint(lst2)"
+  },
+  "tuples_exp": {
+    "title": "Tuples",
+    "desc": "Immutable ordered sequences",
+    "code": "t = (1, 2, 3, 4, 5)\nprint(t[0], t[-1])\nprint(t[1:3])\n\nx, y, z = (10, 20, 30)\nprint(x, y, z)\n\nfirst, *rest = (1, 2, 3, 4, 5)\nprint(first, rest)\n\npoint = (3, 4)\ndistance = (point[0]**2 + point[1]**2)**0.5\nprint(f'Distance: {distance}')\n\ncoords = [(1,2),(3,4),(5,6)]\nfor x, y in coords:\n    print(f'x={x}, y={y}')\n\nprint(t.count(2))\nprint(t.index(3))"
+  },
+  "dicts_exp": {
+    "title": "Dictionaries",
+    "desc": "Key-value pairs for fast lookup",
+    "code": "student = {'name': 'Alice', 'age': 25, 'grade': 'A'}\n\nprint(student['name'])\nprint(student.get('email', 'N/A'))\n\nstudent['city'] = 'NYC'\nstudent.update({'age': 26, 'skill': 'Python'})\nprint(student)\n\nfor key in student.keys():\n    print(key)\n\nfor val in student.values():\n    print(val)\n\nfor k, v in student.items():\n    print(f'{k}: {v}')\n\nfrom collections import Counter\nwords = ['apple','banana','apple','cherry','banana','apple']\ncount = Counter(words)\nprint(count)\nprint(count.most_common(2))"
+  },
+  "sets_exp": {
+    "title": "Sets",
+    "desc": "Unordered unique elements",
+    "code": "s1 = {1, 2, 3, 4, 5}\ns2 = {3, 4, 5, 6, 7}\n\nprint('Union:', s1 | s2)\nprint('Intersection:', s1 & s2)\nprint('Difference:', s1 - s2)\nprint('Symmetric diff:', s1 ^ s2)\n\nlst = [1, 2, 2, 3, 3, 3, 4]\nunique = list(set(lst))\nprint('Unique:', unique)\n\nprint(3 in s1)\nprint(10 in s1)\n\ns1.add(10)\ns1.discard(1)\nprint(s1)"
+  },
+  "strings_exp": {
+    "title": "Strings",
+    "desc": "Immutable sequences of characters",
+    "code": "s = 'Hello, Python World!'\n\nprint(s.upper())\nprint(s.lower())\nprint(s.title())\nprint(s.replace('Python', 'PyLab'))\nprint(s.split(' '))\nprint(s.find('Python'))\nprint(s.count('l'))\nprint(s.startswith('Hello'))\nprint(s.strip())\nprint(s[7:13])\nprint(s[::-1])\n\nwords = ['Python', 'is', 'awesome']\nprint(' '.join(words))\n\nname, age = 'Alice', 25\nprint(f'{name} is {age} years old')\nprint(f'{3.14159:.2f}')\nprint(f'{1000000:,}')"
+  },
+  "classes": {
+    "title": "Classes & Objects",
+    "desc": "Blueprint for creating objects",
+    "code": "class Dog:\n    species = 'Canis lupus'\n    \n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def bark(self):\n        return f'{self.name} says: Woof!'\n    \n    def info(self):\n        return f'{self.name} ({self.age} yrs)'\n    \n    def __str__(self):\n        return f'Dog({self.name})'\n\ndog1 = Dog('Rex', 3)\ndog2 = Dog('Buddy', 5)\n\nprint(dog1.bark())\nprint(dog2.info())\nprint(dog1)\nprint(Dog.species)\nprint(isinstance(dog1, Dog))"
+  },
+  "inheritance": {
+    "title": "Inheritance",
+    "desc": "Child class inherits from parent class",
+    "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return f'{self.name} makes a sound'\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)\n        self.breed = breed\n    def speak(self):\n        return f'{self.name} barks: Woof!'\n\nclass Cat(Animal):\n    def speak(self):\n        return f'{self.name} meows: Meow!'\n\ndog = Dog('Rex', 'Labrador')\ncat = Cat('Whiskers')\n\nprint(dog.speak())\nprint(cat.speak())\nprint(isinstance(dog, Animal))\nprint(isinstance(cat, Dog))\n\nanimals = [dog, cat, Dog('Buddy', 'Poodle')]\nfor a in animals:\n    print(a.speak())"
+  },
+  "polymorphism": {
+    "title": "Polymorphism",
+    "desc": "Same method, different behavior",
+    "code": "import math\n\nclass Shape:\n    def area(self): return 0\n    def describe(self):\n        return f'{type(self).__name__}: area={self.area():.2f}'\n\nclass Circle(Shape):\n    def __init__(self, r): self.r = r\n    def area(self): return math.pi * self.r**2\n\nclass Rectangle(Shape):\n    def __init__(self, w, h): self.w, self.h = w, h\n    def area(self): return self.w * self.h\n\nclass Triangle(Shape):\n    def __init__(self, b, h): self.b, self.h = b, h\n    def area(self): return 0.5 * self.b * self.h\n\nshapes = [Circle(5), Rectangle(4,6), Triangle(3,8)]\nfor s in shapes:\n    print(s.describe())"
+  },
+  "encapsulation": {
+    "title": "Encapsulation",
+    "desc": "Hide data, expose controlled interface",
+    "code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.__balance = balance\n    \n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return f'Deposited ${amount}'\n        return 'Invalid'\n    \n    def withdraw(self, amount):\n        if 0 < amount <= self.__balance:\n            self.__balance -= amount\n            return f'Withdrew ${amount}'\n        return 'Insufficient funds'\n    \n    @property\n    def balance(self):\n        return self.__balance\n    \n    def __str__(self):\n        return f'{self.owner}: ${self.__balance}'\n\nacc = BankAccount('Alice', 1000)\nprint(acc.deposit(500))\nprint(acc.withdraw(200))\nprint(acc.balance)\nprint(acc)"
+  },
+  "sorting": {
+    "title": "Sorting Algorithms",
+    "desc": "Bubble, Selection, Insertion, Merge sort",
+    "code": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\ndef selection_sort(arr):\n    for i in range(len(arr)):\n        min_idx = i\n        for j in range(i+1, len(arr)):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr\n\narr = [64, 34, 25, 12, 22, 11, 90]\nprint('Bubble:', bubble_sort(arr.copy()))\nprint('Selection:', selection_sort(arr.copy()))\nprint('Built-in:', sorted(arr))\n\nstudents = [('Alice',85),('Bob',92),('Charlie',78)]\nprint(sorted(students, key=lambda s: s[1], reverse=True))"
+  },
+  "searching": {
+    "title": "Searching Algorithms",
+    "desc": "Linear search and Binary search",
+    "code": "def linear_search(arr, target):\n    for i, val in enumerate(arr):\n        if val == target:\n            return i\n    return -1\n\ndef binary_search(arr, target):\n    left, right = 0, len(arr)-1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target: return mid\n        elif arr[mid] < target: left = mid + 1\n        else: right = mid - 1\n    return -1\n\narr = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]\nprint('Linear search 7:', linear_search(arr, 7))\nprint('Binary search 7:', binary_search(arr, 7))\nprint('Linear search 6:', linear_search(arr, 6))\nprint('Binary search 6:', binary_search(arr, 6))"
+  },
+  "fibonacci_exp": {
+    "title": "Fibonacci Series",
+    "desc": "Multiple approaches to Fibonacci",
+    "code": "def fib_recursive(n):\n    if n <= 1: return n\n    return fib_recursive(n-1) + fib_recursive(n-2)\n\ndef fib_iterative(n):\n    a, b = 0, 1\n    result = []\n    for _ in range(n):\n        result.append(a)\n        a, b = b, a+b\n    return result\n\ndef fib_generator(limit):\n    a, b = 0, 1\n    while a < limit:\n        yield a\n        a, b = b, a+b\n\nprint([fib_recursive(i) for i in range(10)])\nprint(fib_iterative(10))\nprint(list(fib_generator(100)))"
+  },
+  "prime_exp": {
+    "title": "Prime Numbers",
+    "desc": "Check, find, and generate prime numbers",
+    "code": "def is_prime(n):\n    if n < 2: return False\n    for i in range(2, int(n**0.5)+1):\n        if n % i == 0: return False\n    return True\n\ndef sieve(n):\n    primes = [True] * (n+1)\n    primes[0] = primes[1] = False\n    for i in range(2, int(n**0.5)+1):\n        if primes[i]:\n            for j in range(i*i, n+1, i):\n                primes[j] = False\n    return [i for i in range(n+1) if primes[i]]\n\nprint([n for n in range(2, 30) if is_prime(n)])\nprint(sieve(50))\n\ndef prime_factors(n):\n    factors = []\n    d = 2\n    while d*d <= n:\n        while n % d == 0:\n            factors.append(d)\n            n //= d\n        d += 1\n    if n > 1: factors.append(n)\n    return factors\n\nprint(prime_factors(360))"
+  },
+  "free": {
+    "title": "Free Experiment",
+    "desc": "Write your own Python code and experiment freely!",
+    "code": "# Free Experiment Zone!\n# Write any Python code here and run it\n\n# Try something:\nfor i in range(1, 6):\n    print(f'{i} x {i} = {i*i}')"
+  }
+}

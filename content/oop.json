@@ -1,0 +1,179 @@
+{
+  "title": "Object-Oriented Programming",
+  "icon": "&#x1F3D7;&#xFE0F;",
+  "level": "advanced",
+  "simple_definition": "OOP is a way of organizing code around 'objects' — things that have properties (data) and behaviors (actions). Like a blueprint for creating things.",
+  "technical_definition": "OOP is a programming paradigm based on classes and objects. Python supports the four pillars: Encapsulation, Inheritance, Polymorphism, and Abstraction.",
+  "analogy": "Think of a class as a blueprint for a house. The blueprint defines rooms, doors, windows (attributes) and what you can do in each room (methods). Each actual house built from that blueprint is an object (instance).",
+  "syntax": "class ClassName:\n    def __init__(self, param):\n        self.param = param  # instance attribute\n    \n    def method(self):\n        return self.param\n\n# Inheritance\nclass Child(Parent):\n    def __init__(self):\n        super().__init__()\n\n# Create object\nobj = ClassName(value)",
+  "example_desc": "A complete OOP example with classes, inheritance, and polymorphism.",
+  "code_example": "# Base class\nclass Animal:\n    def __init__(self, name, sound):\n        self.name = name\n        self.sound = sound\n    \n    def speak(self):\n        return f'{self.name} says {self.sound}'\n    \n    def __str__(self):\n        return f'Animal({self.name})'\n\n# Inheritance\nclass Dog(Animal):\n    def __init__(self, name):\n        super().__init__(name, 'Woof')\n        self.tricks = []\n    \n    def learn_trick(self, trick):\n        self.tricks.append(trick)\n    \n    def show_tricks(self):\n        return f'{self.name} knows: {self.tricks}'\n\nclass Cat(Animal):\n    def __init__(self, name):\n        super().__init__(name, 'Meow')\n    \n    def speak(self):  # Polymorphism - override\n        return f'{self.name} purrs... {self.sound}'\n\n# Usage\ndog = Dog('Rex')\ncat = Cat('Whiskers')\n\nprint(dog.speak())\nprint(cat.speak())\n\ndog.learn_trick('sit')\ndog.learn_trick('shake')\nprint(dog.show_tricks())\n\n# Polymorphism in action\nanimals = [dog, cat, Dog('Buddy')]\nfor animal in animals:\n    print(animal.speak())",
+  "output": "Rex says Woof\nWhiskers purrs... Meow\nRex knows: ['sit', 'shake']\nRex says Woof\nWhiskers purrs... Meow\nBuddy says Woof",
+  "logic_steps": [
+    "__init__ is the constructor — called automatically when you create an object",
+    "self refers to the current instance of the class",
+    "Instance attributes (self.x) belong to each object; class attributes are shared",
+    "Inheritance: Child class gets all methods/attributes of Parent class",
+    "super().__init__() calls the parent class constructor",
+    "Polymorphism: same method name, different behavior in different classes",
+    "Python uses MRO (Method Resolution Order) to determine which method to call"
+  ],
+  "edge_cases": [
+    "Forgetting 'self' as first parameter in methods causes TypeError",
+    "Multiple inheritance can cause diamond problem — Python uses C3 linearization (MRO)",
+    "__str__ vs __repr__: str() calls __str__, repr() calls __repr__ for debugging"
+  ],
+  "common_mistakes": [
+    "Confusing class attributes and instance attributes — class attributes are shared by all instances",
+    "Not calling super().__init__() in child class — parent attributes won't be initialized",
+    "Using mutable class attributes (like lists) — they are shared across all instances!"
+  ],
+  "interview_tips": [
+    "Know all 4 pillars: Encapsulation, Inheritance, Polymorphism, Abstraction",
+    "Dunder methods (__init__, __str__, __len__, __eq__) are frequently asked",
+    "@property decorator creates getter/setter without explicit method calls",
+    "@classmethod and @staticmethod are common interview topics",
+    "Abstract classes use abc module: from abc import ABC, abstractmethod"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Create a class 'Rectangle' with width, height and a method to calculate area",
+        "hint": "area = self.width * self.height"
+      },
+      {
+        "question": "Create a class 'BankAccount' with deposit and withdraw methods",
+        "hint": "Track balance as instance attribute, check for sufficient funds"
+      },
+      {
+        "question": "Create a class 'Student' with name, grade and a method to check if passing",
+        "hint": "passing if grade >= 60"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Create a class hierarchy: Shape -> Circle, Rectangle, Triangle with area()",
+        "hint": "Use inheritance, override area() in each subclass"
+      },
+      {
+        "question": "Implement a Stack class using a list with push, pop, peek, is_empty",
+        "hint": "Use self.items = [] and list methods"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Implement a linked list class with insert, delete, and search methods",
+        "hint": "Create a Node class first, then LinkedList class with head pointer"
+      },
+      {
+        "question": "Create a decorator class that counts how many times a function is called",
+        "hint": "Implement __call__ method in the class"
+      }
+    ]
+  },
+  "subtopics": [
+    {
+      "id": "classes-objects",
+      "title": "Classes & Objects",
+      "icon": "🏗️",
+      "explanation": "A class is a blueprint. An object is an instance created from that blueprint. __init__ is the constructor that runs when you create an object.",
+      "syntax": "class ClassName:\n    class_var = 'shared'  # class attribute\n    \n    def __init__(self, param):\n        self.param = param  # instance attribute\n    \n    def method(self):\n        return self.param\n\nobj = ClassName('value')",
+      "code": "class Dog:\n    species = 'Canis lupus'  # class attribute\n    \n    def __init__(self, name, age):\n        self.name = name  # instance attribute\n        self.age = age\n    \n    def bark(self):\n        return f'{self.name} says: Woof!'\n    \n    def info(self):\n        return f'{self.name} ({self.age} yrs) - {self.species}'\n\n# Create objects\ndog1 = Dog('Rex', 3)\ndog2 = Dog('Buddy', 5)\n\nprint(dog1.bark())\nprint(dog2.info())\nprint(dog1.species)  # class attribute\nprint(Dog.species)   # same thing\n\n# Modify instance attribute\ndog1.age = 4\nprint(dog1.age)  # 4\nprint(dog2.age)  # 5 (unchanged)",
+      "output": "Rex says: Woof!\nBuddy (5 yrs) - Canis lupus\nCanis lupus\nCanis lupus\n4\n5",
+      "tip": "self refers to the current instance. Always use self.attribute to store instance data."
+    },
+    {
+      "id": "inheritance",
+      "title": "Inheritance",
+      "icon": "🧬",
+      "explanation": "Inheritance lets a child class reuse code from a parent class. Use super() to call the parent's methods.",
+      "syntax": "class Parent:\n    def __init__(self, name):\n        self.name = name\n    def greet(self):\n        return f'Hi, I am {self.name}'\n\nclass Child(Parent):\n    def __init__(self, name, skill):\n        super().__init__(name)  # call parent\n        self.skill = skill",
+      "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    \n    def speak(self):\n        return f'{self.name} makes a sound'\n    \n    def __str__(self):\n        return f'Animal: {self.name}'\n\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name)  # call Animal.__init__\n        self.breed = breed\n    \n    def speak(self):  # override parent method\n        return f'{self.name} barks: Woof!'\n    \n    def fetch(self):\n        return f'{self.name} fetches the ball!'\n\nclass Cat(Animal):\n    def speak(self):\n        return f'{self.name} meows: Meow!'\n\ndog = Dog('Rex', 'Labrador')\ncat = Cat('Whiskers')\n\nprint(dog.speak())\nprint(cat.speak())\nprint(dog.fetch())\nprint(isinstance(dog, Animal))  # True\nprint(isinstance(dog, Dog))     # True\nprint(isinstance(cat, Dog))     # False",
+      "output": "Rex barks: Woof!\nWhiskers meows: Meow!\nRex fetches the ball!\nTrue\nTrue\nFalse",
+      "tip": "Always call super().__init__() in child class to properly initialize parent attributes."
+    },
+    {
+      "id": "encapsulation",
+      "title": "Encapsulation",
+      "icon": "🔒",
+      "explanation": "Encapsulation hides internal data and provides controlled access through methods. Use _ for protected, __ for private.",
+      "syntax": "class BankAccount:\n    def __init__(self):\n        self.__balance = 0  # private\n    \n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n    \n    @property\n    def balance(self):  # getter\n        return self.__balance",
+      "code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.__balance = balance  # private\n    \n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return f'Deposited ${amount}'\n        return 'Invalid amount'\n    \n    def withdraw(self, amount):\n        if 0 < amount <= self.__balance:\n            self.__balance -= amount\n            return f'Withdrew ${amount}'\n        return 'Insufficient funds'\n    \n    @property\n    def balance(self):\n        return self.__balance\n    \n    def __str__(self):\n        return f'{self.owner}: ${self.__balance}'\n\nacc = BankAccount('Alice', 1000)\nprint(acc.deposit(500))\nprint(acc.withdraw(200))\nprint(acc.balance)\nprint(acc)\n# print(acc.__balance)  # AttributeError!",
+      "output": "Deposited $500\nWithdrew $200\n1300\nAlice: $1300",
+      "tip": "__ (double underscore) makes attributes private via name mangling. Use @property for clean getter/setter access."
+    },
+    {
+      "id": "polymorphism",
+      "title": "Polymorphism",
+      "icon": "🎭",
+      "explanation": "Polymorphism means the same method name works differently for different classes. One interface, many implementations.",
+      "syntax": "# Same method name, different behavior\nclass Shape:\n    def area(self): pass\n\nclass Circle(Shape):\n    def area(self): return 3.14 * r**2\n\nclass Square(Shape):\n    def area(self): return side**2\n\n# Works for any shape!\nfor shape in shapes:\n    print(shape.area())",
+      "code": "import math\n\nclass Shape:\n    def area(self):\n        return 0\n    def describe(self):\n        return f'{self.__class__.__name__}: area={self.area():.2f}'\n\nclass Circle(Shape):\n    def __init__(self, radius):\n        self.radius = radius\n    def area(self):\n        return math.pi * self.radius ** 2\n\nclass Rectangle(Shape):\n    def __init__(self, w, h):\n        self.w, self.h = w, h\n    def area(self):\n        return self.w * self.h\n\nclass Triangle(Shape):\n    def __init__(self, base, height):\n        self.base, self.height = base, height\n    def area(self):\n        return 0.5 * self.base * self.height\n\n# Polymorphism in action\nshapes = [Circle(5), Rectangle(4, 6), Triangle(3, 8)]\nfor shape in shapes:\n    print(shape.describe())\n\n# Built-in polymorphism\nprint(len('hello'))   # 5\nprint(len([1,2,3]))   # 3\nprint(len({'a':1}))   # 1",
+      "output": "Circle: area=78.54\nRectangle: area=24.00\nTriangle: area=12.00\n5\n3\n1",
+      "tip": "Polymorphism is the power of OOP. Write code that works with any object that has the right method — don't check types!"
+    },
+    {
+      "id": "dunder-methods",
+      "title": "Dunder Methods",
+      "icon": "🔮",
+      "explanation": "Dunder (double underscore) methods like __str__, __len__, __add__ let your objects work with Python's built-in operations.",
+      "syntax": "class MyClass:\n    def __init__(self): pass\n    def __str__(self): return 'string repr'\n    def __repr__(self): return 'debug repr'\n    def __len__(self): return 0\n    def __add__(self, other): pass\n    def __eq__(self, other): pass",
+      "code": "class Vector:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    \n    def __str__(self):\n        return f'Vector({self.x}, {self.y})'\n    \n    def __repr__(self):\n        return f'Vector(x={self.x}, y={self.y})'\n    \n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n    \n    def __mul__(self, scalar):\n        return Vector(self.x * scalar, self.y * scalar)\n    \n    def __len__(self):\n        return int((self.x**2 + self.y**2)**0.5)\n    \n    def __eq__(self, other):\n        return self.x == other.x and self.y == other.y\n\nv1 = Vector(2, 3)\nv2 = Vector(1, 4)\nprint(v1)\nprint(v1 + v2)\nprint(v1 * 3)\nprint(len(v1))\nprint(v1 == Vector(2, 3))",
+      "output": "Vector(2, 3)\nVector(3, 7)\nVector(6, 9)\n3\nTrue",
+      "tip": "Dunder methods make your objects feel native to Python. __str__ for print(), __len__ for len(), __add__ for + operator."
+    }
+  ],
+  "problem_first": "Suppose you are building a school management system.\n\nWithout OOP:\nstudent1_name = 'Alice'\nstudent1_age = 20\nstudent1_grade = 'A'\n\nstudent2_name = 'Bob'\nstudent2_age = 21\nstudent2_grade = 'B'\n\n# 100 students = 300 variables! 😱\n\nWith OOP:\nclass Student:\n    def __init__(self, name, age, grade):\n        self.name = name\n        self.age = age\n        self.grade = grade\n\ns1 = Student('Alice', 20, 'A')\ns2 = Student('Bob', 21, 'B')\n# 100 students = 100 objects, same class!",
+  "why_matters": "OOP is used in EVERY large application:\n🌐 Web frameworks: Django, Flask use classes everywhere\n🎮 Games: Player, Enemy, Weapon are all classes\n🤖 ML: sklearn models are classes (fit, predict methods)\n🏦 Banking: Account, Transaction, Customer classes\n📱 GUI: Button, Window, Form are all objects\n\nWithout OOP, large programs become impossible to manage.",
+  "important_points": [
+    "⭐ Class is a BLUEPRINT; Object is an INSTANCE created from that blueprint",
+    "⭐ __init__ is the constructor — runs automatically when you create an object",
+    "⭐ self refers to the current instance — always first parameter in methods",
+    "⭐ Class attributes are SHARED by all instances; instance attributes are UNIQUE per object",
+    "⭐ Inheritance: child class gets ALL methods/attributes of parent class",
+    "⭐ super().__init__() calls parent constructor — always call it in child __init__",
+    "⭐ Polymorphism: same method name, different behavior in different classes",
+    "⭐ Encapsulation: __ (double underscore) makes attributes private via name mangling"
+  ],
+  "dry_run": {
+    "title": "Dry Run: dog = Dog('Rex', 3); print(dog.bark())",
+    "steps": [
+      {
+        "step": 1,
+        "state": "Dog('Rex', 3)",
+        "action": "Python calls Dog.__init__(self, 'Rex', 3)",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "self.name='Rex'",
+        "action": "self.name = 'Rex' stored in object memory",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "self.age=3",
+        "action": "self.age = 3 stored in object memory",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "dog = <Dog object>",
+        "action": "Object created, assigned to variable 'dog'",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "dog.bark()",
+        "action": "Python calls Dog.bark(dog) — self=dog",
+        "output": ""
+      },
+      {
+        "step": 6,
+        "state": "return f-string",
+        "action": "return f'{self.name} says: Woof!' → 'Rex says: Woof!'",
+        "output": "Rex says: Woof!"
+      }
+    ]
+  }
+}

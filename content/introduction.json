@@ -1,0 +1,111 @@
+{
+  "title": "Introduction to Python",
+  "icon": "&#x1F40D;",
+  "level": "beginner",
+  "simple_definition": "Python is a high-level, easy-to-read programming language that lets you tell a computer what to do using simple English-like commands.",
+  "technical_definition": "Python is an interpreted, dynamically-typed, object-oriented programming language with automatic memory management, created by Guido van Rossum in 1991.",
+  "analogy": "Think of Python as giving instructions to a very smart assistant. Instead of complex machine language, you write in plain English-like syntax and Python translates it for the computer.",
+  "syntax": "# Your first Python program\nprint('Hello, World!')\n\n# Python is case-sensitive\nname = 'PyLab AI'\nprint(name)",
+  "example_desc": "A simple program that greets the user and shows basic Python capabilities.",
+  "code_example": "# Introduction to Python\nprint('Welcome to PyLab AI!')\n\n# Variables are easy\nname = 'Alice'\nage = 25\nis_learning = True\n\nprint(f'Name: {name}')\nprint(f'Age: {age}')\nprint(f'Learning Python: {is_learning}')\n\n# Python does math too\nresult = 10 + 5 * 2\nprint(f'10 + 5 * 2 = {result}')",
+  "output": "Welcome to PyLab AI!\nName: Alice\nAge: 25\nLearning Python: True\n10 + 5 * 2 = 20",
+  "logic_steps": [
+    "Python reads your code line by line, top to bottom",
+    "print() is a built-in function that displays output to the screen",
+    "Variables store data in memory with a name you choose",
+    "f-strings (f'...') let you embed variables directly in strings",
+    "Python follows BODMAS/PEMDAS for math operations"
+  ],
+  "edge_cases": [
+    "Python is case-sensitive: 'Name' and 'name' are different variables",
+    "Indentation matters in Python — use 4 spaces consistently",
+    "print() adds a newline by default; use end='' to prevent it"
+  ],
+  "common_mistakes": [
+    "Forgetting quotes around strings: name = Alice (wrong) vs name = 'Alice' (correct)",
+    "Mixing tabs and spaces for indentation — always use spaces",
+    "Using = for comparison instead of == (= assigns, == compares)"
+  ],
+  "interview_tips": [
+    "Python is interpreted, not compiled — code runs line by line",
+    "Python uses duck typing — variable type is determined at runtime",
+    "GIL (Global Interpreter Lock) is a common Python interview topic",
+    "Python 3 is the current standard — Python 2 is deprecated"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a program to print your name and age",
+        "hint": "Use print() with variables"
+      },
+      {
+        "question": "Calculate and print the area of a rectangle (length=10, width=5)",
+        "hint": "area = length * width"
+      },
+      {
+        "question": "Print 'Hello World' 5 times using a loop",
+        "hint": "Use for i in range(5)"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Write a program that takes user input and prints it reversed",
+        "hint": "Use input() and string slicing [::-1]"
+      },
+      {
+        "question": "Create a simple calculator that adds, subtracts, multiplies, divides",
+        "hint": "Use if-elif for operation selection"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Build a number guessing game where the computer picks a random number",
+        "hint": "Use random.randint() and a while loop"
+      },
+      {
+        "question": "Write a program to check if a number is prime",
+        "hint": "Check divisibility from 2 to sqrt(n)"
+      }
+    ]
+  },
+  "problem_first": "You want to build apps, automate tasks, analyze data, or get a job in tech.\n\nBut where do you start? Which language?\n\nPython is the answer because:\n✅ Easiest syntax — reads like English\n✅ Most in-demand language (2024)\n✅ Used in Web, AI, Data Science, Automation\n✅ Huge community and libraries\n\nprint('Hello, World!')  ← Your first Python program!\n\nThat's it. One line. No semicolons, no curly braces, no complexity.",
+  "why_matters": "Python is used by:\n🔬 NASA — space exploration\n🎬 Netflix — recommendation engine\n🔍 Google — search algorithms\n📊 Instagram — backend\n🤖 OpenAI — ChatGPT\n\nLearning Python opens doors to ALL of these fields.",
+  "important_points": [
+    "⭐ Python is INTERPRETED — runs line by line, no compilation needed",
+    "⭐ Python is DYNAMICALLY TYPED — no need to declare variable types",
+    "⭐ Python uses INDENTATION (spaces) instead of curly braces {} for code blocks",
+    "⭐ Python 3 is the current standard — Python 2 is deprecated since 2020",
+    "⭐ Everything in Python is an OBJECT — numbers, strings, functions, classes",
+    "⭐ Python follows PEP 8 style guide — use 4 spaces for indentation",
+    "⭐ The Zen of Python: 'Readability counts' — write code humans can read"
+  ],
+  "dry_run": {
+    "title": "Dry Run: name = 'Alice'; print(f'Hello, {name}!')",
+    "steps": [
+      {
+        "step": 1,
+        "state": "name = 'Alice'",
+        "action": "Python creates string object 'Alice', variable 'name' points to it",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "print(...)",
+        "action": "Python evaluates f'Hello, {name}!' → replaces {name} with 'Alice'",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "f-string evaluated",
+        "action": "Result: 'Hello, Alice!'",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "print('Hello, Alice!')",
+        "action": "Output to console",
+        "output": "Hello, Alice!"
+      }
+    ]
+  }
+}

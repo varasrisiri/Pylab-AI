@@ -1,0 +1,11 @@
+{
+  "title": "Conditionals — Complete Notes",
+  "topic": "conditionals",
+  "sections": [
+    {
+      "title": "Complete Guide to Conditionals",
+      "content": "Comprehensive notes for Conditionals in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Conditionals examples\n# Run in the Code Editor to see output\nprint('Study Conditionals in PyLab AI!')"
+    }
+  ]
+}

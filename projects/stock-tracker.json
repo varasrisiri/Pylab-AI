@@ -1,0 +1,96 @@
+{
+  "slug": "stock-tracker",
+  "title": "Stock Price Tracker",
+  "icon": "&#x1F4C8;",
+  "level": "intermediate",
+  "desc": "Track stock prices, plot charts, set price alerts",
+  "time": "5-6 hours",
+  "tags": [
+    "requests",
+    "Pandas",
+    "Matplotlib",
+    "API"
+  ],
+  "github_template": "stock-tracker",
+  "concepts_needed": [
+    "requests",
+    "Pandas",
+    "Matplotlib",
+    "API"
+  ],
+  "what_you_build": "Track stock prices, plot charts, set price alerts",
+  "what_you_learn": [
+    "How to use requests in a real project",
+    "Project structure and organization",
+    "Error handling and edge cases",
+    "Git workflow and GitHub",
+    "Writing clean, readable code"
+  ],
+  "folder_structure": "stock-tracker/\n├── main.py\n├── requirements.txt\n└── README.md",
+  "steps": [
+    {
+      "num": 1,
+      "title": "Setup & Plan",
+      "desc": "Create project folder, initialize git, plan features.",
+      "code": "mkdir stock-tracker\ncd stock-tracker\ngit init\ntouch main.py README.md",
+      "hint": "Plan before coding! Write down 3-5 features you want to build."
+    },
+    {
+      "num": 2,
+      "title": "Build Core Features",
+      "desc": "Implement the main functionality of Stock Price Tracker.",
+      "code": "# Start with the simplest version\n# Add features one by one\n# Test each feature before moving on",
+      "hint": "Build the minimum working version first, then add features."
+    },
+    {
+      "num": 3,
+      "title": "Add Error Handling",
+      "desc": "Handle edge cases and invalid inputs.",
+      "code": "try:\n    # your code\nexcept ValueError as e:\n    print(f'Error: {e}')",
+      "hint": "Think: what could go wrong? Handle each case."
+    },
+    {
+      "num": 4,
+      "title": "Test & Polish",
+      "desc": "Test with different inputs, fix bugs, clean up code.",
+      "code": "# Test with:\n# - Normal inputs\n# - Edge cases (empty, zero, negative)\n# - Invalid inputs",
+      "hint": "Test with inputs you DON'T expect, not just the happy path."
+    },
+    {
+      "num": 5,
+      "title": "Push to GitHub",
+      "desc": "Write README and push your project to GitHub.",
+      "code": "git add .\ngit commit -m 'feat: complete Stock Price Tracker'\ngit push origin main",
+      "hint": "A good README makes your project stand out to recruiters!"
+    }
+  ],
+  "extensions": [
+    "Add more features",
+    "Build a GUI version",
+    "Add a web interface with Flask",
+    "Write unit tests",
+    "Deploy to the cloud"
+  ],
+  "concepts_needed_links": [
+    {
+      "name": "requests library",
+      "url": "/libraries",
+      "external": false
+    },
+    {
+      "name": "Pandas",
+      "url": "/libraries",
+      "external": false
+    },
+    {
+      "name": "Matplotlib",
+      "url": "/libraries",
+      "external": false
+    },
+    {
+      "name": "API",
+      "url": "/learn/apis",
+      "external": false
+    }
+  ]
+}

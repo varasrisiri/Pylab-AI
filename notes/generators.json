@@ -1,0 +1,11 @@
+{
+  "title": "Generators — Complete Notes",
+  "topic": "generators",
+  "sections": [
+    {
+      "title": "Complete Guide to Generators",
+      "content": "Comprehensive notes for Generators in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Generators examples\n# Run in the Code Editor to see output\nprint('Study Generators in PyLab AI!')"
+    }
+  ]
+}

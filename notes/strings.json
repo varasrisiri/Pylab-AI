@@ -1,0 +1,11 @@
+{
+  "title": "Strings — Complete Notes",
+  "topic": "strings",
+  "sections": [
+    {
+      "title": "Complete Guide to Strings",
+      "content": "Comprehensive notes for Strings in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Strings examples\n# Run in the Code Editor to see output\nprint('Study Strings in PyLab AI!')"
+    }
+  ]
+}

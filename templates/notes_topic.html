@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{{ content.title if content else topic|title }} Notes - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+.notes-layout{display:grid;grid-template-columns:260px 1fr;gap:0;min-height:calc(100vh - 64px);}
+.notes-toc{background:var(--bg-sidebar);border-right:1px solid var(--border-color);padding:1.5rem 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.notes-toc::-webkit-scrollbar{width:4px;}
+.toc-header{padding:.5rem 1.25rem 1rem;border-bottom:1px solid var(--border-color);margin-bottom:.5rem;}
+.toc-title{font-size:.85rem;font-weight:700;color:var(--accent-primary);}
+.toc-item{display:block;padding:.45rem 1.25rem;font-size:.83rem;color:var(--text-secondary);cursor:pointer;transition:all .2s;border-left:3px solid transparent;text-decoration:none;}
+.toc-item:hover,.toc-item.active{background:rgba(0,212,255,.07);color:var(--accent-primary);border-left-color:var(--accent-primary);}
+.toc-sub{padding:.35rem 1.25rem .35rem 2rem;font-size:.78rem;color:var(--text-muted);cursor:pointer;transition:all .2s;border-left:3px solid transparent;display:block;text-decoration:none;}
+.toc-sub:hover{color:var(--accent-primary);border-left-color:var(--accent-primary);}
+.notes-main{padding:2.5rem;overflow-y:auto;max-width:900px;}
+.notes-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color);}
+.notes-title{font-size:2rem;font-weight:900;color:var(--text-heading);margin-bottom:.5rem;}
+.notes-meta{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
+.chapter-block{margin-bottom:3rem;}
+.chapter-title{font-size:1.3rem;font-weight:800;color:var(--text-heading);margin-bottom:1.5rem;padding:.75rem 1rem;background:rgba(0,212,255,.06);border-left:4px solid var(--accent-primary);border-radius:0 10px 10px 0;}
+.section-block{background:var(--bg-card);border:1px solid var(--border-color);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem;transition:border-color .3s;}
+.section-block:hover{border-color:var(--border-glow);}
+.section-heading{font-size:1.05rem;font-weight:700;color:var(--accent-secondary);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;}
+.section-content{color:var(--text-secondary);line-height:1.8;margin-bottom:1rem;font-size:.92rem;}
+.section-output{margin-top:.75rem;}
+.output-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.35rem;}
+.output-box{background:#011627;border:1px solid var(--border-color);border-radius:8px;padding:.85rem 1rem;font-family:Fira Code,monospace;font-size:.82rem;color:#abb2bf;white-space:pre-wrap;}
+.try-btn{display:inline-flex;align-items:center;gap:.4rem;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.25);color:var(--accent-secondary);padding:.3rem .85rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:.75rem;text-decoration:none;}
+.try-btn:hover{background:rgba(0,255,136,.2);color:var(--accent-secondary);}
+.pdf-bar{background:var(--bg-secondary);border-bottom:1px solid var(--border-color);padding:.75rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;}
+.pdf-bar-title{font-size:.88rem;color:var(--text-secondary);}
+.pdf-bar-actions{display:flex;gap:.75rem;}
+@media(max-width:900px){.notes-layout{grid-template-columns:1fr;}.notes-toc{position:static;height:auto;}}
+@media print{.notes-toc,.pdf-bar,.navbar{display:none!important;}.notes-main{padding:1rem;max-width:100%;}}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+
+<div class="pdf-bar">
+  <span class="pdf-bar-title">&#x1F4D3; Notes: {{ content.title if content else topic|title }}</span>
+  <div class="pdf-bar-actions">
+    <a href="/notes" class="btn btn-ghost btn-sm">&#x2190; All Notes</a>
+    <button onclick="window.print()" class="btn btn-ghost btn-sm">&#x1F5A8;&#xFE0F; Print</button>
+    <a href="/api/notes-pdf/{{ topic }}" target="_blank" class="btn btn-primary btn-sm">&#x1F4C4; Download PDF</a>
+    <a href="/learn/{{ topic }}" class="btn btn-secondary btn-sm">&#x1F4D8; Learn Mode</a>
+  </div>
+</div>
+
+<main class="main-content" style="margin-top:64px;">
+<div class="notes-layout">
+
+  <!-- TOC Sidebar -->
+  <aside class="notes-toc">
+    <div class="toc-header">
+      <div class="toc-title">&#x1F4CB; Table of Contents</div>
+    </div>
+    {% if notes and notes.chapters %}
+      {% for ch in notes.chapters %}
+        <a class="toc-item" href="#{{ ch.id }}">{{ ch.title }}</a>
+        {% if ch.sections %}
+          {% for sec in ch.sections %}
+            <a class="toc-sub" href="#{{ ch.id }}-{{ loop.index }}">{{ sec.heading }}</a>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    {% elif content %}
+      <a class="toc-item" href="#definition">&#x1F4A1; Definition</a>
+      {% if content.why_matters %}<a class="toc-item" href="#why_matters">&#x1F680; Logic Building</a>{% endif %}
+      {% if content.logic_steps %}<a class="toc-item" href="#logic">&#x2699;&#xFE0F; Logic Steps</a>{% endif %}
+      {% if content.important_points %}<a class="toc-item" href="#important_points">&#x2B50; Key Points</a>{% endif %}
+      <a class="toc-item" href="#syntax">&#x270F;&#xFE0F; Syntax & Code</a>
+      {% if content.subtopics is defined and content.subtopics %}
+        {% for sub in content.subtopics %}
+          <a class="toc-sub" href="#sub-{{ loop.index }}">{{ sub.title }}</a>
+        {% endfor %}
+      {% endif %}
+      <a class="toc-item" href="#practice">&#x1F3CB;&#xFE0F; Practice Questions</a>
+    {% endif %}
+  </aside>
+
+  <!-- Main Notes Content -->
+  <div class="notes-main">
+    <div class="notes-header">
+      <h1 class="notes-title">
+        {{ content.icon if content else '&#x1F4D3;' }}
+        {{ notes.title if notes else (content.title if content else topic|title) }}
+      </h1>
+      <div class="notes-meta">
+        {% if content %}
+          <span class="badge badge-{{ content.level }}">{{ content.level|title }}</span>
+        {% endif %}
+        <span style="color:var(--text-muted);font-size:.82rem;">&#x1F4DA; Complete Notes</span>
+        <span style="color:var(--text-muted);font-size:.82rem;">&#x1F4BB; Code Examples Included</span>
+      </div>
+    </div>
+
+    <!-- Render from notes JSON if available -->
+    {% if notes and notes.chapters %}
+      {% for ch in notes.chapters %}
+        <div class="chapter-block" id="{{ ch.id }}">
+          <div class="chapter-title">{{ ch.title }}</div>
+          {% for sec in ch.sections %}
+            <div class="section-block" id="{{ ch.id }}-{{ loop.index }}">
+              <div class="section-heading">&#x1F4CC; {{ sec.heading }}</div>
+              <p class="section-content">{{ sec.content }}</p>
+              {% if sec.code %}
+                <div class="code-block">
+                  <div class="code-header">
+                    <span class="code-lang">python</span>
+                    <div style="display:flex;gap:.5rem;">
+                      <button onclick="sendToEditor(this)" data-code="{{ sec.code|e }}" class="btn btn-success btn-sm" style="font-size:.72rem;">&#x25B6; Try</button>
+                      <button class="code-copy">Copy</button>
+                    </div>
+                  </div>
+                  <pre><code class="language-python">{{ sec.code }}</code></pre>
+                </div>
+              {% endif %}
+              {% if sec.output %}
+                <div class="section-output">
+                  <div class="output-label">&#x1F4E4; Output</div>
+                  <div class="output-box">{{ sec.output }}</div>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+    <!-- Fallback: render from content JSON -->
+    {% elif content %}
+      <div class="chapter-block" id="definition">
+        <div class="chapter-title">Chapter 1: Understanding {{ content.title }}</div>
+        <div class="section-block">
+          <div class="section-heading">&#x1F4A1; Simple Definition</div>
+          <p class="section-content">{{ content.simple_definition }}</p>
+        </div>
+        <div class="section-block">
+          <div class="section-heading">&#x1F4DA; Technical Definition</div>
+          <p class="section-content">{{ content.technical_definition }}</p>
+        </div>
+        {% if content.analogy %}
+        <div class="section-block">
+          <div class="section-heading">&#x1F30D; Real-World Analogy</div>
+          <p class="section-content">{{ content.analogy }}</p>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if content.why_matters %}
+      <div class="chapter-block" id="why_matters">
+        <div class="chapter-title">Chapter 2: Logic Building & Why It Matters</div>
+        <div class="section-block">
+          <div class="section-heading">&#x1F680; How Useful in Logic Building</div>
+          <p class="section-content" style="white-space: pre-line; font-size: 0.92rem; line-height: 1.8;">{{ content.why_matters }}</p>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if content.logic_steps %}
+      <div class="chapter-block" id="logic">
+        <div class="chapter-title">Chapter 3: Logic Execution Steps</div>
+        <div class="section-block">
+          <div class="section-heading">&#x2699;&#xFE0F; Step-by-Step Logic</div>
+          <ol style="color:var(--text-secondary); padding-left: 1.5rem; line-height: 2; font-size: 0.92rem;">
+            {% for step in content.logic_steps %}
+            <li style="margin-bottom: 0.5rem;">{{ step }}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if content.important_points %}
+      <div class="chapter-block" id="important_points">
+        <div class="chapter-title">Chapter 4: Important Points & Best Practices</div>
+        <div class="section-block">
+          <div class="section-heading">&#x2B50; Key Insights</div>
+          <ul style="color:var(--text-secondary); padding-left: 1.5rem; line-height: 2.2; font-size: 0.92rem;">
+            {% for pt in content.important_points %}
+            <li style="margin-bottom: 0.5rem;">{{ pt }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="chapter-block" id="syntax">
+        <div class="chapter-title">Chapter 5: Syntax & Code</div>
+        <div class="section-block">
+          <div class="section-heading">&#x270F;&#xFE0F; Syntax</div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+            <pre><code class="language-python">{{ content.syntax }}</code></pre>
+          </div>
+        </div>
+        <div class="section-block" id="example">
+          <div class="section-heading">&#x1F4BB; Code Example</div>
+          <p class="section-content">{{ content.example_desc }}</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">python</span>
+              <div style="display:flex;gap:.5rem;">
+                <button onclick="sendToEditor(this)" data-code="{{ content.code_example|e }}" class="btn btn-success btn-sm" style="font-size:.72rem;">&#x25B6; Try</button>
+                <button class="code-copy">Copy</button>
+              </div>
+            </div>
+            <pre><code class="language-python">{{ content.code_example }}</code></pre>
+          </div>
+          {% if content.output %}
+          <div class="section-output">
+            <div class="output-label">&#x1F4E4; Output</div>
+            <div class="output-box">{{ content.output }}</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if content.subtopics is defined and content.subtopics %}
+      <div class="chapter-block">
+        <div class="chapter-title">Chapter 6: Subtopics Deep Dive</div>
+        {% for sub in content.subtopics %}
+        <div class="section-block" id="sub-{{ loop.index }}">
+          <div class="section-heading">{{ sub.icon }} {{ sub.title }}</div>
+          <p class="section-content">{{ sub.explanation }}</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">python</span>
+              <div style="display:flex;gap:.5rem;">
+                <button onclick="sendToEditor(this)" data-code="{{ sub.code|e }}" class="btn btn-success btn-sm" style="font-size:.72rem;">&#x25B6; Try</button>
+                <button class="code-copy">Copy</button>
+              </div>
+            </div>
+            <pre><code class="language-python">{{ sub.code }}</code></pre>
+          </div>
+          {% if sub.output is defined %}
+          <div class="section-output">
+            <div class="output-label">&#x1F4E4; Output</div>
+            <div class="output-box">{{ sub.output }}</div>
+          </div>
+          {% endif %}
+          {% if sub.tip is defined %}
+          <div style="background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.2);border-radius:8px;padding:.75rem 1rem;margin-top:.75rem;font-size:.85rem;color:var(--accent-secondary);">
+            <strong>&#x1F4A1; Tip:</strong> {{ sub.tip }}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="chapter-block" id="practice">
+        <div class="chapter-title">Chapter 7: Practice Questions</div>
+        {% for q in content.practice.easy %}
+        <div class="section-block">
+          <div class="section-heading">&#x1F7E2; Easy {{ loop.index }}: {{ q.question }}</div>
+          <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+          <a href="/editor" class="try-btn">&#x1F4BB; Solve in Editor</a>
+        </div>
+        {% endfor %}
+        {% for q in content.practice.medium %}
+        <div class="section-block">
+          <div class="section-heading">&#x1F7E1; Medium {{ loop.index }}: {{ q.question }}</div>
+          <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+        </div>
+        {% endfor %}
+        {% for q in content.practice.hard %}
+        <div class="section-block">
+          <div class="section-heading">&#x1F534; Hard {{ loop.index }}: {{ q.question }}</div>
+          <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="chapter-block">
+        <div class="chapter-title">Chapter 8: Interview Tips & Edge Cases</div>
+        <div class="section-block">
+          <div class="section-heading">&#x1F3AF; Interview Tips</div>
+          <ul style="color:var(--text-secondary);padding-left:1.5rem;line-height:2.2;font-size:.92rem;">
+            {% for tip in content.interview_tips %}
+            <li>{{ tip }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="section-block">
+          <div class="section-heading">&#x26A0;&#xFE0F; Edge Cases</div>
+          {% for ec in content.edge_cases %}
+          <div style="background:rgba(255,165,0,.07);border-left:3px solid var(--accent-warning);border-radius:0 8px 8px 0;padding:.6rem 1rem;margin-bottom:.5rem;font-size:.88rem;color:var(--text-secondary);">{{ ec }}</div>
+          {% endfor %}
+        </div>
+        <div class="section-block">
+          <div class="section-heading">&#x274C; Common Mistakes</div>
+          {% for m in content.common_mistakes %}
+          <div style="background:rgba(255,71,87,.07);border-left:3px solid var(--accent-danger);border-radius:0 8px 8px 0;padding:.6rem 1rem;margin-bottom:.5rem;font-size:.88rem;color:var(--text-secondary);">{{ m }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div class="section-block">
+        <div class="section-heading">&#x1F4D3; Notes Coming Soon</div>
+        <p class="section-content">Detailed notes for this topic are being prepared. Check the Learn section for full content.</p>
+        <a href="/learn/{{ topic }}" class="btn btn-primary">&#x1F4D8; Go to Learn Section</a>
+      </div>
+    {% endif %}
+
+    <!-- Navigation -->
+    <div style="display:flex;justify-content:space-between;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color);">
+      <a href="/notes" class="btn btn-ghost">&#x2190; All Notes</a>
+      <div style="display:flex;gap:.75rem;">
+        <button onclick="window.print()" class="btn btn-ghost">&#x1F5A8;&#xFE0F; Print</button>
+        <a href="/api/notes-pdf/{{ topic }}" target="_blank" class="btn btn-primary">&#x1F4C4; Download PDF</a>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+function sendToEditor(btn) {
+  const code = btn.getAttribute('data-code');
+  localStorage.setItem('pylab-editor-code', code);
+  window.open('/editor', '_blank');
+}
+</script>
+</body></html>

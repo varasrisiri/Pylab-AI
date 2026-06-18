@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Projects - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.proj-layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px);gap:0;}
+.proj-sidebar{background:var(--bg-sidebar);border-right:1px solid var(--border-color);overflow-y:auto;position:sticky;top:64px;height:calc(100vh - 64px);}
+.proj-sidebar::-webkit-scrollbar{width:4px;}
+.sidebar-level{margin-bottom:.25rem;}
+.sidebar-level-title{padding:.6rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;display:flex;align-items:center;gap:.5rem;}
+.sidebar-level-title.beginner{color:var(--accent-secondary);}
+.sidebar-level-title.intermediate{color:var(--accent-warning);}
+.sidebar-level-title.advanced{color:var(--accent-danger);}
+.sidebar-proj{display:flex;align-items:center;gap:.6rem;padding:.45rem 1.25rem;font-size:.83rem;color:var(--text-secondary);cursor:pointer;transition:all .2s;border-left:3px solid transparent;text-decoration:none;}
+.sidebar-proj:hover,.sidebar-proj.active{background:rgba(0,212,255,.07);color:var(--accent-primary);border-left-color:var(--accent-primary);}
+.sidebar-proj-icon{font-size:.95rem;width:20px;text-align:center;flex-shrink:0;}
+.proj-main{padding:2rem;overflow-y:auto;}
+.proj-hero{background:var(--gradient-hero);border:1px solid var(--border-color);border-radius:24px;padding:3rem 2rem;text-align:center;margin-bottom:2rem;position:relative;overflow:hidden;}
+.proj-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none;}
+.level-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:2rem;}
+.level-card{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:20px;padding:2rem;text-align:center;transition:all .3s;cursor:pointer;}
+.level-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);}
+.level-card.beginner:hover{border-color:var(--accent-secondary);}
+.level-card.intermediate:hover{border-color:var(--accent-warning);}
+.level-card.advanced:hover{border-color:var(--accent-danger);}
+.level-icon{font-size:3rem;margin-bottom:.75rem;display:block;}
+.level-name{font-size:1.2rem;font-weight:800;margin-bottom:.4rem;}
+.level-count{font-size:.85rem;color:var(--text-muted);}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+.pcard{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:18px;padding:1.5rem;transition:all .3s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.pcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:var(--border-glow);}
+.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem;}
+.pcard-icon{font-size:2.2rem;}
+.pcard-time{font-size:.72rem;color:var(--text-muted);background:var(--bg-secondary);border:1px solid var(--border-color);padding:.2rem .6rem;border-radius:10px;}
+.pcard-title{font-size:1rem;font-weight:700;color:var(--text-heading);margin-bottom:.4rem;}
+.pcard-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.6;margin-bottom:.85rem;}
+.pcard-tags{display:flex;gap:.35rem;flex-wrap:wrap;}
+.pcard-tag{background:rgba(0,212,255,.08);color:var(--accent-primary);border:1px solid rgba(0,212,255,.15);padding:.15rem .55rem;border-radius:10px;font-size:.72rem;}
+.pcard-arrow{position:absolute;bottom:1.25rem;right:1.25rem;color:var(--accent-primary);font-size:1.1rem;transition:transform .3s;}
+.pcard:hover .pcard-arrow{transform:translateX(4px);}
+.section-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.ai-suggest-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;margin-bottom:2rem;}
+.ai-suggest-input{width:100%;background:var(--bg-code);border:1px solid var(--border-color);color:var(--text-primary);padding:.7rem 1rem;border-radius:10px;font-family:Inter,sans-serif;font-size:.9rem;outline:none;margin-bottom:.75rem;}
+.ai-suggest-input:focus{border-color:var(--accent-primary);}
+.ai-suggest-chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.ai-chip{background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-secondary);padding:.25rem .7rem;border-radius:12px;font-size:.78rem;cursor:pointer;transition:all .2s;}
+.ai-chip:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
+.ai-suggest-result{background:var(--bg-code);border:1px solid var(--border-color);border-radius:10px;padding:1rem;font-family:Fira Code,monospace;font-size:.83rem;color:#abb2bf;white-space:pre-wrap;display:none;max-height:300px;overflow-y:auto;}
+.ai-suggest-result.show{display:block;}
+@media(max-width:900px){.proj-layout{grid-template-columns:1fr;}.proj-sidebar{position:static;height:auto;}.level-cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content" style="margin-top:64px;">
+<div class="proj-layout">
+<aside class="proj-sidebar">
+<div class="sidebar-level">
+<div class="sidebar-level-title beginner">&#x1F7E2; Beginner (20)</div>
+<a href="/projects/calculator" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F9EE;</span>Calculator App</a>
+<a href="/projects/number-guessing" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3B2;</span>Number Guessing Game</a>
+<a href="/projects/todo-cli" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4DD;</span>Todo List (CLI)</a>
+<a href="/projects/password-generator" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F511;</span>Password Generator</a>
+<a href="/projects/unit-converter" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4CF;</span>Unit Converter</a>
+<a href="/projects/quiz-app" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2753;</span>Quiz Application</a>
+<a href="/projects/contact-book" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4D6;</span>Contact Book</a>
+<a href="/projects/rock-paper-scissors" class="sidebar-proj"><span class="sidebar-proj-icon">&#x270A;</span>Rock Paper Scissors</a>
+<a href="/projects/bmi-calculator" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2696;&#xFE0F;</span>BMI Calculator</a>
+<a href="/projects/word-counter" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4CA;</span>Word Counter</a>
+<a href="/projects/temperature-converter" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F321;&#xFE0F;</span>Temperature Converter</a>
+<a href="/projects/simple-bank" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3E6;</span>Simple Bank Account</a>
+<a href="/projects/hangman" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3AF;</span>Hangman Game</a>
+<a href="/projects/dice-roller" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3B2;</span>Dice Roller Simulator</a>
+<a href="/projects/alarm-clock" class="sidebar-proj"><span class="sidebar-proj-icon">&#x23F0;</span>Alarm Clock</a>
+<a href="/projects/text-adventure" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F5FA;&#xFE0F;</span>Text Adventure Game</a>
+<a href="/projects/expense-tracker" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4B0;</span>Expense Tracker</a>
+<a href="/projects/library-system" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4DA;</span>Library Management</a>
+<a href="/projects/typing-speed" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2328;&#xFE0F;</span>Typing Speed Test</a>
+<a href="/projects/mad-libs" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4DD;</span>Mad Libs Generator</a>
+</div>
+<div class="sidebar-level">
+<div class="sidebar-level-title intermediate">&#x1F7E1; Intermediate (20)</div>
+<a href="/projects/web-scraper" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F578;&#xFE0F;</span>Web Scraper</a>
+<a href="/projects/flask-todo-api" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F376;</span>Flask REST API</a>
+<a href="/projects/data-analyzer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4CA;</span>Data Analyzer</a>
+<a href="/projects/chat-app" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4AC;</span>Chat Application</a>
+<a href="/projects/file-organizer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4C1;</span>File Organizer</a>
+<a href="/projects/weather-app" class="sidebar-proj"><span class="sidebar-proj-icon">&#x26C5;</span>Weather App</a>
+<a href="/projects/url-shortener" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F517;</span>URL Shortener</a>
+<a href="/projects/student-management" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F393;</span>Student Management System</a>
+<a href="/projects/image-resizer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F5BC;&#xFE0F;</span>Image Resizer & Editor</a>
+<a href="/projects/email-sender" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4E7;</span>Email Automation</a>
+<a href="/projects/markdown-blog" class="sidebar-proj"><span class="sidebar-proj-icon">&#x270D;&#xFE0F;</span>Markdown Blog</a>
+<a href="/projects/stock-tracker" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4C8;</span>Stock Price Tracker</a>
+<a href="/projects/password-manager" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F510;</span>Password Manager</a>
+<a href="/projects/task-scheduler" class="sidebar-proj"><span class="sidebar-proj-icon">&#x23F1;&#xFE0F;</span>Task Scheduler</a>
+<a href="/projects/pdf-generator" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4C4;</span>PDF Report Generator</a>
+<a href="/projects/quiz-api" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2753;</span>Quiz REST API</a>
+<a href="/projects/news-aggregator" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4F0;</span>News Aggregator</a>
+<a href="/projects/budget-planner" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4B3;</span>Budget Planner</a>
+<a href="/projects/recipe-app" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F373;</span>Recipe Manager</a>
+<a href="/projects/github-analyzer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F419;</span>GitHub Profile Analyzer</a>
+</div>
+<div class="sidebar-level">
+<div class="sidebar-level-title advanced">&#x1F534; Advanced (20)</div>
+<a href="/projects/ml-classifier" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F9E0;</span>ML Image Classifier</a>
+<a href="/projects/chatbot" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F916;</span>AI Chatbot</a>
+<a href="/projects/django-ecommerce" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F6D2;</span>E-Commerce Platform</a>
+<a href="/projects/face-recognition" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F464;</span>Face Recognition System</a>
+<a href="/projects/stock-predictor" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4C9;</span>Stock Price Predictor</a>
+<a href="/projects/social-network" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F465;</span>Social Network API</a>
+<a href="/projects/sentiment-analyzer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F60A;</span>Sentiment Analyzer</a>
+<a href="/projects/real-time-dashboard" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4CA;</span>Real-Time Dashboard</a>
+<a href="/projects/blockchain" class="sidebar-proj"><span class="sidebar-proj-icon">&#x26D3;&#xFE0F;</span>Blockchain Implementation</a>
+<a href="/projects/recommendation-engine" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3AF;</span>Recommendation Engine</a>
+<a href="/projects/api-gateway" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F6AA;</span>API Gateway</a>
+<a href="/projects/data-pipeline" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F504;</span>Data Pipeline</a>
+<a href="/projects/web-crawler" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F578;&#xFE0F;</span>Web Crawler & Search Engine</a>
+<a href="/projects/video-streaming" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3A5;</span>Video Streaming Server</a>
+<a href="/projects/distributed-task" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F9F5;</span>Distributed Task Queue</a>
+<a href="/projects/nlp-summarizer" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F4DD;</span>Text Summarizer</a>
+<a href="/projects/game-engine" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F3AE;</span>2D Game Engine</a>
+<a href="/projects/compiler" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2699;&#xFE0F;</span>Mini Compiler/Interpreter</a>
+<a href="/projects/kubernetes-monitor" class="sidebar-proj"><span class="sidebar-proj-icon">&#x2388;&#xFE0F;</span>Kubernetes Monitor</a>
+<a href="/projects/ml-pipeline" class="sidebar-proj"><span class="sidebar-proj-icon">&#x1F9EA;</span>ML Training Pipeline</a>
+</div>
+</aside>
+<div class="proj-main">
+<div class="proj-hero">
+<div style="position:relative;z-index:1;">
+<div style="font-size:4rem;margin-bottom:1rem;">&#x1F6E0;&#xFE0F;</div>
+<h1 style="font-size:2.5rem;font-weight:900;color:var(--text-heading);margin-bottom:.75rem;">Python Projects Hub</h1>
+<p style="color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto 1.5rem;">Build real projects. Connect to GitHub. Learn by doing.</p>
+<div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+<div style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);border-radius:12px;padding:.5rem 1.25rem;font-size:.88rem;color:var(--accent-secondary);">&#x1F4BB; 60 Projects</div>
+<div style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:.5rem 1.25rem;font-size:.88rem;color:var(--accent-primary);">&#x1F419; GitHub Ready</div>
+<div style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:.5rem 1.25rem;font-size:.88rem;color:var(--accent-tertiary);">&#x1F916; AI Guidance</div>
+<div style="background:rgba(191,95,255,.1);border:1px solid rgba(191,95,255,.2);border-radius:12px;padding:.5rem 1.25rem;font-size:.88rem;color:#bf5fff;">&#x1F4C8; Portfolio Builder</div>
+</div>
+</div>
+</div>
+<div class="level-cards">
+<div class="level-card beginner" onclick="scrollToLevel('beginner')">
+  <span class="level-icon">&#x1F331;</span>
+  <div class="level-name" style="color:var(--accent-secondary);">Beginner</div>
+  <div class="level-count">20 Projects</div>
+  <div style="color:var(--text-muted);font-size:.82rem;margin-top:.4rem;">Start here! Build with basics</div>
+</div>
+<div class="level-card intermediate" onclick="scrollToLevel('intermediate')">
+  <span class="level-icon">&#x1F525;</span>
+  <div class="level-name" style="color:var(--accent-warning);">Intermediate</div>
+  <div class="level-count">20 Projects</div>
+  <div style="color:var(--text-muted);font-size:.82rem;margin-top:.4rem;">APIs, databases, web apps</div>
+</div>
+<div class="level-card advanced" onclick="scrollToLevel('advanced')">
+  <span class="level-icon">&#x1F9E0;</span>
+  <div class="level-name" style="color:var(--accent-danger);">Advanced</div>
+  <div class="level-count">20 Projects</div>
+  <div style="color:var(--text-muted);font-size:.82rem;margin-top:.4rem;">ML, AI, distributed systems</div>
+</div>
+</div>
+<div class="ai-suggest-box">
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+  <span style="font-size:1.8rem;">&#x1F916;</span>
+  <div><div style="font-weight:700;color:var(--text-heading);">AI Project Advisor</div>
+  <div style="color:var(--text-muted);font-size:.82rem;">Tell me your skill level and interests, I'll suggest the perfect project</div></div>
+</div>
+<div class="ai-suggest-chips">
+<div class="ai-chip" onclick="askAISuggest('I know loops and functions')">I know loops and functions</div>
+<div class="ai-chip" onclick="askAISuggest('I want to build a web app')">I want to build a web app</div>
+<div class="ai-chip" onclick="askAISuggest('I like data and charts')">I like data and charts</div>
+<div class="ai-chip" onclick="askAISuggest('I want to use AI/ML')">I want to use AI/ML</div>
+<div class="ai-chip" onclick="askAISuggest('I want to automate tasks')">I want to automate tasks</div>
+<div class="ai-chip" onclick="askAISuggest('I want to build games')">I want to build games</div>
+<div class="ai-chip" onclick="askAISuggest('I want to practice OOP')">I want to practice OOP</div>
+<div class="ai-chip" onclick="askAISuggest('Suggest a portfolio project')">Suggest a portfolio project</div>
+</div>
+<input type="text" class="ai-suggest-input" id="aiSuggestInput" placeholder="Or type your own: e.g. I know Python basics and want to build something for my resume...">
+<button onclick="getAISuggestion()" class="btn btn-primary btn-sm">&#x1F916; Get AI Suggestion</button>
+<div class="ai-suggest-result" id="aiSuggestResult"></div>
+</div>
+<div id="level-beginner" style="margin-bottom:3rem;">
+<div class="section-header-row">
+  <h2 style="font-size:1.5rem;font-weight:800;color:var(--accent-secondary);">&#x1F331; Beginner Projects</h2>
+  <span style="color:var(--text-muted);font-size:.85rem;">20 projects</span>
+</div>
+<div class="proj-grid">
+<a href="/projects/calculator" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F9EE;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Calculator App</div>
+  <div class="pcard-desc">Build a command-line calculator with +, -, *, / operations</div>
+  <div class="pcard-tags"><span class="pcard-tag">basics</span><span class="pcard-tag">functions</span><span class="pcard-tag">loops</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/number-guessing" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3B2;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Number Guessing Game</div>
+  <div class="pcard-desc">Computer picks a number, user guesses with hints</div>
+  <div class="pcard-tags"><span class="pcard-tag">loops</span><span class="pcard-tag">conditionals</span><span class="pcard-tag">random</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/todo-cli" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4DD;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">Todo List (CLI)</div>
+  <div class="pcard-desc">Command-line todo app with add, remove, complete features</div>
+  <div class="pcard-tags"><span class="pcard-tag">lists</span><span class="pcard-tag">file handling</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/password-generator" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F511;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Password Generator</div>
+  <div class="pcard-desc">Generate strong passwords with custom length and characters</div>
+  <div class="pcard-tags"><span class="pcard-tag">strings</span><span class="pcard-tag">random</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/unit-converter" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4CF;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Unit Converter</div>
+  <div class="pcard-desc">Convert between units: temperature, length, weight, currency</div>
+  <div class="pcard-tags"><span class="pcard-tag">functions</span><span class="pcard-tag">dictionaries</span><span class="pcard-tag">math</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/quiz-app" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2753;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">Quiz Application</div>
+  <div class="pcard-desc">Multiple choice quiz with score tracking and timer</div>
+  <div class="pcard-tags"><span class="pcard-tag">lists</span><span class="pcard-tag">dictionaries</span><span class="pcard-tag">loops</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/contact-book" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4D6;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Contact Book</div>
+  <div class="pcard-desc">Store, search, update and delete contacts with file persistence</div>
+  <div class="pcard-tags"><span class="pcard-tag">dictionaries</span><span class="pcard-tag">file handling</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/rock-paper-scissors" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x270A;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Rock Paper Scissors</div>
+  <div class="pcard-desc">Play against the computer with score tracking</div>
+  <div class="pcard-tags"><span class="pcard-tag">conditionals</span><span class="pcard-tag">random</span><span class="pcard-tag">loops</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/bmi-calculator" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2696;&#xFE0F;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">BMI Calculator</div>
+  <div class="pcard-desc">Calculate BMI and provide health category with advice</div>
+  <div class="pcard-tags"><span class="pcard-tag">functions</span><span class="pcard-tag">conditionals</span><span class="pcard-tag">math</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/word-counter" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4CA;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Word Counter</div>
+  <div class="pcard-desc">Count words, sentences, paragraphs in text files</div>
+  <div class="pcard-tags"><span class="pcard-tag">strings</span><span class="pcard-tag">file handling</span><span class="pcard-tag">dictionaries</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/temperature-converter" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F321;&#xFE0F;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Temperature Converter</div>
+  <div class="pcard-desc">Convert Celsius, Fahrenheit, Kelvin with history</div>
+  <div class="pcard-tags"><span class="pcard-tag">functions</span><span class="pcard-tag">loops</span><span class="pcard-tag">math</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/simple-bank" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3E6;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">Simple Bank Account</div>
+  <div class="pcard-desc">Deposit, withdraw, check balance with transaction history</div>
+  <div class="pcard-tags"><span class="pcard-tag">OOP</span><span class="pcard-tag">functions</span><span class="pcard-tag">file handling</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/hangman" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3AF;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Hangman Game</div>
+  <div class="pcard-desc">Classic word guessing game with ASCII art</div>
+  <div class="pcard-tags"><span class="pcard-tag">strings</span><span class="pcard-tag">lists</span><span class="pcard-tag">loops</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/dice-roller" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3B2;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Dice Roller Simulator</div>
+  <div class="pcard-desc">Roll dice, track statistics, simulate board games</div>
+  <div class="pcard-tags"><span class="pcard-tag">random</span><span class="pcard-tag">statistics</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/alarm-clock" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x23F0;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Alarm Clock</div>
+  <div class="pcard-desc">Set alarms, countdown timer with sound notification</div>
+  <div class="pcard-tags"><span class="pcard-tag">datetime</span><span class="pcard-tag">loops</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/text-adventure" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F5FA;&#xFE0F;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Text Adventure Game</div>
+  <div class="pcard-desc">Interactive story game with choices and inventory</div>
+  <div class="pcard-tags"><span class="pcard-tag">dictionaries</span><span class="pcard-tag">functions</span><span class="pcard-tag">OOP</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/expense-tracker" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4B0;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">Expense Tracker</div>
+  <div class="pcard-desc">Track daily expenses with categories and monthly reports</div>
+  <div class="pcard-tags"><span class="pcard-tag">dictionaries</span><span class="pcard-tag">file handling</span><span class="pcard-tag">math</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/library-system" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4DA;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Library Management</div>
+  <div class="pcard-desc">Manage books: add, search, borrow, return with due dates</div>
+  <div class="pcard-tags"><span class="pcard-tag">OOP</span><span class="pcard-tag">lists</span><span class="pcard-tag">file handling</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/typing-speed" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2328;&#xFE0F;</span><span class="pcard-time">&#x23F1; 2-3 hours</span></div>
+  <div class="pcard-title">Typing Speed Test</div>
+  <div class="pcard-desc">Measure WPM, accuracy with different difficulty levels</div>
+  <div class="pcard-tags"><span class="pcard-tag">strings</span><span class="pcard-tag">datetime</span><span class="pcard-tag">functions</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/mad-libs" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4DD;</span><span class="pcard-time">&#x23F1; 1-2 hours</span></div>
+  <div class="pcard-title">Mad Libs Generator</div>
+  <div class="pcard-desc">Fill-in-the-blank story generator with templates</div>
+  <div class="pcard-tags"><span class="pcard-tag">strings</span><span class="pcard-tag">lists</span><span class="pcard-tag">file handling</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+</div>
+</div>
+<div id="level-intermediate" style="margin-bottom:3rem;">
+<div class="section-header-row">
+  <h2 style="font-size:1.5rem;font-weight:800;color:var(--accent-warning);">&#x1F525; Intermediate Projects</h2>
+  <span style="color:var(--text-muted);font-size:.85rem;">20 projects</span>
+</div>
+<div class="proj-grid">
+<a href="/projects/web-scraper" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F578;&#xFE0F;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Web Scraper</div>
+  <div class="pcard-desc">Scrape websites for data using BeautifulSoup and requests</div>
+  <div class="pcard-tags"><span class="pcard-tag">requests</span><span class="pcard-tag">BeautifulSoup</span><span class="pcard-tag">CSV</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/flask-todo-api" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F376;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">Flask REST API</div>
+  <div class="pcard-desc">Full REST API with CRUD operations and SQLite database</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">REST</span><span class="pcard-tag">SQLite</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/data-analyzer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4CA;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">Data Analyzer</div>
+  <div class="pcard-desc">Analyze CSV datasets with Pandas and visualize with Matplotlib</div>
+  <div class="pcard-tags"><span class="pcard-tag">Pandas</span><span class="pcard-tag">Matplotlib</span><span class="pcard-tag">NumPy</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/chat-app" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4AC;</span><span class="pcard-time">&#x23F1; 6-8 hours</span></div>
+  <div class="pcard-title">Chat Application</div>
+  <div class="pcard-desc">Real-time chat using sockets with multiple users</div>
+  <div class="pcard-tags"><span class="pcard-tag">sockets</span><span class="pcard-tag">threading</span><span class="pcard-tag">networking</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/file-organizer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4C1;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">File Organizer</div>
+  <div class="pcard-desc">Auto-organize files by type, date, size with rules</div>
+  <div class="pcard-tags"><span class="pcard-tag">os</span><span class="pcard-tag">shutil</span><span class="pcard-tag">pathlib</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/weather-app" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x26C5;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Weather App</div>
+  <div class="pcard-desc">Fetch real weather data from API and display forecasts</div>
+  <div class="pcard-tags"><span class="pcard-tag">requests</span><span class="pcard-tag">API</span><span class="pcard-tag">JSON</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/url-shortener" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F517;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">URL Shortener</div>
+  <div class="pcard-desc">Create short URLs with click tracking and analytics</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">SQLite</span><span class="pcard-tag">hashlib</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/student-management" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F393;</span><span class="pcard-time">&#x23F1; 8-10 hours</span></div>
+  <div class="pcard-title">Student Management System</div>
+  <div class="pcard-desc">Full CRUD system with grades, attendance, reports</div>
+  <div class="pcard-tags"><span class="pcard-tag">OOP</span><span class="pcard-tag">SQLite</span><span class="pcard-tag">Pandas</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/image-resizer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F5BC;&#xFE0F;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Image Resizer & Editor</div>
+  <div class="pcard-desc">Batch resize, crop, filter images using Pillow</div>
+  <div class="pcard-tags"><span class="pcard-tag">Pillow</span><span class="pcard-tag">os</span><span class="pcard-tag">batch processing</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/email-sender" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4E7;</span><span class="pcard-time">&#x23F1; 3-4 hours</span></div>
+  <div class="pcard-title">Email Automation</div>
+  <div class="pcard-desc">Send bulk emails with templates and attachments</div>
+  <div class="pcard-tags"><span class="pcard-tag">smtplib</span><span class="pcard-tag">email</span><span class="pcard-tag">automation</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/markdown-blog" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x270D;&#xFE0F;</span><span class="pcard-time">&#x23F1; 6-8 hours</span></div>
+  <div class="pcard-title">Markdown Blog</div>
+  <div class="pcard-desc">Static blog generator from Markdown files with Flask</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">Markdown</span><span class="pcard-tag">Jinja2</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/stock-tracker" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4C8;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">Stock Price Tracker</div>
+  <div class="pcard-desc">Track stock prices, plot charts, set price alerts</div>
+  <div class="pcard-tags"><span class="pcard-tag">requests</span><span class="pcard-tag">Pandas</span><span class="pcard-tag">Matplotlib</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/password-manager" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F510;</span><span class="pcard-time">&#x23F1; 6-8 hours</span></div>
+  <div class="pcard-title">Password Manager</div>
+  <div class="pcard-desc">Encrypted password storage with master password</div>
+  <div class="pcard-tags"><span class="pcard-tag">cryptography</span><span class="pcard-tag">SQLite</span><span class="pcard-tag">OOP</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/task-scheduler" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x23F1;&#xFE0F;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">Task Scheduler</div>
+  <div class="pcard-desc">Schedule and automate tasks with cron-like syntax</div>
+  <div class="pcard-tags"><span class="pcard-tag">schedule</span><span class="pcard-tag">threading</span><span class="pcard-tag">automation</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/pdf-generator" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4C4;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">PDF Report Generator</div>
+  <div class="pcard-desc">Generate PDF reports from data with charts and tables</div>
+  <div class="pcard-tags"><span class="pcard-tag">reportlab</span><span class="pcard-tag">Pandas</span><span class="pcard-tag">Matplotlib</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/quiz-api" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2753;</span><span class="pcard-time">&#x23F1; 6-8 hours</span></div>
+  <div class="pcard-title">Quiz REST API</div>
+  <div class="pcard-desc">Full quiz API with categories, difficulty, leaderboard</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">SQLite</span><span class="pcard-tag">REST</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/news-aggregator" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4F0;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">News Aggregator</div>
+  <div class="pcard-desc">Fetch and categorize news from multiple RSS feeds</div>
+  <div class="pcard-tags"><span class="pcard-tag">requests</span><span class="pcard-tag">feedparser</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/budget-planner" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4B3;</span><span class="pcard-time">&#x23F1; 6-8 hours</span></div>
+  <div class="pcard-title">Budget Planner</div>
+  <div class="pcard-desc">Track income, expenses, savings goals with charts</div>
+  <div class="pcard-tags"><span class="pcard-tag">Pandas</span><span class="pcard-tag">Matplotlib</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/recipe-app" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F373;</span><span class="pcard-time">&#x23F1; 5-6 hours</span></div>
+  <div class="pcard-title">Recipe Manager</div>
+  <div class="pcard-desc">Store, search, scale recipes with ingredient calculator</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">SQLite</span><span class="pcard-tag">Jinja2</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/github-analyzer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F419;</span><span class="pcard-time">&#x23F1; 4-5 hours</span></div>
+  <div class="pcard-title">GitHub Profile Analyzer</div>
+  <div class="pcard-desc">Analyze GitHub profiles: repos, languages, contributions</div>
+  <div class="pcard-tags"><span class="pcard-tag">requests</span><span class="pcard-tag">GitHub API</span><span class="pcard-tag">Pandas</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+</div>
+</div>
+<div id="level-advanced" style="margin-bottom:3rem;">
+<div class="section-header-row">
+  <h2 style="font-size:1.5rem;font-weight:800;color:var(--accent-danger);">&#x1F9E0; Advanced Projects</h2>
+  <span style="color:var(--text-muted);font-size:.85rem;">20 projects</span>
+</div>
+<div class="proj-grid">
+<a href="/projects/ml-classifier" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F9E0;</span><span class="pcard-time">&#x23F1; 10-15 hours</span></div>
+  <div class="pcard-title">ML Image Classifier</div>
+  <div class="pcard-desc">Train CNN to classify images using TensorFlow/Keras</div>
+  <div class="pcard-tags"><span class="pcard-tag">TensorFlow</span><span class="pcard-tag">CNN</span><span class="pcard-tag">NumPy</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/chatbot" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F916;</span><span class="pcard-time">&#x23F1; 10-15 hours</span></div>
+  <div class="pcard-title">AI Chatbot</div>
+  <div class="pcard-desc">Build a chatbot with NLP using NLTK or transformers</div>
+  <div class="pcard-tags"><span class="pcard-tag">NLP</span><span class="pcard-tag">NLTK</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/django-ecommerce" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F6D2;</span><span class="pcard-time">&#x23F1; 20-30 hours</span></div>
+  <div class="pcard-title">E-Commerce Platform</div>
+  <div class="pcard-desc">Full e-commerce site with cart, payments, admin</div>
+  <div class="pcard-tags"><span class="pcard-tag">Django</span><span class="pcard-tag">Stripe</span><span class="pcard-tag">PostgreSQL</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/face-recognition" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F464;</span><span class="pcard-time">&#x23F1; 8-12 hours</span></div>
+  <div class="pcard-title">Face Recognition System</div>
+  <div class="pcard-desc">Real-time face detection and recognition with OpenCV</div>
+  <div class="pcard-tags"><span class="pcard-tag">OpenCV</span><span class="pcard-tag">face_recognition</span><span class="pcard-tag">NumPy</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/stock-predictor" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4C9;</span><span class="pcard-time">&#x23F1; 12-15 hours</span></div>
+  <div class="pcard-title">Stock Price Predictor</div>
+  <div class="pcard-desc">Predict stock prices using LSTM neural network</div>
+  <div class="pcard-tags"><span class="pcard-tag">TensorFlow</span><span class="pcard-tag">LSTM</span><span class="pcard-tag">Pandas</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/social-network" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F465;</span><span class="pcard-time">&#x23F1; 20-30 hours</span></div>
+  <div class="pcard-title">Social Network API</div>
+  <div class="pcard-desc">Twitter-like API with posts, follows, likes, feed</div>
+  <div class="pcard-tags"><span class="pcard-tag">Django REST</span><span class="pcard-tag">PostgreSQL</span><span class="pcard-tag">JWT</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/sentiment-analyzer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F60A;</span><span class="pcard-time">&#x23F1; 8-10 hours</span></div>
+  <div class="pcard-title">Sentiment Analyzer</div>
+  <div class="pcard-desc">Analyze text sentiment using ML and visualize results</div>
+  <div class="pcard-tags"><span class="pcard-tag">NLTK</span><span class="pcard-tag">scikit-learn</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/real-time-dashboard" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4CA;</span><span class="pcard-time">&#x23F1; 10-15 hours</span></div>
+  <div class="pcard-title">Real-Time Dashboard</div>
+  <div class="pcard-desc">Live data dashboard with WebSockets and charts</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">SocketIO</span><span class="pcard-tag">Chart.js</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/blockchain" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x26D3;&#xFE0F;</span><span class="pcard-time">&#x23F1; 8-12 hours</span></div>
+  <div class="pcard-title">Blockchain Implementation</div>
+  <div class="pcard-desc">Build a simple blockchain with proof of work</div>
+  <div class="pcard-tags"><span class="pcard-tag">cryptography</span><span class="pcard-tag">hashlib</span><span class="pcard-tag">OOP</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/recommendation-engine" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3AF;</span><span class="pcard-time">&#x23F1; 10-15 hours</span></div>
+  <div class="pcard-title">Recommendation Engine</div>
+  <div class="pcard-desc">Movie/product recommendations using collaborative filtering</div>
+  <div class="pcard-tags"><span class="pcard-tag">scikit-learn</span><span class="pcard-tag">Pandas</span><span class="pcard-tag">NumPy</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/api-gateway" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F6AA;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">API Gateway</div>
+  <div class="pcard-desc">Build a microservices API gateway with rate limiting</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">Redis</span><span class="pcard-tag">JWT</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/data-pipeline" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F504;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">Data Pipeline</div>
+  <div class="pcard-desc">ETL pipeline: extract, transform, load data at scale</div>
+  <div class="pcard-tags"><span class="pcard-tag">Pandas</span><span class="pcard-tag">SQLAlchemy</span><span class="pcard-tag">Airflow</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/web-crawler" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F578;&#xFE0F;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">Web Crawler & Search Engine</div>
+  <div class="pcard-desc">Build a web crawler and simple search engine</div>
+  <div class="pcard-tags"><span class="pcard-tag">Scrapy</span><span class="pcard-tag">Elasticsearch</span><span class="pcard-tag">Redis</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/video-streaming" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3A5;</span><span class="pcard-time">&#x23F1; 10-15 hours</span></div>
+  <div class="pcard-title">Video Streaming Server</div>
+  <div class="pcard-desc">Stream video with Flask, handle chunked transfer</div>
+  <div class="pcard-tags"><span class="pcard-tag">Flask</span><span class="pcard-tag">OpenCV</span><span class="pcard-tag">streaming</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/distributed-task" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F9F5;</span><span class="pcard-time">&#x23F1; 12-15 hours</span></div>
+  <div class="pcard-title">Distributed Task Queue</div>
+  <div class="pcard-desc">Celery task queue with Redis broker and monitoring</div>
+  <div class="pcard-tags"><span class="pcard-tag">Celery</span><span class="pcard-tag">Redis</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/nlp-summarizer" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F4DD;</span><span class="pcard-time">&#x23F1; 8-12 hours</span></div>
+  <div class="pcard-title">Text Summarizer</div>
+  <div class="pcard-desc">Automatic text summarization using transformers</div>
+  <div class="pcard-tags"><span class="pcard-tag">transformers</span><span class="pcard-tag">BERT</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/game-engine" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F3AE;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">2D Game Engine</div>
+  <div class="pcard-desc">Build a simple 2D game engine with Pygame</div>
+  <div class="pcard-tags"><span class="pcard-tag">Pygame</span><span class="pcard-tag">OOP</span><span class="pcard-tag">physics</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/compiler" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2699;&#xFE0F;</span><span class="pcard-time">&#x23F1; 20-30 hours</span></div>
+  <div class="pcard-title">Mini Compiler/Interpreter</div>
+  <div class="pcard-desc">Build a simple language interpreter with lexer and parser</div>
+  <div class="pcard-tags"><span class="pcard-tag">parsing</span><span class="pcard-tag">AST</span><span class="pcard-tag">OOP</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/kubernetes-monitor" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x2388;&#xFE0F;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">Kubernetes Monitor</div>
+  <div class="pcard-desc">Monitor K8s clusters with Python and Prometheus</div>
+  <div class="pcard-tags"><span class="pcard-tag">kubernetes</span><span class="pcard-tag">Prometheus</span><span class="pcard-tag">Flask</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+<a href="/projects/ml-pipeline" class="pcard">
+  <div class="pcard-top"><span class="pcard-icon">&#x1F9EA;</span><span class="pcard-time">&#x23F1; 15-20 hours</span></div>
+  <div class="pcard-title">ML Training Pipeline</div>
+  <div class="pcard-desc">End-to-end ML pipeline with MLflow tracking</div>
+  <div class="pcard-tags"><span class="pcard-tag">scikit-learn</span><span class="pcard-tag">MLflow</span><span class="pcard-tag">Pandas</span></div>
+  <span class="pcard-arrow">&#x2192;</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+function scrollToLevel(level) {
+  const el = document.getElementById('level-' + level);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function askAISuggest(text) {
+  document.getElementById('aiSuggestInput').value = text;
+  getAISuggestion();
+}
+
+async function getAISuggestion() {
+  const question = document.getElementById('aiSuggestInput').value.trim();
+  if (!question) return;
+  const result = document.getElementById('aiSuggestResult');
+  result.textContent = '&#x1F916; Thinking...';
+  result.classList.add('show');
+  try {
+    const res = await fetch('/api/ai-project-help', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({project:'Project Advisor', question, step:''})
+    });
+    const data = await res.json();
+    result.textContent = data.result;
+  } catch(e) {
+    result.textContent = 'Error: ' + e.message;
+  }
+}
+
+document.getElementById('aiSuggestInput')?.addEventListener('keypress', e => {
+  if (e.key === 'Enter') getAISuggestion();
+});
+
+// Highlight active sidebar item
+const path = window.location.pathname;
+document.querySelectorAll('.sidebar-proj').forEach(el => {
+  if (el.getAttribute('href') === path) el.classList.add('active');
+});
+</script>
+</body></html>

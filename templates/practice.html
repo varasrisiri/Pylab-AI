@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Practice - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+.practice-wrap{max-width:1000px;margin:0 auto;padding:2rem;}
+.pfilters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem;align-items:center;}
+.pfbtn{padding:.45rem 1.1rem;border-radius:20px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:.85rem;transition:all .3s;text-decoration:none;display:inline-block;}
+.pfbtn:hover,.pfbtn.active{background:rgba(0,212,255,.1);color:var(--accent-primary);border-color:var(--accent-primary);}
+.prob-card{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:18px;margin-bottom:1.5rem;overflow:hidden;transition:border-color .3s;}
+.prob-card:hover{border-color:var(--border-glow);}
+.prob-header{padding:1.25rem 1.5rem;cursor:pointer;display:flex;align-items:flex-start;gap:1rem;}
+.prob-num{font-size:1.1rem;font-weight:900;color:var(--accent-primary);font-family:Fira Code,monospace;flex-shrink:0;min-width:32px;}
+.prob-info{flex:1;}
+.prob-title{font-size:1.05rem;font-weight:700;color:var(--text-primary);margin-bottom:.35rem;}
+.prob-desc{color:var(--text-secondary);font-size:.9rem;line-height:1.6;}
+.prob-meta{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-top:.5rem;}
+.prob-toggle{color:var(--accent-primary);font-size:1.2rem;transition:transform .3s;flex-shrink:0;}
+.prob-toggle.open{transform:rotate(180deg);}
+.prob-body{display:none;border-top:1px solid var(--border-color);}
+.prob-body.open{display:block;}
+.prob-io{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1rem 1.5rem;background:rgba(0,0,0,.2);}
+.io-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.4rem;font-weight:600;}
+.io-box{background:var(--bg-code);border:1px solid var(--border-color);border-radius:8px;padding:.6rem .85rem;font-family:Fira Code,monospace;font-size:.82rem;color:#abb2bf;}
+.prob-editor-section{padding:1rem 1.5rem;}
+.editor-label{font-size:.8rem;font-weight:700;color:var(--text-heading);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.inline-editor{position:relative;border:1px solid var(--border-color);border-radius:10px;overflow:hidden;margin-bottom:.75rem;}
+.inline-editor:focus-within{border-color:var(--accent-primary);box-shadow:var(--glow-primary);}
+.editor-header{display:flex;align-items:center;justify-content:space-between;padding:.4rem .85rem;background:rgba(0,0,0,.3);border-bottom:1px solid var(--border-color);}
+.editor-lang{font-size:.72rem;color:var(--accent-primary);font-weight:600;font-family:Fira Code,monospace;}
+.editor-actions{display:flex;gap:.4rem;}
+.inline-textarea{width:100%;min-height:120px;background:var(--bg-code);color:#abb2bf;border:none;padding:1rem;font-family:Fira Code,monospace;font-size:.88rem;line-height:1.7;resize:vertical;outline:none;tab-size:4;}
+.prob-action-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.pabtn{display:flex;align-items:center;gap:.35rem;padding:.45rem 1rem;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:.82rem;font-weight:600;transition:all .25s;}
+.pabtn:hover{transform:translateY(-1px);}
+.pabtn.run{background:var(--accent-secondary);color:#000;border-color:var(--accent-secondary);}
+.pabtn.run:hover{box-shadow:var(--glow-secondary);}
+.pabtn.hint-btn{color:var(--accent-warning);border-color:rgba(255,165,0,.3);}
+.pabtn.hint-btn:hover{background:rgba(255,165,0,.1);}
+.pabtn.sol-btn{color:var(--accent-danger);border-color:rgba(255,71,87,.3);}
+.pabtn.sol-btn:hover{background:rgba(255,71,87,.1);}
+.pabtn.skip-btn{color:var(--text-muted);}
+.pabtn.skip-btn:hover{color:var(--accent-primary);}
+.output-box{background:#011627;border:1px solid var(--border-color);border-radius:8px;padding:.85rem 1rem;font-family:Fira Code,monospace;font-size:.85rem;line-height:1.6;white-space:pre-wrap;color:#abb2bf;margin-bottom:.75rem;min-height:50px;display:none;}
+.output-box.show{display:block;}
+.output-box.correct{border-color:var(--accent-secondary);background:rgba(0,255,136,.05);}
+.output-box.error{border-color:var(--accent-danger);background:rgba(255,71,87,.05);}
+.hint-box{background:rgba(255,165,0,.07);border:1px solid rgba(255,165,0,.25);border-radius:10px;padding:.85rem 1rem;font-size:.88rem;color:var(--accent-warning);margin-bottom:.75rem;display:none;}
+.hint-box.show{display:block;}
+.solution-box{display:none;margin-bottom:.75rem;}
+.solution-box.show{display:block;}
+.result-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .85rem;border-radius:20px;font-size:.82rem;font-weight:700;margin-bottom:.5rem;}
+.result-badge.correct{background:rgba(0,255,136,.15);color:var(--accent-secondary);border:1px solid rgba(0,255,136,.3);}
+.result-badge.wrong{background:rgba(255,71,87,.15);color:var(--accent-danger);border:1px solid rgba(255,71,87,.3);}
+.xp-pop{display:none;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;padding:.3rem .85rem;border-radius:20px;font-size:.82rem;font-weight:800;margin-left:.5rem;}
+.progress-bar-wrap{height:6px;background:var(--bg-secondary);border-radius:3px;overflow:hidden;margin-bottom:1.5rem;}
+.progress-bar-fill{height:100%;background:var(--gradient-accent);border-radius:3px;transition:width .5s ease;}
+.stats-row{display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.stat-pill{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:.5rem 1rem;font-size:.85rem;display:flex;align-items:center;gap:.4rem;}
+.stat-pill span{font-weight:700;color:var(--accent-primary);font-family:Fira Code,monospace;}
+@media(max-width:600px){.prob-io{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div class="practice-wrap">
+
+  <div style="margin-bottom:1.5rem;">
+    <h1 class="section-title">&#x1F4BB; Practice Coding</h1>
+    <p style="color:var(--text-secondary);">Write code directly in the editor. Run it, get hints, or reveal the solution.</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-pill">&#x2705; Solved: <span id="solvedCount">0</span></div>
+    <div class="stat-pill">&#x26A1; XP: <span id="xpCount">0</span></div>
+    <div class="stat-pill">&#x1F4CA; Level: <span id="levelName">Beginner</span></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="pfilters">
+    <span style="color:var(--text-muted);font-size:.82rem;font-weight:600;">Level:</span>
+    <a href="/practice?level=beginner" class="pfbtn {% if level=='beginner' %}active{% endif %}">&#x1F7E2; Beginner</a>
+    <a href="/practice?level=intermediate" class="pfbtn {% if level=='intermediate' %}active{% endif %}">&#x1F7E1; Intermediate</a>
+    <a href="/practice?level=advanced" class="pfbtn {% if level=='advanced' %}active{% endif %}">&#x1F534; Advanced</a>
+    <span style="color:var(--text-muted);font-size:.82rem;font-weight:600;margin-left:.5rem;">Topic:</span>
+    <a href="/practice?level={{ level }}&topic=all" class="pfbtn {% if topic=='all' %}active{% endif %}">All</a>
+    <a href="/practice?level={{ level }}&topic=basics" class="pfbtn {% if topic=='basics' %}active{% endif %}">Basics</a>
+    <a href="/practice?level={{ level }}&topic=loops" class="pfbtn {% if topic=='loops' %}active{% endif %}">Loops</a>
+    <a href="/practice?level={{ level }}&topic=strings" class="pfbtn {% if topic=='strings' %}active{% endif %}">Strings</a>
+    <a href="/practice?level={{ level }}&topic=functions" class="pfbtn {% if topic=='functions' %}active{% endif %}">Functions</a>
+    <a href="/practice?level={{ level }}&topic=arrays" class="pfbtn {% if topic=='arrays' %}active{% endif %}">Arrays</a>
+  </div>
+
+  {% if level == 'advanced' %}
+  <div style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,165,0,.04));border:1px solid rgba(255,215,0,.2);border-radius:14px;padding:1rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
+    <span style="font-size:1.8rem;">&#x1F3AF;</span>
+    <div><div style="font-weight:700;color:var(--accent-tertiary);">Google / Amazon / Microsoft Interview Questions</div>
+    <div style="color:var(--text-secondary);font-size:.85rem;">Focus on optimal solutions and time complexity analysis.</div></div>
+  </div>
+  {% endif %}
+
+  <!-- Problems -->
+  {% if problems %}
+    {% for p in problems %}
+    <div class="prob-card" id="card-{{ p.id }}">
+      <div class="prob-header" onclick="toggleProblem('{{ p.id }}')">
+        <div class="prob-num">{{ loop.index }}</div>
+        <div class="prob-info">
+          <div class="prob-title">{{ p.title }}</div>
+          <div class="prob-desc">{{ p.statement }}</div>
+          <div class="prob-meta">
+            <span class="badge badge-{% if p.difficulty=='easy' %}beginner{% elif p.difficulty=='medium' %}intermediate{% else %}advanced{% endif %}">{{ p.difficulty|title }}</span>
+            <span style="background:rgba(0,212,255,.1);color:var(--accent-primary);border:1px solid rgba(0,212,255,.2);padding:.15rem .6rem;border-radius:12px;font-size:.72rem;">{{ p.topic }}</span>
+            <span id="status-{{ p.id }}" style="display:none;" class="result-badge correct">&#x2705; Solved</span>
+          </div>
+        </div>
+        <div class="prob-toggle" id="toggle-{{ p.id }}">&#x25BC;</div>
+      </div>
+
+      <div class="prob-body" id="body-{{ p.id }}">
+        <!-- I/O Examples -->
+        <div class="prob-io">
+          <div>
+            <div class="io-label">&#x1F4E5; Input Example</div>
+            <div class="io-box">{{ p.input_example }}</div>
+          </div>
+          <div>
+            <div class="io-label">&#x1F4E4; Expected Output</div>
+            <div class="io-box">{{ p.output_example }}</div>
+          </div>
+        </div>
+
+        <!-- Code Editor -->
+        <div class="prob-editor-section">
+          <div class="editor-label">&#x270F;&#xFE0F; Write Your Solution</div>
+          <div class="inline-editor">
+            <div class="editor-header">
+              <span class="editor-lang">python</span>
+              <div class="editor-actions">
+                <button onclick="clearEditor('{{ p.id }}')" style="background:none;border:1px solid var(--border-color);color:var(--text-muted);padding:.15rem .5rem;border-radius:5px;cursor:pointer;font-size:.72rem;">Clear</button>
+              </div>
+            </div>
+            <textarea class="inline-textarea" id="code-{{ p.id }}"
+              placeholder="# Write your Python solution here...
+# Example: print('Hello, World!')"
+              onkeydown="handleTab(event, '{{ p.id }}')"
+            ></textarea>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="prob-action-bar">
+            <button class="pabtn run" onclick="runSolution('{{ p.id }}', '{{ p.output_example|e }}')">
+              &#x25B6; Run Code
+            </button>
+            <button class="pabtn hint-btn" onclick="showHint('{{ p.id }}')">
+              &#x1F4A1; Hint
+            </button>
+            <button class="pabtn sol-btn" onclick="showSolution('{{ p.id }}')">
+              &#x1F513; Show Solution
+            </button>
+            <button class="pabtn skip-btn" onclick="skipProblem('{{ p.id }}', {{ loop.index }})">
+              &#x23ED;&#xFE0F; Skip
+            </button>
+            <span class="xp-pop" id="xp-{{ p.id }}">+10 XP &#x1F525;</span>
+          </div>
+
+          <!-- Output -->
+          <div class="output-box" id="output-{{ p.id }}"></div>
+
+          <!-- Hint (hidden) -->
+          <div class="hint-box" id="hint-{{ p.id }}">
+            <strong>&#x1F4A1; Hint:</strong> {{ p.hint }}
+          </div>
+
+          <!-- Solution (hidden) -->
+          <div class="solution-box" id="sol-{{ p.id }}">
+            <div style="margin-bottom:.5rem;display:flex;gap:.75rem;align-items:center;">
+              <span style="font-size:.8rem;font-weight:700;color:var(--text-heading);">&#x1F4CB; Step-by-Step Solution</span>
+              <span style="font-size:.8rem;font-weight:700;color:var(--accent-secondary);">&#x26A1; Optimized Solution</span>
+            </div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-python">{{ p.solution }}</code></pre>
+            </div>
+            {% if p.optimized and p.optimized != p.solution %}
+            <div class="code-block" style="margin-top:.5rem;">
+              <div class="code-header"><span class="code-lang">optimized</span><button class="code-copy">Copy</button></div>
+              <pre><code class="language-python">{{ p.optimized }}</code></pre>
+            </div>
+            {% endif %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center;padding:4rem;color:var(--text-muted);">
+      <div style="font-size:3rem;margin-bottom:1rem;">&#x1F4CB;</div>
+      <p>No problems found. Try a different filter.</p>
+    </div>
+  {% endif %}
+
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+let solvedProblems = JSON.parse(localStorage.getItem('pylab-solved') || '{}');
+let totalXP = parseInt(localStorage.getItem('pylab-xp') || '0');
+
+// Init stats
+function updateStats() {
+  const solved = Object.keys(solvedProblems).length;
+  document.getElementById('solvedCount').textContent = solved;
+  document.getElementById('xpCount').textContent = totalXP;
+  const total = document.querySelectorAll('.prob-card').length;
+  const pct = total > 0 ? Math.round(solved/total*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  const levels = [{n:'Beginner',xp:0},{n:'Learner',xp:100},{n:'Coder',xp:300},{n:'Developer',xp:600},{n:'Expert',xp:1000}];
+  const lv = levels.filter(l=>totalXP>=l.xp).pop();
+  document.getElementById('levelName').textContent = lv ? lv.n : 'Beginner';
+  // Mark already solved
+  for (const id in solvedProblems) {
+    const el = document.getElementById('status-'+id);
+    if (el) el.style.display = 'inline-flex';
+  }
+}
+
+function toggleProblem(id) {
+  const body = document.getElementById('body-'+id);
+  const toggle = document.getElementById('toggle-'+id);
+  const isOpen = body.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.prob-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.prob-toggle.open').forEach(t => t.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    toggle.classList.add('open');
+    // Highlight code in solution if visible
+    body.querySelectorAll('pre code').forEach(el => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+    });
+  }
+}
+
+function handleTab(e, id) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta = document.getElementById('code-'+id);
+    const s = ta.selectionStart;
+    ta.value = ta.value.substring(0,s) + '    ' + ta.value.substring(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = s + 4;
+  }
+  if (e.ctrlKey && e.key === 'Enter') {
+    e.preventDefault();
+    const btn = document.querySelector(`#card-${id} .pabtn.run`);
+    if (btn) btn.click();
+  }
+}
+
+async function runSolution(id, expected) {
+  const code = document.getElementById('code-'+id).value.trim();
+  const outBox = document.getElementById('output-'+id);
+
+  if (!code) {
+    outBox.textContent = '⚠️ Please write your solution first!';
+    outBox.className = 'output-box show error';
+    return;
+  }
+
+  outBox.textContent = '⏳ Running...';
+  outBox.className = 'output-box show';
+
+  try {
+    const res = await fetch('/api/run-code', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code, stdin:''})
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      outBox.textContent = '❌ Error:\n' + data.error;
+      outBox.className = 'output-box show error';
+      return;
+    }
+
+    const actual = (data.output || '').trim();
+    const exp = expected.trim();
+    const isCorrect = actual === exp || actual.includes(exp) || exp.includes(actual);
+
+    if (isCorrect) {
+      outBox.textContent = '✅ Correct! Output:\n' + actual;
+      outBox.className = 'output-box show correct';
+      markSolved(id);
+    } else {
+      outBox.textContent = '❌ Not quite!\n\nYour output:\n' + actual + '\n\nExpected:\n' + exp;
+      outBox.className = 'output-box show error';
+    }
+  } catch(e) {
+    outBox.textContent = 'Connection error: ' + e.message;
+    outBox.className = 'output-box show error';
+  }
+}
+
+function markSolved(id) {
+  if (solvedProblems[id]) return;
+  solvedProblems[id] = true;
+  localStorage.setItem('pylab-solved', JSON.stringify(solvedProblems));
+  totalXP += 10;
+  localStorage.setItem('pylab-xp', totalXP);
+
+  const xpEl = document.getElementById('xp-'+id);
+  if (xpEl) { xpEl.style.display = 'inline-flex'; setTimeout(()=>xpEl.style.display='none', 3000); }
+
+  const statusEl = document.getElementById('status-'+id);
+  if (statusEl) statusEl.style.display = 'inline-flex';
+
+  // Award XP to streak
+  fetch('/api/streak/solve', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({xp:10})}).catch(()=>{});
+
+  updateStats();
+  showToast('✅ Solved! +10 XP 🔥');
+}
+
+function showHint(id) {
+  const hint = document.getElementById('hint-'+id);
+  hint.classList.toggle('show');
+}
+
+function showSolution(id) {
+  const sol = document.getElementById('sol-'+id);
+  sol.classList.toggle('show');
+  if (sol.classList.contains('show')) {
+    sol.querySelectorAll('pre code').forEach(el => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+    });
+  }
+}
+
+function skipProblem(id, num) {
+  // Close current, open next
+  const body = document.getElementById('body-'+id);
+  const toggle = document.getElementById('toggle-'+id);
+  body.classList.remove('open');
+  toggle.classList.remove('open');
+
+  // Find next card
+  const cards = document.querySelectorAll('.prob-card');
+  const idx = Array.from(cards).findIndex(c => c.id === 'card-'+id);
+  if (idx < cards.length - 1) {
+    const nextCard = cards[idx+1];
+    const nextId = nextCard.id.replace('card-','');
+    const nextBody = document.getElementById('body-'+nextId);
+    const nextToggle = document.getElementById('toggle-'+nextId);
+    nextBody.classList.add('open');
+    nextToggle.classList.add('open');
+    nextCard.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    showToast('🎉 You reached the last problem!');
+  }
+}
+
+function clearEditor(id) {
+  document.getElementById('code-'+id).value = '';
+  const out = document.getElementById('output-'+id);
+  out.className = 'output-box';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateStats();
+  // Auto-open first problem
+  const first = document.querySelector('.prob-card');
+  if (first) {
+    const id = first.id.replace('card-','');
+    toggleProblem(id);
+  }
+});
+</script>
+</body></html>

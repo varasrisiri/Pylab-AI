@@ -1,0 +1,89 @@
+{
+  "slug": "alarm-clock",
+  "title": "Alarm Clock",
+  "icon": "&#x23F0;",
+  "level": "beginner",
+  "desc": "Set alarms, countdown timer with sound notification",
+  "time": "2-3 hours",
+  "tags": [
+    "datetime",
+    "loops",
+    "functions"
+  ],
+  "github_template": "alarm-clock-python",
+  "concepts_needed": [
+    "datetime",
+    "loops",
+    "functions"
+  ],
+  "what_you_build": "Set alarms, countdown timer with sound notification",
+  "what_you_learn": [
+    "How to use datetime in a real project",
+    "Project structure and organization",
+    "Error handling and edge cases",
+    "Git workflow and GitHub",
+    "Writing clean, readable code"
+  ],
+  "folder_structure": "alarm-clock/\n├── main.py\n├── requirements.txt\n└── README.md",
+  "steps": [
+    {
+      "num": 1,
+      "title": "Setup & Plan",
+      "desc": "Create project folder, initialize git, plan features.",
+      "code": "mkdir alarm-clock\ncd alarm-clock\ngit init\ntouch main.py README.md",
+      "hint": "Plan before coding! Write down 3-5 features you want to build."
+    },
+    {
+      "num": 2,
+      "title": "Build Core Features",
+      "desc": "Implement the main functionality of Alarm Clock.",
+      "code": "# Start with the simplest version\n# Add features one by one\n# Test each feature before moving on",
+      "hint": "Build the minimum working version first, then add features."
+    },
+    {
+      "num": 3,
+      "title": "Add Error Handling",
+      "desc": "Handle edge cases and invalid inputs.",
+      "code": "try:\n    # your code\nexcept ValueError as e:\n    print(f'Error: {e}')",
+      "hint": "Think: what could go wrong? Handle each case."
+    },
+    {
+      "num": 4,
+      "title": "Test & Polish",
+      "desc": "Test with different inputs, fix bugs, clean up code.",
+      "code": "# Test with:\n# - Normal inputs\n# - Edge cases (empty, zero, negative)\n# - Invalid inputs",
+      "hint": "Test with inputs you DON'T expect, not just the happy path."
+    },
+    {
+      "num": 5,
+      "title": "Push to GitHub",
+      "desc": "Write README and push your project to GitHub.",
+      "code": "git add .\ngit commit -m 'feat: complete Alarm Clock'\ngit push origin main",
+      "hint": "A good README makes your project stand out to recruiters!"
+    }
+  ],
+  "extensions": [
+    "Add more features",
+    "Build a GUI version",
+    "Add a web interface with Flask",
+    "Write unit tests",
+    "Deploy to the cloud"
+  ],
+  "concepts_needed_links": [
+    {
+      "name": "datetime",
+      "url": "/learn/modules",
+      "external": false
+    },
+    {
+      "name": "loops",
+      "url": "/learn/loops",
+      "external": false
+    },
+    {
+      "name": "functions",
+      "url": "/learn/functions",
+      "external": false
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "title": "Conditional Statements",
+  "icon": "❓",
+  "level": "beginner",
+  "simple_definition": "Conditional statements let your program make decisions — run different code based on whether a condition is True or False.",
+  "technical_definition": "Python uses if, elif, and else keywords for conditional execution. Conditions are boolean expressions evaluated at runtime. Python 3.10+ also supports match-case (structural pattern matching).",
+  "analogy": "A conditional is like a traffic light:\n🟢 if green → go\n🟡 elif yellow → slow down\n🔴 else → stop\n\nYour program checks conditions and takes different paths.",
+  "problem_first": "Suppose you're building a grade calculator.\n\nWithout conditionals, you can't decide:\n- Is this student passing or failing?\n- Should they get an A, B, C, or F?\n- Are they eligible for a scholarship?\n\nYou NEED conditionals to make decisions:\n\nscore = 78\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')  # ← this runs!\nelse:\n    print('F')\n\nWithout if-else, every program would do the same thing regardless of input.",
+  "why_matters": "Conditionals are in EVERY program:\n🔐 Login: if password correct → grant access\n🛒 Shopping: if item in stock → allow purchase\n🎮 Games: if health == 0 → game over\n🌤️ Weather app: if temp > 30 → show hot weather\n🏦 Banking: if balance >= amount → allow withdrawal\n\nWithout conditionals, programs can't respond to different situations.",
+  "syntax": "# Basic if\nif condition:\n    # runs if True\n\n# if-else\nif condition:\n    # runs if True\nelse:\n    # runs if False\n\n# if-elif-else\nif condition1:\n    # runs if condition1 True\nelif condition2:\n    # runs if condition2 True\nelif condition3:\n    # can have many elif\nelse:\n    # runs if ALL above False\n\n# Ternary (one-line)\nvalue = true_val if condition else false_val\n\n# Nested\nif outer_condition:\n    if inner_condition:\n        # both True",
+  "example_desc": "Complete examples of all conditional patterns.",
+  "code_example": "# ── BASIC IF-ELIF-ELSE ───────────────────\nscore = 78\n\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'  # ← this runs (78 >= 70)\nelif score >= 60:\n    grade = 'D'\nelse:\n    grade = 'F'\n\nprint(f'Score: {score} → Grade: {grade}')\n\n# ── MULTIPLE CONDITIONS ───────────────────\nage = 20\nhas_id = True\n\nif age >= 18 and has_id:\n    print('Entry allowed')\nelif age >= 18 and not has_id:\n    print('Need ID card')\nelse:\n    print('Must be 18+')\n\n# ── TERNARY OPERATOR ─────────────────────\nnum = 7\nresult = 'odd' if num % 2 != 0 else 'even'\nprint(f'{num} is {result}')\n\n# ── NESTED CONDITIONS ────────────────────\nusername = 'admin'\npassword = 'secret123'\nlogged_in = True\n\nif logged_in:\n    if username == 'admin':\n        print('Admin dashboard')\n    elif username == 'moderator':\n        print('Mod panel')\n    else:\n        print('User dashboard')\nelse:\n    print('Please login first')\n\n# ── CHECKING TYPES & MEMBERSHIP ──────────\nvalue = [1, 2, 3]\n\nif isinstance(value, list):\n    print(f'It is a list with {len(value)} items')\n\nif 2 in value:\n    print('2 is in the list')\n\n# ── TRUTHY / FALSY ───────────────────────\n# Falsy: 0, '', [], {}, None, False\n# Truthy: everything else\n\nname = ''\nif name:  # empty string is falsy\n    print(f'Hello, {name}')\nelse:\n    print('Name is empty!')\n\nnumbers = [1, 2, 3]\nif numbers:  # non-empty list is truthy\n    print(f'List has {len(numbers)} items')",
+  "output": "Score: 78 → Grade: C\nEntry allowed\n7 is odd\nAdmin dashboard\nIt is a list with 3 items\n2 is in the list\nName is empty!\nList has 3 items",
+  "logic_steps": [
+    "Python evaluates the if condition — result must be True or False",
+    "If True → execute the if block, then SKIP all elif and else",
+    "If False → check the first elif condition",
+    "Continue checking elif conditions until one is True",
+    "If NO condition is True → execute the else block",
+    "Only ONE block executes — the first True condition wins",
+    "Python checks conditions TOP to BOTTOM and stops at first True",
+    "Ternary: evaluates condition, returns true_val or false_val in one line",
+    "Nested if: outer condition must be True before inner is even checked"
+  ],
+  "dry_run": {
+    "title": "Dry Run: Grade Calculator with score = 78",
+    "steps": [
+      {
+        "step": 1,
+        "state": "score = 78",
+        "action": "Check: score >= 90 → 78 >= 90 → False",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "score = 78",
+        "action": "Skip if block, check elif: score >= 80 → 78 >= 80 → False",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "score = 78",
+        "action": "Skip elif, check next elif: score >= 70 → 78 >= 70 → TRUE!",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "grade = 'C'",
+        "action": "Execute this elif block: grade = 'C'",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "grade = 'C'",
+        "action": "Skip remaining elif and else (already found True)",
+        "output": ""
+      },
+      {
+        "step": 6,
+        "state": "done",
+        "action": "print(f'Score: 78 → Grade: C')",
+        "output": "Score: 78 → Grade: C"
+      }
+    ]
+  },
+  "important_points": [
+    "⭐ Python checks conditions TOP to BOTTOM — order matters! Put most specific conditions first",
+    "⭐ Only ONE block executes — the first True condition wins, rest are skipped",
+    "⭐ Falsy values: 0, 0.0, '', [], {}, set(), None, False — all evaluate to False in if",
+    "⭐ Truthy values: any non-zero number, non-empty string/list/dict, True",
+    "⭐ and: BOTH must be True | or: AT LEAST ONE must be True | not: reverses True/False",
+    "⭐ Ternary operator: value = x if condition else y — use for simple one-liners only",
+    "⭐ isinstance(x, type) is better than type(x) == type for type checking",
+    "⭐ 'in' operator checks membership: if 'a' in 'apple' or if x in [1,2,3]"
+  ],
+  "edge_cases": [
+    "if x = 5: → SyntaxError! Use == for comparison, = is assignment",
+    "if 0.1 + 0.2 == 0.3: → False! Floating point precision issue, use abs(a-b) < 1e-9",
+    "if x == True: vs if x: — the second is more Pythonic and handles all truthy values",
+    "Chained comparisons work: if 0 < x < 10: (Python-specific feature)",
+    "None check: use 'if x is None' not 'if x == None'"
+  ],
+  "common_mistakes": [
+    "❌ if x = 5: → SyntaxError! Should be if x == 5:",
+    "❌ Wrong order: if score >= 60: before if score >= 90: — 60 catches everything!",
+    "❌ Missing else: program does nothing when all conditions are False",
+    "❌ if x == True: instead of if x: — less Pythonic",
+    "❌ Comparing None with ==: use 'is None' not '== None'"
+  ],
+  "interview_tips": [
+    "Python has no switch statement (before 3.10) — use if-elif-else or dict mapping",
+    "match-case (Python 3.10+) is Python's pattern matching — like switch but more powerful",
+    "Short-circuit evaluation: 'and' stops at first False, 'or' stops at first True",
+    "Ternary: x if condition else y — useful in list comprehensions",
+    "Chained comparisons: 0 < x < 10 is valid Python (not in most languages)",
+    "dict.get() can replace simple if-else: result = d.get(key, default)"
+  ],
+  "subtopics": [
+    {
+      "id": "if-elif-else",
+      "title": "if / elif / else",
+      "icon": "🔀",
+      "explanation": "The if statement checks a condition. elif (else-if) checks another condition if the previous was False. else runs when ALL conditions above are False. Python checks top to bottom and stops at the first True.",
+      "syntax": "if condition1:\n    # block 1\nelif condition2:\n    # block 2\nelif condition3:\n    # block 3\nelse:\n    # default block",
+      "code": "# Example 1: Grade calculator\ndef get_grade(score):\n    if score >= 90:\n        return 'A (Excellent)'\n    elif score >= 80:\n        return 'B (Good)'\n    elif score >= 70:\n        return 'C (Average)'\n    elif score >= 60:\n        return 'D (Below Average)'\n    else:\n        return 'F (Fail)'\n\nfor s in [95, 83, 72, 65, 45]:\n    print(f'{s}: {get_grade(s)}')\n\n# Example 2: Multiple conditions with and/or\nage = 25\nincome = 50000\ncredit_score = 750\n\nif age >= 21 and income >= 30000 and credit_score >= 700:\n    print('Loan approved!')\nelif age >= 21 and income >= 30000:\n    print('Loan approved with higher interest')\nelif age >= 18:\n    print('Need co-signer')\nelse:\n    print('Not eligible')",
+      "output": "95: A (Excellent)\n83: B (Good)\n72: C (Average)\n65: D (Below Average)\n45: F (Fail)\nLoan approved!",
+      "tip": "⭐ Always order conditions from MOST SPECIFIC to LEAST SPECIFIC. If you put score >= 60 before score >= 90, everyone with 60+ gets 'D' and never reaches 'A'!"
+    },
+    {
+      "id": "ternary",
+      "title": "Ternary Operator",
+      "icon": "⚡",
+      "explanation": "The ternary operator is a one-line if-else. Use it for simple assignments. Avoid it for complex conditions — readability matters more than brevity.",
+      "syntax": "# Syntax\nvalue = true_value if condition else false_value\n\n# Equivalent to:\nif condition:\n    value = true_value\nelse:\n    value = false_value",
+      "code": "# Basic ternary\nage = 20\nstatus = 'adult' if age >= 18 else 'minor'\nprint(status)  # adult\n\n# In print\nfor n in range(1, 6):\n    print(f'{n} is', 'even' if n % 2 == 0 else 'odd')\n\n# In list comprehension\nnums = [1, -2, 3, -4, 5]\nabs_vals = [n if n >= 0 else -n for n in nums]\nprint(abs_vals)  # [1, 2, 3, 4, 5]\n\n# Nested ternary (use sparingly!)\nscore = 75\ngrade = 'A' if score>=90 else 'B' if score>=80 else 'C' if score>=70 else 'F'\nprint(grade)  # C\n\n# Better: use function for complex logic\ndef classify(n):\n    return 'positive' if n > 0 else 'negative' if n < 0 else 'zero'\n\nfor n in [5, -3, 0]:\n    print(f'{n}: {classify(n)}')",
+      "output": "adult\n1 is odd\n2 is even\n3 is odd\n4 is even\n5 is odd\n[1, 2, 3, 4, 5]\nC\n5: positive\n-3: negative\n0: zero",
+      "tip": "⭐ Use ternary for SIMPLE conditions only. If you need more than one elif, use a regular if-elif-else block for readability."
+    }
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Check if a number is positive, negative, or zero",
+        "hint": "Use if n>0, elif n<0, else"
+      },
+      {
+        "question": "Check if a year is a leap year",
+        "hint": "Divisible by 4 AND (not 100 OR divisible by 400)"
+      },
+      {
+        "question": "Find the largest of three numbers without using max()",
+        "hint": "Use if-elif-else to compare all three"
+      },
+      {
+        "question": "Check if a character is a vowel or consonant",
+        "hint": "if char.lower() in 'aeiou'"
+      },
+      {
+        "question": "Write a simple login system: check username AND password",
+        "hint": "if username == 'admin' and password == 'secret'"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Write a function that returns the day name for a number 1-7",
+        "hint": "Use if-elif or a dict: days = {1:'Monday', ...}"
+      },
+      {
+        "question": "Check if a triangle is valid given three sides",
+        "hint": "Sum of any two sides must be greater than the third"
+      },
+      {
+        "question": "Classify a BMI value: Underweight/Normal/Overweight/Obese",
+        "hint": "BMI < 18.5: Underweight, 18.5-25: Normal, 25-30: Overweight, >30: Obese"
+      },
+      {
+        "question": "Write a number guessing game with hints (too high/too low)",
+        "hint": "Compare guess with secret, print hint, use while loop"
+      },
+      {
+        "question": "Implement a simple calculator with +, -, *, / using if-elif",
+        "hint": "if op == '+': return a+b, elif op == '-': return a-b, etc."
+      }
+    ],
+    "hard": [
+      {
+        "question": "Implement FizzBuzz for 1-100 without using elif",
+        "hint": "Use dict or list with conditions, or use modulo cleverly"
+      },
+      {
+        "question": "Write a function that validates a password (length, uppercase, digit, special char)",
+        "hint": "Use multiple if conditions with any() and string methods"
+      },
+      {
+        "question": "Implement a simple state machine for a traffic light",
+        "hint": "Use a dict mapping current state to next state"
+      },
+      {
+        "question": "Write a function that classifies a triangle as equilateral, isosceles, or scalene",
+        "hint": "Compare all three sides: a==b==c, a==b or b==c or a==c, else scalene"
+      },
+      {
+        "question": "Implement match-case (Python 3.10+) for a command parser",
+        "hint": "match command: case 'quit': ... case 'help': ... case _: ..."
+      }
+    ]
+  }
+}

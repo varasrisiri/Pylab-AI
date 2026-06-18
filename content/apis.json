@@ -1,0 +1,117 @@
+{
+  "title": "APIs and JSON",
+  "icon": "globe",
+  "level": "advanced",
+  "simple_definition": "APIs let Python communicate with web services. JSON is the standard data format for APIs.",
+  "technical_definition": "REST APIs use HTTP methods. Python requests library handles HTTP. json module parses JSON.",
+  "analogy": "An API is like a waiter — you order (request), they fetch from kitchen (server), bring back food (response).",
+  "syntax": "import json\nimport requests\n\ndata = json.dumps({'key': 'value'})\nparsed = json.loads(data)\n\nresponse = requests.get('https://api.example.com')\ndata = response.json()",
+  "example_desc": "Practical examples demonstrating APIs and JSON.",
+  "code_example": "import json\n\ndata = {\n    'name': 'Alice',\n    'age': 25,\n    'skills': ['Python', 'Flask']\n}\n\njson_str = json.dumps(data, indent=2)\nprint(json_str)\n\nparsed = json.loads(json_str)\nprint(parsed['name'])\nprint(parsed['skills'][0])\n\nwith open('data.json', 'w') as f:\n    json.dump(data, f, indent=2)\n\nwith open('data.json', 'r') as f:\n    loaded = json.load(f)\nprint(loaded)\n\nimport os\nos.remove('data.json')",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of APIs and JSON",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "APIs and JSON is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using APIs and JSON",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using APIs and JSON",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using APIs and JSON",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "You want to show weather data in your app.\nDo you build a weather station? 😅\n\nNo! You use a Weather API:\nimport requests\nresponse = requests.get('https://api.weather.com/current?city=NYC')\ndata = response.json()\nprint(data['temperature'])  # 25°C\n\nAPIs let you use OTHER services' data and functionality in your app.",
+  "why_matters": "APIs power the modern web:\n🌤️ Weather apps use weather APIs\n🗺️ Maps use Google Maps API\n💳 Payments use Stripe/PayPal API\n🔐 Login with Google/GitHub uses OAuth API\n📱 Every mobile app uses multiple APIs",
+  "important_points": [
+    "⭐ REST API: uses HTTP methods GET, POST, PUT, DELETE",
+    "⭐ JSON is the standard data format for APIs — Python dict ↔ JSON",
+    "⭐ requests library: pip install requests — most popular HTTP library",
+    "⭐ response.status_code: 200=OK, 404=Not Found, 500=Server Error",
+    "⭐ response.json() parses JSON response to Python dict",
+    "⭐ API keys: most APIs require authentication — never hardcode in code!",
+    "⭐ Rate limiting: APIs limit requests per minute/hour — handle 429 errors"
+  ],
+  "dry_run": {
+    "title": "Dry Run: json.dumps({'name':'Alice'}) and json.loads()",
+    "steps": [
+      {
+        "step": 1,
+        "state": "data = {'name':'Alice'}",
+        "action": "Python dict in memory",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "json.dumps(data)",
+        "action": "Convert dict to JSON string: '{\"name\": \"Alice\"}'",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "json_str = '{\"name\":\"Alice\"}'",
+        "action": "JSON string (can be sent over network)",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "json.loads(json_str)",
+        "action": "Parse JSON string back to Python dict",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "{'name': 'Alice'}",
+        "action": "Back to Python dict",
+        "output": "{'name': 'Alice'}"
+      }
+    ]
+  }
+}

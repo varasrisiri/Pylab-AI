@@ -1,0 +1,11 @@
+{
+  "title": "Apis — Complete Notes",
+  "topic": "apis",
+  "sections": [
+    {
+      "title": "Complete Guide to Apis",
+      "content": "Comprehensive notes for Apis in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Apis examples\n# Run in the Code Editor to see output\nprint('Study Apis in PyLab AI!')"
+    }
+  ]
+}

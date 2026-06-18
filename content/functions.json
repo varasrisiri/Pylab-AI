@@ -1,0 +1,210 @@
+{
+  "title": "Functions in Python",
+  "icon": "🧩",
+  "level": "beginner",
+  "simple_definition": "A function is a named, reusable block of code that performs a specific task. Write it once, use it anywhere.",
+  "technical_definition": "Functions in Python are first-class objects defined with the 'def' keyword. They support default parameters, *args (variable positional), **kwargs (variable keyword), closures, decorators, and can return multiple values as tuples.",
+  "analogy": "A function is like a recipe. You write the recipe once. Whenever you want to cook that dish, you just follow the recipe (call the function). You can customize it with different ingredients (parameters).",
+  "problem_first": "Suppose you need to calculate the area of a rectangle in 10 different places in your program.\n\nWithout functions:\narea1 = 5 * 3      # line 10\narea2 = 10 * 4     # line 50\narea3 = 7 * 2      # line 100\n... (7 more times)\n\nNow if the formula changes, you must update 10 places! 😱\n\nWith a function:\ndef area(l, w):\n    return l * w\n\narea(5, 3)   # use anywhere\narea(10, 4)  # change formula? update ONE place only!",
+  "why_matters": "Functions are the building blocks of ALL programs:\n🏗️ Every app is made of hundreds/thousands of functions\n🔄 DRY Principle: Don't Repeat Yourself\n🧪 Easy to test individual pieces in isolation\n👥 Teams can work on different functions simultaneously\n�� Bugs are easier to find and fix\n📦 Functions can be imported and reused across projects",
+  "syntax": "# Basic function\ndef function_name(param1, param2):\n    # code\n    return value\n\n# Default parameter\ndef greet(name, msg='Hello'):\n    return f'{msg}, {name}!'\n\n# *args - variable positional arguments\ndef add_all(*numbers):\n    return sum(numbers)\n\n# **kwargs - variable keyword arguments\ndef profile(**info):\n    for k, v in info.items():\n        print(f'{k}: {v}')\n\n# Type hints (Python 3.5+)\ndef add(a: int, b: int) -> int:\n    return a + b",
+  "example_desc": "Complete function examples covering all parameter types and patterns.",
+  "code_example": "# ── BASIC FUNCTION ───────────────────────\ndef greet(name):\n    return f'Hello, {name}!'\n\nprint(greet('Alice'))   # Hello, Alice!\nprint(greet('Bob'))     # Hello, Bob!\n\n# ── DEFAULT PARAMETERS ───────────────────\ndef power(base, exponent=2):  # exponent defaults to 2\n    return base ** exponent\n\nprint(power(3))      # 9  (uses default)\nprint(power(3, 3))   # 27 (overrides default)\nprint(power(2, 10))  # 1024\n\n# ── MULTIPLE RETURN VALUES ───────────────\ndef min_max(numbers):\n    return min(numbers), max(numbers)  # returns tuple\n\nlow, high = min_max([3, 1, 4, 1, 5, 9, 2, 6])\nprint(f'Min: {low}, Max: {high}')  # Min: 1, Max: 9\n\n# ── *args (variable positional) ──────────\ndef add_all(*numbers):  # numbers is a TUPLE\n    print(f'Received: {numbers}')\n    return sum(numbers)\n\nprint(add_all(1, 2, 3))        # 6\nprint(add_all(1, 2, 3, 4, 5))  # 15\n\n# ── **kwargs (variable keyword) ──────────\ndef profile(**info):  # info is a DICT\n    for key, val in info.items():\n        print(f'  {key}: {val}')\n\nprofile(name='Alice', age=25, city='NYC')\n\n# ── COMBINING ALL TYPES ───────────────────\ndef full_func(required, default='hi', *args, **kwargs):\n    print(f'required={required}')\n    print(f'default={default}')\n    print(f'args={args}')\n    print(f'kwargs={kwargs}')\n\nfull_func('hello', 'world', 1, 2, 3, x=10, y=20)",
+  "output": "Hello, Alice!\nHello, Bob!\n9\n27\n1024\nMin: 1, Max: 9\nReceived: (1, 2, 3)\n6\nReceived: (1, 2, 3, 4, 5)\n15\n  name: Alice\n  age: 25\n  city: NYC\nrequired=hello\ndefault=world\nargs=(1, 2, 3)\nkwargs={'x': 10, 'y': 20}",
+  "logic_steps": [
+    "def keyword tells Python: 'I am defining a function, store it in memory'",
+    "The function body is NOT executed when defined — only when called",
+    "When called, Python creates a new local scope for the function",
+    "Parameters receive the argument values (left to right)",
+    "The function body executes line by line",
+    "return sends a value back to the caller and EXITS the function",
+    "Without return, Python automatically returns None",
+    "After the function returns, the local scope is destroyed",
+    "*args collects extra positional arguments into a TUPLE",
+    "**kwargs collects extra keyword arguments into a DICT"
+  ],
+  "dry_run": {
+    "title": "Dry Run: power(3, 3)",
+    "steps": [
+      {
+        "step": 1,
+        "state": "Call: power(3, 3)",
+        "action": "Python looks up 'power' function in memory",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "base=3, exponent=3",
+        "action": "Parameters assigned: base=3, exponent=3",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "base=3, exp=3",
+        "action": "Execute: return 3 ** 3",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "3 ** 3 = 27",
+        "action": "Calculate: 3 × 3 × 3 = 27",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "return 27",
+        "action": "Return 27 to caller, function scope destroyed",
+        "output": "27"
+      },
+      {
+        "step": 6,
+        "state": "print(27)",
+        "action": "Caller receives 27, prints it",
+        "output": "27"
+      }
+    ]
+  },
+  "important_points": [
+    "⭐ Functions are FIRST-CLASS OBJECTS in Python — they can be passed as arguments, returned from functions, stored in variables",
+    "⭐ Parameter ORDER matters: regular → default → *args → **kwargs",
+    "⭐ Default parameters are evaluated ONCE at definition time — never use mutable defaults like [] or {}",
+    "⭐ Without return statement, function returns None automatically",
+    "⭐ Variables inside a function are LOCAL — they don't exist outside",
+    "⭐ Use global keyword to modify global variables (but avoid it!)",
+    "⭐ Functions can return MULTIPLE values as a tuple: return a, b, c",
+    "⭐ Lambda functions are anonymous one-line functions: lambda x: x*2"
+  ],
+  "edge_cases": [
+    "def f(a, b=5, c): → SyntaxError! Non-default args cannot follow default args",
+    "def f(lst=[]): lst.append(1) → BUG! Default list is shared across all calls",
+    "Calling f() when f needs arguments → TypeError: missing required argument",
+    "Recursion without base case → RecursionError (Python limit: 1000 calls)",
+    "return inside a loop exits the ENTIRE function, not just the loop"
+  ],
+  "common_mistakes": [
+    "❌ Forgetting () when calling: greet vs greet() — first is the function object!",
+    "❌ Using mutable default: def f(lst=[]) — use def f(lst=None): if lst is None: lst=[]",
+    "❌ Not returning a value: def add(a,b): a+b — result is lost! Add return",
+    "❌ Confusing parameters and arguments — parameters are in definition, arguments in call",
+    "❌ Modifying global variable without global keyword → creates local variable instead"
+  ],
+  "interview_tips": [
+    "Functions are first-class objects — can be passed as arguments (callbacks, decorators)",
+    "Know the difference: *args (tuple) vs **kwargs (dict)",
+    "Closures: inner function remembers enclosing scope even after outer function returns",
+    "Decorators are functions that wrap other functions — @functools.wraps preserves metadata",
+    "Lambda: anonymous one-line function — lambda args: expression",
+    "map(), filter(), reduce() take functions as arguments",
+    "functools.lru_cache is a decorator for memoization — common interview topic"
+  ],
+  "subtopics": [
+    {
+      "id": "def-return",
+      "title": "def & return",
+      "icon": "🔧",
+      "explanation": "def defines a function and stores it in memory. return sends a value back to the caller and immediately exits the function. A function without return implicitly returns None.",
+      "syntax": "def name(params):\n    # body\n    return value  # optional\n\n# Multiple return values\ndef stats(lst):\n    return min(lst), max(lst), sum(lst)/len(lst)\n\nlo, hi, avg = stats([1,2,3,4,5])",
+      "code": "# Basic return\ndef square(n):\n    return n ** 2\n\nresult = square(5)\nprint(result)  # 25\n\n# Multiple return values (returns tuple)\ndef divide(a, b):\n    if b == 0:\n        return None, 'Error: division by zero'\n    return a / b, None\n\nresult, error = divide(10, 2)\nprint(result, error)  # 5.0 None\n\nresult, error = divide(10, 0)\nprint(result, error)  # None Error: division by zero\n\n# No return = returns None\ndef say_hi(name):\n    print(f'Hi, {name}!')\n    # no return statement\n\nval = say_hi('Alice')\nprint(val)  # None\n\n# Early return (guard clause)\ndef safe_sqrt(n):\n    if n < 0:\n        return None  # early exit\n    return n ** 0.5\n\nprint(safe_sqrt(16))  # 4.0\nprint(safe_sqrt(-4))  # None",
+      "output": "25\n5.0 None\nNone Error: division by zero\nHi, Alice!\nNone\n4.0\nNone",
+      "tip": "⭐ Use early return (guard clauses) to handle edge cases at the top of a function. This avoids deep nesting and makes code cleaner."
+    },
+    {
+      "id": "parameters",
+      "title": "Parameters & Arguments",
+      "icon": "📥",
+      "explanation": "Parameters are the variable names in the function definition. Arguments are the actual values passed when calling. Python supports 4 types: positional, default, *args, **kwargs.",
+      "syntax": "# 1. Positional\ndef f(a, b): pass\nf(1, 2)\n\n# 2. Default\ndef f(a, b=10): pass\nf(1)       # b=10\nf(1, 20)   # b=20\n\n# 3. Keyword arguments\nf(b=20, a=1)  # order doesn't matter\n\n# 4. *args\ndef f(*args): pass  # args is a tuple\nf(1, 2, 3, 4)\n\n# 5. **kwargs\ndef f(**kwargs): pass  # kwargs is a dict\nf(name='Alice', age=25)",
+      "code": "# Positional arguments\ndef subtract(a, b):\n    return a - b\n\nprint(subtract(10, 3))   # 7\nprint(subtract(3, 10))   # -7 (order matters!)\n\n# Default parameters\ndef greet(name, greeting='Hello', punctuation='!'):\n    return f'{greeting}, {name}{punctuation}'\n\nprint(greet('Alice'))                    # Hello, Alice!\nprint(greet('Bob', 'Hi'))               # Hi, Bob!\nprint(greet('Charlie', 'Hey', '...'))   # Hey, Charlie...\n\n# Keyword arguments (order doesn't matter)\nprint(greet(punctuation='?', name='Dave', greeting='Sup'))\n\n# *args\ndef total(*numbers):\n    print(f'Numbers: {numbers}')  # tuple\n    return sum(numbers)\n\nprint(total(1, 2, 3))\nprint(total(1, 2, 3, 4, 5, 6))\n\n# **kwargs\ndef display(**data):\n    for k, v in data.items():\n        print(f'  {k} = {v}')\n\ndisplay(name='Alice', age=25, score=98.5)",
+      "output": "7\n-7\nHello, Alice!\nHi, Bob!\nHey, Charlie...\nSup, Dave?\nNumbers: (1, 2, 3)\n6\nNumbers: (1, 2, 3, 4, 5, 6)\n21\n  name = Alice\n  age = 25\n  score = 98.5",
+      "tip": "⭐ NEVER use mutable objects (list, dict) as default parameters! Use None instead:\ndef f(lst=None):\n    if lst is None: lst = []\n    lst.append(1)\n    return lst"
+    },
+    {
+      "id": "scope",
+      "title": "Scope — LEGB Rule",
+      "icon": "🔭",
+      "explanation": "Scope determines where a variable is accessible. Python uses LEGB rule: Local → Enclosing → Global → Built-in. Python searches in this order when you use a variable name.",
+      "syntax": "# LEGB Order:\n# L - Local: inside current function\n# E - Enclosing: outer function (closures)\n# G - Global: module level\n# B - Built-in: Python built-ins (len, print, etc.)\n\nglobal_var = 'global'\n\ndef outer():\n    enclosing_var = 'enclosing'\n    def inner():\n        local_var = 'local'\n        # Can access: local, enclosing, global, built-in\n    inner()",
+      "code": "x = 'global'\n\ndef show_scope():\n    x = 'local'  # creates LOCAL variable\n    print(f'Inside: {x}')  # local\n\nshow_scope()\nprint(f'Outside: {x}')  # global (unchanged)\n\n# global keyword\ncounter = 0\ndef increment():\n    global counter  # access global variable\n    counter += 1\n\nincrement(); increment(); increment()\nprint(f'Counter: {counter}')  # 3\n\n# Closure (Enclosing scope)\ndef make_multiplier(n):\n    def multiply(x):\n        return x * n  # n from ENCLOSING scope\n    return multiply\n\ndouble = make_multiplier(2)\ntriple = make_multiplier(3)\nprint(double(5))   # 10\nprint(triple(5))   # 15\nprint(double(10))  # 20\n\n# nonlocal keyword\ndef counter_factory():\n    count = 0\n    def increment():\n        nonlocal count  # modify enclosing variable\n        count += 1\n        return count\n    return increment\n\nc = counter_factory()\nprint(c())  # 1\nprint(c())  # 2\nprint(c())  # 3",
+      "output": "Inside: local\nOutside: global\nCounter: 3\n10\n15\n20\n1\n2\n3",
+      "tip": "⭐ Avoid global variables — they make code hard to debug and test. Pass values as parameters and return results instead."
+    },
+    {
+      "id": "recursion",
+      "title": "Recursion",
+      "icon": "🌀",
+      "explanation": "Recursion is when a function calls itself. Every recursive function MUST have:\n1. Base case — the stopping condition (prevents infinite recursion)\n2. Recursive case — calls itself with a SMALLER problem\n\nThink of it as: solve a big problem by solving a smaller version of the same problem.",
+      "syntax": "def recursive_func(n):\n    # 1. BASE CASE (MUST HAVE!)\n    if n == 0:\n        return 0\n    \n    # 2. RECURSIVE CASE\n    # Call with SMALLER input\n    return n + recursive_func(n - 1)\n\n# Each call reduces n by 1\n# Eventually hits base case n==0",
+      "code": "# Factorial: n! = n × (n-1) × ... × 1\ndef factorial(n):\n    if n <= 1:          # BASE CASE\n        return 1\n    return n * factorial(n - 1)  # RECURSIVE\n\nprint(factorial(5))  # 120\nprint(factorial(0))  # 1\n\n# Fibonacci\ndef fib(n):\n    if n <= 1:          # BASE CASE\n        return n\n    return fib(n-1) + fib(n-2)  # RECURSIVE\n\nprint([fib(i) for i in range(8)])  # [0,1,1,2,3,5,8,13]\n\n# Sum of list\ndef sum_list(lst):\n    if not lst:         # BASE CASE: empty list\n        return 0\n    return lst[0] + sum_list(lst[1:])  # RECURSIVE\n\nprint(sum_list([1, 2, 3, 4, 5]))  # 15\n\n# Power\ndef power(base, exp):\n    if exp == 0:        # BASE CASE\n        return 1\n    return base * power(base, exp - 1)  # RECURSIVE\n\nprint(power(2, 8))  # 256",
+      "output": "120\n1\n[0, 1, 1, 2, 3, 5, 8, 13]\n15\n256",
+      "tip": "⭐ Always define the BASE CASE first! Without it, you get RecursionError. Python's default recursion limit is 1000 calls. Use memoization (functools.lru_cache) to optimize recursive functions."
+    }
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a function that returns the square of a number",
+        "hint": "return n ** 2"
+      },
+      {
+        "question": "Write a function to check if a number is even or odd",
+        "hint": "return 'Even' if n%2==0 else 'Odd'"
+      },
+      {
+        "question": "Write a function that takes a list and returns its sum and average",
+        "hint": "return sum(lst), sum(lst)/len(lst)"
+      },
+      {
+        "question": "Write a function greet(name, greeting='Hello') that returns a greeting",
+        "hint": "return f'{greeting}, {name}!'"
+      },
+      {
+        "question": "Write a function that returns the largest of three numbers",
+        "hint": "return max(a, b, c)"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Write a recursive function to calculate factorial",
+        "hint": "Base: n<=1 return 1; Recursive: n * factorial(n-1)"
+      },
+      {
+        "question": "Write a function that takes *args and returns their product",
+        "hint": "from functools import reduce; return reduce(lambda x,y: x*y, args)"
+      },
+      {
+        "question": "Write a closure that creates a counter function",
+        "hint": "def make_counter(): count=0; def counter(): nonlocal count; count+=1; return count; return counter"
+      },
+      {
+        "question": "Write a function to check if a string is a palindrome",
+        "hint": "return s.lower() == s.lower()[::-1]"
+      },
+      {
+        "question": "Write a memoized Fibonacci using functools.lru_cache",
+        "hint": "@lru_cache(maxsize=None) on the recursive fib function"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Implement a function that flattens a nested list of any depth",
+        "hint": "Use recursion: if isinstance(item, list): recurse; else: yield item"
+      },
+      {
+        "question": "Write a decorator that measures execution time of any function",
+        "hint": "import time; start=time.time(); result=func(*args); return time.time()-start, result"
+      },
+      {
+        "question": "Implement binary search recursively",
+        "hint": "Base: low>high return -1; Check mid; recurse left or right"
+      },
+      {
+        "question": "Write a function that generates all permutations of a list",
+        "hint": "Base: len(lst)<=1 return [lst]; Recursive: for each element, permute the rest"
+      },
+      {
+        "question": "Implement a function that evaluates a mathematical expression string",
+        "hint": "Use eval() safely or implement a stack-based parser"
+      }
+    ]
+  }
+}

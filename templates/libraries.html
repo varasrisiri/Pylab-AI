@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Libraries - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+.lib-page{max-width:1200px;margin:0 auto;padding:2rem;}
+.lib-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2rem;}
+.lib-tab{padding:.5rem 1.25rem;border-radius:20px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:.88rem;font-weight:600;transition:all .3s;}
+.lib-tab:hover,.lib-tab.active{background:rgba(0,212,255,.1);color:var(--accent-primary);border-color:var(--accent-primary);}
+.lib-content{display:none;}
+.lib-content.active{display:block;}
+.lib-hero{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:20px;padding:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1.5rem;}
+.lib-hero-icon{font-size:3.5rem;flex-shrink:0;}
+.lib-hero-info{flex:1;}
+.lib-name{font-size:1.8rem;font-weight:900;color:var(--text-heading);margin-bottom:.25rem;}
+.lib-tagline{color:var(--accent-primary);font-size:1rem;font-weight:600;margin-bottom:.75rem;}
+.lib-desc{color:var(--text-secondary);line-height:1.7;font-size:.95rem;margin-bottom:1rem;}
+.lib-install{background:var(--bg-code);border:1px solid var(--border-color);border-radius:8px;padding:.5rem 1rem;font-family:Fira Code,monospace;font-size:.88rem;color:var(--accent-secondary);display:inline-block;}
+.lib-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem;}
+.lib-tag{background:rgba(0,212,255,.1);color:var(--accent-primary);border:1px solid rgba(0,212,255,.2);padding:.2rem .65rem;border-radius:12px;font-size:.75rem;}
+.lib-used-by{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem;align-items:center;}
+.used-by-badge{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);color:var(--accent-tertiary);padding:.2rem .65rem;border-radius:12px;font-size:.75rem;font-weight:600;}
+.section-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem;}
+.section-card h3{font-size:1.05rem;font-weight:700;color:var(--text-heading);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.concept-item{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;padding:1rem;}
+.concept-name{font-weight:700;color:var(--accent-secondary);font-family:Fira Code,monospace;font-size:.88rem;margin-bottom:.35rem;}
+.concept-desc{color:var(--text-secondary);font-size:.82rem;line-height:1.5;}
+.project-card{background:linear-gradient(135deg,rgba(0,212,255,.05),rgba(0,255,136,.03));border:1px solid rgba(0,212,255,.15);border-radius:14px;padding:1.25rem;margin-bottom:1rem;}
+.project-title{font-weight:700;color:var(--accent-primary);margin-bottom:.5rem;font-size:.95rem;}
+.project-desc{color:var(--text-secondary);font-size:.85rem;margin-bottom:.75rem;}
+.method-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.method-table th{background:rgba(0,212,255,.1);color:var(--accent-primary);padding:.5rem .85rem;text-align:left;border-bottom:2px solid var(--border-color);}
+.method-table td{padding:.45rem .85rem;border-bottom:1px solid var(--border-color);color:var(--text-secondary);font-family:Fira Code,monospace;}
+.method-table tr:hover td{background:var(--bg-card-hover);}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div class="lib-page">
+<div style="margin-bottom:2rem;"><h1 class="section-title">&#x1F4E6; Python Libraries Explorer</h1>
+<p style="color:var(--text-secondary);">Deep dive into the most powerful Python libraries. What, Why, How, and real projects.</p></div>
+<div class="lib-tabs">
+<div class="lib-tab active" onclick="showLib('numpy')">&#x1F4CA; NumPy</div>
+<div class="lib-tab " onclick="showLib('pandas')">&#x1F43C; Pandas</div>
+<div class="lib-tab " onclick="showLib('matplotlib')">&#x1F4C8; Matplotlib</div>
+<div class="lib-tab " onclick="showLib('flask')">&#x1F376; Flask</div>
+<div class="lib-tab " onclick="showLib('django')">&#x1F3D7; Django</div>
+<div class="lib-tab " onclick="showLib('tensorflow')">&#x1F9E0; TensorFlow</div>
+<div class="lib-tab " onclick="showLib('opencv')">&#x1F441; OpenCV</div>
+</div>
+<div class="lib-content" id="lib-numpy">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F4CA;</div><div class="lib-hero-info">
+<div class="lib-name">NumPy</div>
+<div class="lib-tagline">Numerical Python - Foundation of Scientific Computing</div>
+<div class="lib-desc">NumPy provides fast N-dimensional arrays and math operations. It is 50-100x faster than Python lists because operations run in C. Every scientific Python library (Pandas, TensorFlow, OpenCV) is built on NumPy.</div>
+<div class="lib-install">pip install numpy</div>
+<div class="lib-tags"><span class="lib-tag">Arrays</span><span class="lib-tag">Math</span><span class="lib-tag">Linear Algebra</span><span class="lib-tag">Statistics</span><span class="lib-tag">Broadcasting</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">NASA</span><span class="used-by-badge">OpenAI</span><span class="used-by-badge">Pandas</span><span class="used-by-badge">TensorFlow</span><span class="used-by-badge">scikit-learn</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">ndarray</div><div class="concept-desc">N-dimensional array. All elements same type. Stored in contiguous memory for speed.</div></div>
+<div class="concept-item"><div class="concept-name">dtype</div><div class="concept-desc">Data type: int32, float64, bool. Determines memory and operations.</div></div>
+<div class="concept-item"><div class="concept-name">shape</div><div class="concept-desc">Dimensions: (5,)=1D, (3,4)=2D matrix, (2,3,4)=3D tensor.</div></div>
+<div class="concept-item"><div class="concept-name">Broadcasting</div><div class="concept-desc">arr+5 adds 5 to EVERY element. No loop needed.</div></div>
+<div class="concept-item"><div class="concept-name">Vectorization</div><div class="concept-desc">Apply operations to entire array at once. 50x faster than loops.</div></div>
+<div class="concept-item"><div class="concept-name">Boolean Indexing</div><div class="concept-desc">arr[arr>5] returns only elements >5. Powerful filtering.</div></div>
+<div class="concept-item"><div class="concept-name">reshape()</div><div class="concept-desc">Change array shape: (12,) -> (3,4) without copying data.</div></div>
+<div class="concept-item"><div class="concept-name">np.linalg</div><div class="concept-desc">Linear algebra: dot product, inverse, determinant, eigenvalues.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete NumPy Reference</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import numpy as np
+
+# CREATING ARRAYS
+arr = np.array([1, 2, 3, 4, 5])
+matrix = np.array([[1,2,3],[4,5,6],[7,8,9]])
+zeros = np.zeros((3, 4))        # 3x4 of zeros
+ones = np.ones((2, 3))          # 2x3 of ones
+eye = np.eye(3)                 # 3x3 identity matrix
+rng = np.arange(0, 10, 2)      # [0,2,4,6,8]
+lin = np.linspace(0, 1, 5)     # 5 evenly spaced 0 to 1
+rand = np.random.rand(3, 3)    # random 3x3
+
+# ARRAY PROPERTIES
+print(arr.shape)    # (5,)
+print(matrix.shape) # (3, 3)
+print(arr.dtype)    # int64
+print(arr.ndim)     # 1
+print(arr.size)     # 5
+
+# INDEXING & SLICING
+print(matrix[0])           # first row: [1,2,3]
+print(matrix[1][2])        # row 1, col 2: 6
+print(matrix[0:2, 1:3])   # rows 0-1, cols 1-2
+print(arr[arr > 3])        # boolean: [4,5]
+
+# MATH OPERATIONS (vectorized)
+a = np.array([1, 2, 3, 4])
+b = np.array([10, 20, 30, 40])
+print(a + b)        # [11, 22, 33, 44]
+print(a * b)        # [10, 40, 90, 160]
+print(a ** 2)       # [1, 4, 9, 16]
+print(np.sqrt(a))   # [1.0, 1.41, 1.73, 2.0]
+print(a + 100)      # broadcasting: [101,102,103,104]
+
+# STATISTICS
+scores = np.array([85, 90, 78, 92, 88, 76, 95])
+print(f"Mean: {scores.mean():.1f}")
+print(f"Std: {scores.std():.1f}")
+print(f"Min/Max: {scores.min()}/{scores.max()}")
+print(f"Median: {np.median(scores)}")
+
+# RESHAPE
+arr = np.arange(12)
+matrix = arr.reshape(3, 4)
+flat = matrix.flatten()
+T = matrix.T  # transpose
+
+# LINEAR ALGEBRA
+A = np.array([[1,2],[3,4]])
+B = np.array([[5,6],[7,8]])
+print(np.dot(A, B))         # matrix multiply
+print(np.linalg.det(A))     # determinant
+print(np.linalg.inv(A))     # inverse</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project 1: Grade Analyzer</div>
+<div class="project-desc">Analyze student scores with statistics.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import numpy as np
+scores = np.array([85, 92, 78, 65, 90, 55, 88, 72, 95, 60])
+names = ['Alice','Bob','Charlie','Dave','Eve','Frank','Grace','Henry','Iris','Jack']
+print(f"Average: {scores.mean():.1f}")
+print(f"Top student: {names[scores.argmax()]} ({scores.max()})")
+print(f"Passing: {(scores>=60).sum()}/{len(scores)}")
+grades = np.select([scores>=90,scores>=80,scores>=70,scores>=60],['A','B','C','D'],default='F')
+for n,s,g in zip(names,scores,grades):
+    print(f"  {n}: {s} -> {g}")</code></pre></div></div>
+<div class="project-card"><div class="project-title">Project 2: Statistics Calculator</div>
+<div class="project-desc">Calculate mean, variance, std dev from scratch.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import numpy as np
+data = np.array([4, 7, 13, 2, 1, 8, 15, 3, 9, 6])
+print(f"Data: {data}")
+print(f"Mean: {data.mean():.2f}")
+print(f"Variance: {data.var():.2f}")
+print(f"Std Dev: {data.std():.2f}")
+print(f"Range: {data.max()-data.min()}")
+print(f"Sorted: {np.sort(data)}")
+print(f"Cumulative sum: {np.cumsum(data)}")</code></pre></div></div>
+</div>
+</div>
+<div class="lib-content" id="lib-pandas">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F43C;</div><div class="lib-hero-info">
+<div class="lib-name">Pandas</div><div class="lib-tagline">Data Analysis and Manipulation Library</div>
+<div class="lib-desc">Pandas provides DataFrame and Series data structures for working with tabular data. It is the go-to library for data cleaning, analysis, and transformation. Think of it as Excel in Python, but 1000x more powerful.</div><div class="lib-install">pip install pandas</div>
+<div class="lib-tags"><span class="lib-tag">DataFrame</span><span class="lib-tag">Series</span><span class="lib-tag">CSV</span><span class="lib-tag">Excel</span><span class="lib-tag">Data Cleaning</span><span class="lib-tag">GroupBy</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">Netflix</span><span class="used-by-badge">Spotify</span><span class="used-by-badge">Airbnb</span><span class="used-by-badge">JPMorgan</span><span class="used-by-badge">Google</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">DataFrame</div><div class="concept-desc">2D table with labeled rows and columns. Like an Excel spreadsheet in Python.</div></div>
+<div class="concept-item"><div class="concept-name">Series</div><div class="concept-desc">1D labeled array. A single column of a DataFrame.</div></div>
+<div class="concept-item"><div class="concept-name">Index</div><div class="concept-desc">Row labels. Can be integers, strings, dates, etc.</div></div>
+<div class="concept-item"><div class="concept-name">groupby()</div><div class="concept-desc">Group data by a column and apply aggregation (sum, mean, count).</div></div>
+<div class="concept-item"><div class="concept-name">merge()</div><div class="concept-desc">Combine DataFrames like SQL JOIN operations.</div></div>
+<div class="concept-item"><div class="concept-name">apply()</div><div class="concept-desc">Apply a function to each row or column.</div></div>
+<div class="concept-item"><div class="concept-name">fillna()</div><div class="concept-desc">Fill missing values (NaN) with a specified value or method.</div></div>
+<div class="concept-item"><div class="concept-name">read_csv()</div><div class="concept-desc">Load CSV files into DataFrame in one line.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete Pandas Reference</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+
+# CREATING DATAFRAMES
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve'],
+    'Age': [25, 30, 35, 28, 22],
+    'Score': [90, 85, 92, 78, 95],
+    'City': ['NYC', 'LA', 'NYC', 'Chicago', 'LA']
+}
+df = pd.DataFrame(data)
+print(df)
+print(df.shape)      # (5, 4)
+print(df.dtypes)     # column types
+print(df.describe()) # statistics
+
+# SELECTING DATA
+print(df['Name'])           # single column (Series)
+print(df[['Name','Score']]) # multiple columns
+print(df.iloc[0])           # first row by position
+print(df.loc[0])            # first row by label
+print(df[df['Score'] > 88]) # filter rows
+
+# ADDING/MODIFYING
+df['Grade'] = df['Score'].apply(lambda x: 'A' if x>=90 else 'B' if x>=80 else 'C')
+df['Score_Normalized'] = (df['Score'] - df['Score'].min()) / (df['Score'].max() - df['Score'].min())
+
+# GROUPBY
+city_avg = df.groupby('City')['Score'].mean()
+print(city_avg)
+
+city_stats = df.groupby('City').agg({'Score': ['mean','max','count']})
+print(city_stats)
+
+# SORTING
+print(df.sort_values('Score', ascending=False))
+
+# MISSING DATA
+df_with_nan = df.copy()
+df_with_nan.loc[1, 'Score'] = np.nan
+print(df_with_nan.isnull().sum())  # count missing
+df_filled = df_with_nan.fillna(df_with_nan['Score'].mean())
+
+# READ/WRITE FILES
+# df = pd.read_csv('data.csv')
+# df.to_csv('output.csv', index=False)
+# df = pd.read_excel('data.xlsx')</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project 1: Sales Analysis</div><div class="project-desc">Analyze sales data to find top products and revenue.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import pandas as pd
+
+data = {
+    'Product': ['Laptop','Phone','Tablet','Laptop','Phone','Tablet','Laptop'],
+    'Month': ['Jan','Jan','Jan','Feb','Feb','Feb','Mar'],
+    'Sales': [50000, 30000, 20000, 55000, 32000, 18000, 60000],
+    'Units': [10, 30, 20, 11, 32, 18, 12]
+}
+df = pd.DataFrame(data)
+
+print("Total Revenue:", df['Sales'].sum())
+print("\nRevenue by Product:")
+print(df.groupby('Product')['Sales'].sum().sort_values(ascending=False))
+print("\nMonthly Revenue:")
+print(df.groupby('Month')['Sales'].sum())
+print("\nAvg Price per Unit:")
+df['Avg_Price'] = df['Sales'] / df['Units']
+print(df.groupby('Product')['Avg_Price'].mean().round(0))</code></pre></div></div>
+<div class="project-card"><div class="project-title">Project 2: Student Report Card</div><div class="project-desc">Generate report cards from student data.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import pandas as pd
+
+students = pd.DataFrame({
+    'Name': ['Alice','Bob','Charlie','Dave'],
+    'Math': [90, 75, 85, 60],
+    'Science': [88, 80, 92, 55],
+    'English': [92, 70, 78, 65]
+})
+
+students['Total'] = students[['Math','Science','English']].sum(axis=1)
+students['Average'] = students['Total'] / 3
+students['Grade'] = students['Average'].apply(
+    lambda x: 'A' if x>=90 else 'B' if x>=80 else 'C' if x>=70 else 'F'
+)
+students['Rank'] = students['Average'].rank(ascending=False).astype(int)
+print(students.sort_values('Rank'))</code></pre></div></div>
+</div></div>
+<div class="lib-content" id="lib-matplotlib">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F4C8;</div><div class="lib-hero-info">
+<div class="lib-name">Matplotlib</div><div class="lib-tagline">Data Visualization Library</div>
+<div class="lib-desc">Matplotlib creates static, animated, and interactive visualizations. It is the most widely used Python plotting library. Every chart type you can imagine: line, bar, scatter, pie, histogram, heatmap, 3D plots.</div><div class="lib-install">pip install matplotlib</div>
+<div class="lib-tags"><span class="lib-tag">Charts</span><span class="lib-tag">Graphs</span><span class="lib-tag">Plots</span><span class="lib-tag">Visualization</span><span class="lib-tag">2D</span><span class="lib-tag">3D</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">NASA</span><span class="used-by-badge">CERN</span><span class="used-by-badge">Nature Journal</span><span class="used-by-badge">SciPy</span><span class="used-by-badge">Seaborn</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">Figure</div><div class="concept-desc">The entire window/page. Container for all plots.</div></div>
+<div class="concept-item"><div class="concept-name">Axes</div><div class="concept-desc">The actual plot area with x/y axes. One Figure can have multiple Axes.</div></div>
+<div class="concept-item"><div class="concept-name">plt.plot()</div><div class="concept-desc">Line chart. Best for trends over time.</div></div>
+<div class="concept-item"><div class="concept-name">plt.bar()</div><div class="concept-desc">Bar chart. Best for comparing categories.</div></div>
+<div class="concept-item"><div class="concept-name">plt.scatter()</div><div class="concept-desc">Scatter plot. Best for showing relationships between variables.</div></div>
+<div class="concept-item"><div class="concept-name">plt.hist()</div><div class="concept-desc">Histogram. Best for showing distribution of data.</div></div>
+<div class="concept-item"><div class="concept-name">plt.subplot()</div><div class="concept-desc">Create multiple plots in one figure.</div></div>
+<div class="concept-item"><div class="concept-name">plt.savefig()</div><div class="concept-desc">Save plot as PNG, PDF, SVG, etc.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete Matplotlib Reference</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+# LINE CHART
+x = np.linspace(0, 10, 100)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+plt.figure(figsize=(10, 4))
+plt.plot(x, y1, color='cyan', linewidth=2, label='sin(x)')
+plt.plot(x, y2, color='orange', linewidth=2, label='cos(x)')
+plt.title('Sine and Cosine Waves', fontsize=14)
+plt.xlabel('X axis')
+plt.ylabel('Y axis')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# BAR CHART
+categories = ['Python', 'JavaScript', 'Java', 'C++', 'Go']
+popularity = [30, 25, 20, 15, 10]
+colors = ['#00d4ff', '#00ff88', '#ffd700', '#ff6b6b', '#bf5fff']
+
+plt.figure(figsize=(8, 5))
+bars = plt.bar(categories, popularity, color=colors, edgecolor='white')
+plt.title('Programming Language Popularity 2024')
+plt.ylabel('Popularity (%)')
+for bar, val in zip(bars, popularity):
+    plt.text(bar.get_x()+bar.get_width()/2, bar.get_height()+0.5,
+             f'{val}%', ha='center', fontweight='bold')
+plt.show()
+
+# SCATTER PLOT
+np.random.seed(42)
+x = np.random.randn(100)
+y = 2*x + np.random.randn(100)*0.5
+plt.figure(figsize=(7, 5))
+plt.scatter(x, y, alpha=0.6, color='cyan', edgecolors='white', s=50)
+plt.title('Scatter Plot with Correlation')
+plt.xlabel('X'); plt.ylabel('Y')
+plt.show()
+
+# HISTOGRAM
+data = np.random.normal(70, 10, 1000)  # exam scores
+plt.figure(figsize=(8, 5))
+plt.hist(data, bins=30, color='#00d4ff', edgecolor='white', alpha=0.7)
+plt.axvline(data.mean(), color='red', linestyle='--', label=f'Mean: {data.mean():.1f}')
+plt.title('Exam Score Distribution')
+plt.xlabel('Score'); plt.ylabel('Frequency')
+plt.legend()
+plt.show()
+
+# SUBPLOTS (multiple charts)
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+axes[0,0].plot(x, np.sin(x))
+axes[0,0].set_title('Line')
+axes[0,1].bar(['A','B','C'], [3,7,5])
+axes[0,1].set_title('Bar')
+axes[1,0].scatter(np.random.rand(50), np.random.rand(50))
+axes[1,0].set_title('Scatter')
+axes[1,1].hist(np.random.randn(200), bins=20)
+axes[1,1].set_title('Histogram')
+plt.tight_layout()
+plt.show()</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project 1: Sales Dashboard</div><div class="project-desc">Create a multi-chart sales dashboard.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+months = ['Jan','Feb','Mar','Apr','May','Jun']
+sales = [45000, 52000, 48000, 61000, 55000, 67000]
+expenses = [30000, 35000, 32000, 40000, 38000, 42000]
+profit = [s-e for s,e in zip(sales,expenses)]
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Sales vs Expenses
+ax1.plot(months, sales, 'o-', color='#00d4ff', label='Sales', linewidth=2)
+ax1.plot(months, expenses, 's-', color='#ff6b6b', label='Expenses', linewidth=2)
+ax1.fill_between(months, sales, expenses, alpha=0.1, color='green')
+ax1.set_title('Sales vs Expenses')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Profit bar chart
+colors = ['#00ff88' if p>0 else '#ff6b6b' for p in profit]
+ax2.bar(months, profit, color=colors, edgecolor='white')
+ax2.set_title('Monthly Profit')
+ax2.axhline(y=0, color='white', linewidth=0.5)
+
+plt.tight_layout()
+plt.savefig('sales_dashboard.png', dpi=100, bbox_inches='tight')
+plt.show()
+print("Dashboard saved!")</code></pre></div></div>
+<div class="project-card"><div class="project-title">Project 2: Data Distribution Analysis</div><div class="project-desc">Visualize data distribution with histogram and box plot.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+np.random.seed(42)
+class_a = np.random.normal(75, 10, 50)
+class_b = np.random.normal(82, 8, 50)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+ax1.hist(class_a, bins=15, alpha=0.6, color='cyan', label='Class A')
+ax1.hist(class_b, bins=15, alpha=0.6, color='orange', label='Class B')
+ax1.axvline(class_a.mean(), color='blue', linestyle='--')
+ax1.axvline(class_b.mean(), color='red', linestyle='--')
+ax1.set_title('Score Distribution')
+ax1.legend()
+
+ax2.boxplot([class_a, class_b], labels=['Class A', 'Class B'])
+ax2.set_title('Box Plot Comparison')
+ax2.set_ylabel('Scores')
+
+plt.tight_layout()
+plt.show()</code></pre></div></div>
+</div></div>
+<div class="lib-content" id="lib-flask">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F376;</div><div class="lib-hero-info">
+<div class="lib-name">Flask</div><div class="lib-tagline">Lightweight Web Framework</div>
+<div class="lib-desc">Flask is a micro web framework for Python. It is simple, flexible, and perfect for building REST APIs, web apps, and microservices. Flask gives you the basics and lets you choose your tools.</div><div class="lib-install">pip install flask</div>
+<div class="lib-tags"><span class="lib-tag">Web</span><span class="lib-tag">API</span><span class="lib-tag">REST</span><span class="lib-tag">Routes</span><span class="lib-tag">Templates</span><span class="lib-tag">Microservices</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">Pinterest</span><span class="used-by-badge">LinkedIn</span><span class="used-by-badge">Netflix</span><span class="used-by-badge">Reddit</span><span class="used-by-badge">Airbnb</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">app = Flask(__name__)</div><div class="concept-desc">Create Flask application instance.</div></div>
+<div class="concept-item"><div class="concept-name">@app.route()</div><div class="concept-desc">Decorator that maps URL to a function.</div></div>
+<div class="concept-item"><div class="concept-name">request</div><div class="concept-desc">Access incoming request data: form, JSON, args.</div></div>
+<div class="concept-item"><div class="concept-name">jsonify()</div><div class="concept-desc">Convert Python dict to JSON response.</div></div>
+<div class="concept-item"><div class="concept-name">render_template()</div><div class="concept-desc">Render HTML template with Jinja2.</div></div>
+<div class="concept-item"><div class="concept-name">Blueprint</div><div class="concept-desc">Organize routes into modules for large apps.</div></div>
+<div class="concept-item"><div class="concept-name">Flask-SQLAlchemy</div><div class="concept-desc">ORM for database operations.</div></div>
+<div class="concept-item"><div class="concept-name">Flask-Login</div><div class="concept-desc">User authentication and session management.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete Flask Reference</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">from flask import Flask, request, jsonify, render_template
+
+app = Flask(__name__)
+
+# Simple route
+@app.route('/')
+def home():
+    return '<h1>Hello, Flask!</h1>'
+
+# Route with variable
+@app.route('/user/<name>')
+def greet_user(name):
+    return f'<h1>Hello, {name}!</h1>'
+
+# REST API - GET
+@app.route('/api/students', methods=['GET'])
+def get_students():
+    students = [
+        {'id': 1, 'name': 'Alice', 'grade': 'A'},
+        {'id': 2, 'name': 'Bob', 'grade': 'B'},
+    ]
+    return jsonify({'students': students, 'count': len(students)})
+
+# REST API - POST
+@app.route('/api/students', methods=['POST'])
+def add_student():
+    data = request.json
+    if not data or 'name' not in data:
+        return jsonify({'error': 'Name required'}), 400
+    # In real app: save to database
+    return jsonify({'message': f"Student {data['name']} added!", 'id': 3}), 201
+
+# Route with query parameters
+@app.route('/api/search')
+def search():
+    query = request.args.get('q', '')
+    limit = int(request.args.get('limit', 10))
+    return jsonify({'query': query, 'limit': limit, 'results': []})
+
+# Error handlers
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({'error': 'Not found'}), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return jsonify({'error': 'Internal server error'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project 1: Todo API</div><div class="project-desc">Build a complete REST API for a todo list.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+todos = []
+next_id = 1
+
+@app.route('/api/todos', methods=['GET'])
+def get_todos():
+    return jsonify({'todos': todos, 'count': len(todos)})
+
+@app.route('/api/todos', methods=['POST'])
+def add_todo():
+    global next_id
+    data = request.json
+    todo = {'id': next_id, 'task': data['task'], 'done': False}
+    todos.append(todo)
+    next_id += 1
+    return jsonify(todo), 201
+
+@app.route('/api/todos/<int:todo_id>', methods=['PUT'])
+def update_todo(todo_id):
+    todo = next((t for t in todos if t['id']==todo_id), None)
+    if not todo:
+        return jsonify({'error': 'Not found'}), 404
+    todo['done'] = request.json.get('done', todo['done'])
+    return jsonify(todo)
+
+@app.route('/api/todos/<int:todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+    global todos
+    todos = [t for t in todos if t['id'] != todo_id]
+    return jsonify({'message': 'Deleted'})
+
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre></div></div>
+<div class="project-card"><div class="project-title">Project 2: Simple Calculator API</div><div class="project-desc">REST API for math operations.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/api/calc', methods=['POST'])
+def calculate():
+    data = request.json
+    a = data.get('a', 0)
+    b = data.get('b', 0)
+    op = data.get('op', '+')
+    
+    ops = {
+        '+': lambda x,y: x+y,
+        '-': lambda x,y: x-y,
+        '*': lambda x,y: x*y,
+        '/': lambda x,y: x/y if y!=0 else None
+    }
+    
+    if op not in ops:
+        return jsonify({'error': 'Invalid operator'}), 400
+    
+    result = ops[op](a, b)
+    if result is None:
+        return jsonify({'error': 'Division by zero'}), 400
+    
+    return jsonify({'a': a, 'b': b, 'op': op, 'result': result})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+# Test: POST /api/calc with {"a":10,"b":3,"op":"/"}</code></pre></div></div>
+</div></div>
+<div class="lib-content" id="lib-django">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F3D7;</div><div class="lib-hero-info">
+<div class="lib-name">Django</div><div class="lib-tagline">The Web Framework for Perfectionists with Deadlines</div>
+<div class="lib-desc">Django is a high-level Python web framework that encourages rapid development and clean, pragmatic design. It includes everything: ORM, admin panel, authentication, forms, templates. Used for large-scale applications.</div><div class="lib-install">pip install django</div>
+<div class="lib-tags"><span class="lib-tag">Full-Stack</span><span class="lib-tag">ORM</span><span class="lib-tag">Admin</span><span class="lib-tag">Auth</span><span class="lib-tag">Templates</span><span class="lib-tag">REST</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">Instagram</span><span class="used-by-badge">Pinterest</span><span class="used-by-badge">Disqus</span><span class="used-by-badge">Mozilla</span><span class="used-by-badge">NASA</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">Models</div><div class="concept-desc">Python classes that map to database tables. Django ORM handles SQL.</div></div>
+<div class="concept-item"><div class="concept-name">Views</div><div class="concept-desc">Functions/classes that handle HTTP requests and return responses.</div></div>
+<div class="concept-item"><div class="concept-name">URLs</div><div class="concept-desc">URL patterns that map URLs to views.</div></div>
+<div class="concept-item"><div class="concept-name">Templates</div><div class="concept-desc">HTML files with Django template language for dynamic content.</div></div>
+<div class="concept-item"><div class="concept-name">Admin</div><div class="concept-desc">Auto-generated admin interface for managing data.</div></div>
+<div class="concept-item"><div class="concept-name">Migrations</div><div class="concept-desc">Track and apply database schema changes.</div></div>
+<div class="concept-item"><div class="concept-name">Forms</div><div class="concept-desc">Handle HTML forms with validation.</div></div>
+<div class="concept-item"><div class="concept-name">Middleware</div><div class="concept-desc">Process requests/responses globally.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Django Quick Start</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python"># 1. Create project
+# django-admin startproject mysite
+# cd mysite
+# python manage.py startapp blog
+
+# models.py
+from django.db import models
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    published = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['-created_at']
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    author = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+# views.py
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import Post
+
+def post_list(request):
+    posts = Post.objects.filter(published=True).order_by('-created_at')
+    return render(request, 'blog/post_list.html', {'posts': posts})
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all()
+    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments})
+
+# API view
+def api_posts(request):
+    posts = Post.objects.filter(published=True).values('id','title','author','created_at')
+    return JsonResponse({'posts': list(posts)})
+
+# urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.post_list, name='post-list'),
+    path('post/<int:pk>/', views.post_detail, name='post-detail'),
+    path('api/posts/', views.api_posts, name='api-posts'),
+]
+
+# admin.py
+from django.contrib import admin
+from .models import Post, Comment
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'published', 'created_at']
+    list_filter = ['published']
+    search_fields = ['title', 'content']</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project: Blog with Django</div><div class="project-desc">Full blog with posts, comments, and admin.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python"># Complete Django blog structure:
+# mysite/
+#   blog/
+#     models.py  - Post, Comment, Category
+#     views.py   - list, detail, create, delete
+#     urls.py    - URL routing
+#     templates/ - HTML templates
+#     admin.py   - Admin configuration
+
+# Key commands:
+# python manage.py makemigrations  # create migration
+# python manage.py migrate         # apply to DB
+# python manage.py createsuperuser # create admin
+# python manage.py runserver       # start server
+
+# ORM queries
+from blog.models import Post
+
+# Create
+post = Post.objects.create(title='Hello', content='World', author='Alice')
+
+# Read
+all_posts = Post.objects.all()
+published = Post.objects.filter(published=True)
+recent = Post.objects.order_by('-created_at')[:5]
+single = Post.objects.get(id=1)
+
+# Update
+Post.objects.filter(author='Alice').update(published=True)
+
+# Delete
+Post.objects.filter(published=False).delete()
+
+# Aggregation
+from django.db.models import Count, Avg
+stats = Post.objects.aggregate(total=Count('id'))
+print(stats)  # {'total': 10}</code></pre></div></div>
+</div></div>
+<div class="lib-content" id="lib-tensorflow">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F9E0;</div><div class="lib-hero-info">
+<div class="lib-name">TensorFlow</div><div class="lib-tagline">Machine Learning Framework by Google</div>
+<div class="lib-desc">TensorFlow is Google's open-source ML framework. It enables building and training neural networks for image recognition, NLP, time series, and more. Keras (high-level API) makes it beginner-friendly.</div><div class="lib-install">pip install tensorflow</div>
+<div class="lib-tags"><span class="lib-tag">Neural Networks</span><span class="lib-tag">Deep Learning</span><span class="lib-tag">AI</span><span class="lib-tag">Keras</span><span class="lib-tag">GPU</span><span class="lib-tag">Models</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">Google</span><span class="used-by-badge">Uber</span><span class="used-by-badge">Airbnb</span><span class="used-by-badge">Twitter</span><span class="used-by-badge">DeepMind</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">Tensor</div><div class="concept-desc">Multi-dimensional array. The fundamental data structure in TensorFlow.</div></div>
+<div class="concept-item"><div class="concept-name">Model</div><div class="concept-desc">A neural network. Sequential or Functional API.</div></div>
+<div class="concept-item"><div class="concept-name">Layer</div><div class="concept-desc">Building block: Dense, Conv2D, LSTM, Dropout, etc.</div></div>
+<div class="concept-item"><div class="concept-name">Activation</div><div class="concept-desc">Non-linear function: relu, sigmoid, softmax, tanh.</div></div>
+<div class="concept-item"><div class="concept-name">Loss Function</div><div class="concept-desc">Measures how wrong predictions are: MSE, CrossEntropy.</div></div>
+<div class="concept-item"><div class="concept-name">Optimizer</div><div class="concept-desc">Updates weights to minimize loss: Adam, SGD, RMSprop.</div></div>
+<div class="concept-item"><div class="concept-name">Epoch</div><div class="concept-desc">One complete pass through training data.</div></div>
+<div class="concept-item"><div class="concept-name">Batch Size</div><div class="concept-desc">Number of samples processed before updating weights.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete TensorFlow/Keras Guide</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+
+# SIMPLE NEURAL NETWORK
+model = keras.Sequential([
+    keras.layers.Dense(128, activation='relu', input_shape=(784,)),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(64, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')  # 10 classes
+])
+
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+model.summary()
+
+# MNIST DIGIT RECOGNITION
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+x_train = x_train.reshape(-1, 784) / 255.0  # normalize
+x_test = x_test.reshape(-1, 784) / 255.0
+
+history = model.fit(
+    x_train, y_train,
+    epochs=5,
+    batch_size=32,
+    validation_split=0.1,
+    verbose=1
+)
+
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print(f"Test accuracy: {test_acc:.4f}")
+
+# MAKE PREDICTIONS
+predictions = model.predict(x_test[:5])
+predicted_classes = np.argmax(predictions, axis=1)
+print(f"Predicted: {predicted_classes}")
+print(f"Actual: {y_test[:5]}")
+
+# SAVE AND LOAD
+model.save('digit_model.h5')
+loaded_model = keras.models.load_model('digit_model.h5')
+
+# CONVOLUTIONAL NEURAL NETWORK (CNN)
+cnn_model = keras.Sequential([
+    keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)),
+    keras.layers.MaxPooling2D(2,2),
+    keras.layers.Conv2D(64, (3,3), activation='relu'),
+    keras.layers.MaxPooling2D(2,2),
+    keras.layers.Flatten(),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
+])</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project: Digit Classifier</div><div class="project-desc">Train a neural network to recognize handwritten digits.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+
+# Load MNIST dataset
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+# Preprocess
+x_train = x_train.reshape(-1, 784).astype('float32') / 255.0
+x_test = x_test.reshape(-1, 784).astype('float32') / 255.0
+
+# Build model
+model = keras.Sequential([
+    keras.layers.Dense(256, activation='relu', input_shape=(784,)),
+    keras.layers.Dropout(0.3),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+# Train
+print("Training...")
+history = model.fit(x_train, y_train, epochs=5, batch_size=128, validation_split=0.1)
+
+# Evaluate
+loss, acc = model.evaluate(x_test, y_test, verbose=0)
+print(f"Test Accuracy: {acc*100:.2f}%")
+
+# Predict
+sample = x_test[0:1]
+pred = model.predict(sample)
+print(f"Predicted digit: {pred.argmax()}")
+print(f"Actual digit: {y_test[0]}")</code></pre></div></div>
+</div></div>
+<div class="lib-content" id="lib-opencv">
+<div class="lib-hero"><div class="lib-hero-icon">&#x1F441;</div><div class="lib-hero-info">
+<div class="lib-name">OpenCV</div><div class="lib-tagline">Computer Vision Library</div>
+<div class="lib-desc">OpenCV (Open Source Computer Vision) is the world's largest computer vision library. It provides tools for image processing, video analysis, face detection, object tracking, and more. Used in robotics, security, medical imaging.</div><div class="lib-install">pip install opencv-python</div>
+<div class="lib-tags"><span class="lib-tag">Computer Vision</span><span class="lib-tag">Images</span><span class="lib-tag">Video</span><span class="lib-tag">Face Detection</span><span class="lib-tag">Object Tracking</span></div>
+<div class="lib-used-by"><span style="font-size:.78rem;color:var(--text-muted);">Used by:</span><span class="used-by-badge">Tesla</span><span class="used-by-badge">Google</span><span class="used-by-badge">Microsoft</span><span class="used-by-badge">Intel</span><span class="used-by-badge">NASA</span></div>
+</div></div>
+<div class="section-card"><h3>&#x1F9E0; Core Concepts</h3><div class="concept-grid">
+<div class="concept-item"><div class="concept-name">imread()</div><div class="concept-desc">Load image from file as NumPy array.</div></div>
+<div class="concept-item"><div class="concept-name">imshow()</div><div class="concept-desc">Display image in a window.</div></div>
+<div class="concept-item"><div class="concept-name">cvtColor()</div><div class="concept-desc">Convert between color spaces: BGR, RGB, GRAY, HSV.</div></div>
+<div class="concept-item"><div class="concept-name">resize()</div><div class="concept-desc">Resize image to specified dimensions.</div></div>
+<div class="concept-item"><div class="concept-name">GaussianBlur()</div><div class="concept-desc">Blur image to reduce noise.</div></div>
+<div class="concept-item"><div class="concept-name">Canny()</div><div class="concept-desc">Edge detection algorithm.</div></div>
+<div class="concept-item"><div class="concept-name">CascadeClassifier</div><div class="concept-desc">Pre-trained classifier for face/eye detection.</div></div>
+<div class="concept-item"><div class="concept-name">VideoCapture()</div><div class="concept-desc">Capture video from camera or file.</div></div>
+</div></div>
+<div class="section-card"><h3>&#x1F4BB; Complete OpenCV Guide</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import cv2
+import numpy as np
+
+# READ AND DISPLAY IMAGE
+img = cv2.imread('photo.jpg')
+print(f"Shape: {img.shape}")  # (height, width, channels)
+print(f"Dtype: {img.dtype}")  # uint8
+
+# COLOR CONVERSION
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+# RESIZE
+resized = cv2.resize(img, (300, 300))
+half = cv2.resize(img, None, fx=0.5, fy=0.5)
+
+# BLUR AND DENOISE
+blurred = cv2.GaussianBlur(img, (15, 15), 0)
+median = cv2.medianBlur(img, 5)
+
+# EDGE DETECTION
+edges = cv2.Canny(gray, 100, 200)
+
+# DRAWING
+img_copy = img.copy()
+cv2.rectangle(img_copy, (50,50), (200,200), (0,255,0), 2)
+cv2.circle(img_copy, (300,300), 50, (255,0,0), -1)
+cv2.putText(img_copy, 'OpenCV', (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+
+# FACE DETECTION
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+for (x, y, w, h) in faces:
+    cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
+print(f"Faces found: {len(faces)}")
+
+# VIDEO CAPTURE
+cap = cv2.VideoCapture(0)  # 0 = webcam
+while True:
+    ret, frame = cap.read()
+    if not ret: break
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cv2.imshow('Webcam', gray_frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()</code></pre></div></div>
+<div class="section-card"><h3>&#x1F3AF; Mini Projects</h3>
+<div class="project-card"><div class="project-title">Project: Face Detector</div><div class="project-desc">Detect faces in images using Haar Cascades.</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+<pre><code class="language-python">import cv2
+import numpy as np
+
+# Create a simple test image with a face-like pattern
+img = np.zeros((400, 400, 3), dtype=np.uint8)
+img[:] = (30, 30, 50)  # dark background
+
+# Draw a simple face
+cv2.circle(img, (200, 180), 100, (200, 180, 150), -1)  # face
+cv2.circle(img, (165, 155), 15, (50, 50, 50), -1)      # left eye
+cv2.circle(img, (235, 155), 15, (50, 50, 50), -1)      # right eye
+cv2.ellipse(img, (200, 210), (40, 20), 0, 0, 180, (150, 80, 80), -1)  # mouth
+
+# Convert to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Load face detector
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+# Detect faces
+faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+print(f"Detected {len(faces)} face(s)")
+
+# Draw rectangles
+for (x, y, w, h) in faces:
+    cv2.rectangle(img, (x,y), (x+w,y+h), (0,255,0), 2)
+    cv2.putText(img, 'Face', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
+
+cv2.imshow('Face Detection', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()</code></pre></div></div>
+</div></div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+function showLib(name) {
+  document.querySelectorAll('.lib-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.lib-tab').forEach(el => el.classList.remove('active'));
+  const content = document.getElementById('lib-' + name);
+  if (content) {
+    content.classList.add('active');
+    content.querySelectorAll('pre code').forEach(el => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+    });
+  }
+  event.target.classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Highlight first tab content
+  const first = document.querySelector('.lib-content.active');
+  if (first) {
+    first.querySelectorAll('pre code').forEach(el => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+    });
+  }
+});
+</script>
+</body></html>

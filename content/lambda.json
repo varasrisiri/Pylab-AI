@@ -1,0 +1,117 @@
+{
+  "title": "Lambda Functions",
+  "icon": "lambda",
+  "level": "advanced",
+  "simple_definition": "Lambda functions are small anonymous one-line functions. Perfect for short operations passed as arguments.",
+  "technical_definition": "Lambda creates anonymous function objects: lambda args: expression. Used with map(), filter(), sorted().",
+  "analogy": "A lambda is like a sticky note — a quick temporary function for a simple task.",
+  "syntax": "add = lambda x, y: x + y\nprint(add(3, 5))\n\ndoubled = list(map(lambda x: x*2, [1,2,3]))\nevens = list(filter(lambda x: x%2==0, [1,2,3,4]))\npeople.sort(key=lambda p: p[1])",
+  "example_desc": "Practical examples demonstrating Lambda Functions.",
+  "code_example": "square = lambda x: x**2\nprint(square(5))\n\nnumbers = [1, 2, 3, 4, 5]\ndoubled = list(map(lambda x: x * 2, numbers))\nprint(doubled)\n\nevens = list(filter(lambda x: x % 2 == 0, numbers))\nprint(evens)\n\nstudents = [('Alice', 85), ('Bob', 92), ('Charlie', 78)]\nby_grade = sorted(students, key=lambda s: s[1], reverse=True)\nprint(by_grade)\n\nfrom functools import reduce\nproduct = reduce(lambda x, y: x * y, numbers)\nprint(product)",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Lambda Functions",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Lambda Functions is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Lambda Functions",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Lambda Functions",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Lambda Functions",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "You need to sort a list of tuples by the second element:\n\nstudents = [('Alice',85), ('Bob',92), ('Charlie',78)]\n\nWithout lambda:\ndef get_score(student):\n    return student[1]\nstudents.sort(key=get_score)\n\nWith lambda:\nstudents.sort(key=lambda s: s[1])\n\nLambda lets you write small functions inline without naming them.",
+  "why_matters": "Lambda functions are used with:\n🔄 sorted(), sort() — custom sort keys\n🗺️ map() — transform each element\n🔍 filter() — keep elements matching condition\n📊 pandas — apply operations to dataframes\n🎯 GUI callbacks — button click handlers",
+  "important_points": [
+    "⭐ Lambda syntax: lambda arguments: expression (single expression only!)",
+    "⭐ Lambda returns the expression value automatically — no return keyword",
+    "⭐ Lambda can take multiple arguments: lambda x, y: x + y",
+    "⭐ Lambda is anonymous — no name, used inline",
+    "⭐ For complex logic, use a regular def function — readability matters",
+    "⭐ map(func, lst) applies func to each element — returns iterator",
+    "⭐ filter(func, lst) keeps elements where func returns True"
+  ],
+  "dry_run": {
+    "title": "Dry Run: sorted([('Bob',92),('Alice',85)], key=lambda s: s[1])",
+    "steps": [
+      {
+        "step": 1,
+        "state": "sorted() called",
+        "action": "Python needs to compare elements using key function",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "lambda s: s[1]",
+        "action": "For ('Bob',92): lambda returns 92",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "lambda s: s[1]",
+        "action": "For ('Alice',85): lambda returns 85",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "compare 92 vs 85",
+        "action": "85 < 92, so Alice comes first",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "sorted result",
+        "action": "Return sorted list",
+        "output": "[('Alice', 85), ('Bob', 92)]"
+      }
+    ]
+  }
+}

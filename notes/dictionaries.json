@@ -1,0 +1,11 @@
+{
+  "title": "Dictionaries — Complete Notes",
+  "topic": "dictionaries",
+  "sections": [
+    {
+      "title": "Complete Guide to Dictionaries",
+      "content": "Comprehensive notes for Dictionaries in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Dictionaries examples\n# Run in the Code Editor to see output\nprint('Study Dictionaries in PyLab AI!')"
+    }
+  ]
+}

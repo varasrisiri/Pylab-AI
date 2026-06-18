@@ -1,0 +1,117 @@
+{
+  "title": "Generators and Iterators",
+  "icon": "lightning",
+  "level": "advanced",
+  "simple_definition": "Generators produce values one at a time using yield, saving memory for large datasets.",
+  "technical_definition": "Generators implement the iterator protocol lazily using yield. Generator expressions use () syntax.",
+  "analogy": "A generator is like a tap — gives water one drop at a time instead of filling a tank.",
+  "syntax": "def my_gen(n):\n    for i in range(n):\n        yield i\n\nfor val in my_gen(5):\n    print(val)\n\ngen_expr = (x**2 for x in range(10))\nprint(next(gen_expr))",
+  "example_desc": "Practical examples demonstrating Generators and Iterators.",
+  "code_example": "def fibonacci(limit):\n    a, b = 0, 1\n    while a < limit:\n        yield a\n        a, b = b, a + b\n\nfor n in fibonacci(50):\n    print(n, end=' ')\nprint()\n\nsquares = (x**2 for x in range(10))\nprint(list(squares))\n\ndef infinite_counter(start=0):\n    n = start\n    while True:\n        yield n\n        n += 1\n\nc = infinite_counter(1)\nprint([next(c) for _ in range(5)])\n\nimport itertools\nprint(list(itertools.islice(infinite_counter(), 5)))",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Generators and Iterators",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Generators and Iterators is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Generators and Iterators",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Generators and Iterators",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Generators and Iterators",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "Suppose you need to process 1 million numbers.\n\nWith a list:\nnumbers = [x**2 for x in range(1000000)]\n# Creates ALL 1 million numbers in memory at once! 😱\n# Uses ~8MB of RAM\n\nWith a generator:\nnumbers = (x**2 for x in range(1000000))\n# Creates numbers ONE AT A TIME as needed\n# Uses ~200 bytes of RAM!\n\nGenerators are memory-efficient — they generate values lazily.",
+  "why_matters": "Generators are essential for:\n📊 Big Data: process files too large to fit in memory\n🌐 Streaming: process data as it arrives\n🔄 Infinite sequences: generate values forever\n⚡ Performance: avoid creating large intermediate lists",
+  "important_points": [
+    "⭐ yield pauses the function and returns a value — resumes from same point next call",
+    "⭐ Generator functions return a generator OBJECT — values computed on demand (lazy)",
+    "⭐ Generator expressions use () instead of [] — like list comprehension but lazy",
+    "⭐ next() gets the next value; StopIteration raised when exhausted",
+    "⭐ Generators can only be iterated ONCE — they are not reusable",
+    "⭐ itertools module provides powerful generator-based utilities",
+    "⭐ yield from delegates to another generator (Python 3.3+)"
+  ],
+  "dry_run": {
+    "title": "Dry Run: gen = count_up(3); next(gen) three times",
+    "steps": [
+      {
+        "step": 1,
+        "state": "gen = count_up(3)",
+        "action": "Creates generator object — function body NOT executed yet",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "next(gen)",
+        "action": "Execute until first yield: i=0, yield 0 — PAUSE",
+        "output": "0"
+      },
+      {
+        "step": 3,
+        "state": "next(gen)",
+        "action": "Resume from yield: i=1, yield 1 — PAUSE",
+        "output": "1"
+      },
+      {
+        "step": 4,
+        "state": "next(gen)",
+        "action": "Resume: i=2, yield 2 — PAUSE",
+        "output": "2"
+      },
+      {
+        "step": 5,
+        "state": "next(gen)",
+        "action": "Resume: i=3, loop ends, StopIteration raised",
+        "output": "StopIteration"
+      }
+    ]
+  }
+}

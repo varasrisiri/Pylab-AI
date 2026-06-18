@@ -1,0 +1,96 @@
+{
+  "slug": "django-ecommerce",
+  "title": "E-Commerce Platform",
+  "icon": "&#x1F6D2;",
+  "level": "advanced",
+  "desc": "Full e-commerce site with cart, payments, admin",
+  "time": "20-30 hours",
+  "tags": [
+    "Django",
+    "Stripe",
+    "PostgreSQL",
+    "REST"
+  ],
+  "github_template": "django-ecommerce",
+  "concepts_needed": [
+    "Django",
+    "Stripe",
+    "PostgreSQL",
+    "REST"
+  ],
+  "what_you_build": "Full e-commerce site with cart, payments, admin",
+  "what_you_learn": [
+    "How to use Django in a real project",
+    "Project structure and organization",
+    "Error handling and edge cases",
+    "Git workflow and GitHub",
+    "Writing clean, readable code"
+  ],
+  "folder_structure": "django-ecommerce/\n├── main.py\n├── requirements.txt\n└── README.md",
+  "steps": [
+    {
+      "num": 1,
+      "title": "Setup & Plan",
+      "desc": "Create project folder, initialize git, plan features.",
+      "code": "mkdir django-ecommerce\ncd django-ecommerce\ngit init\ntouch main.py README.md",
+      "hint": "Plan before coding! Write down 3-5 features you want to build."
+    },
+    {
+      "num": 2,
+      "title": "Build Core Features",
+      "desc": "Implement the main functionality of E-Commerce Platform.",
+      "code": "# Start with the simplest version\n# Add features one by one\n# Test each feature before moving on",
+      "hint": "Build the minimum working version first, then add features."
+    },
+    {
+      "num": 3,
+      "title": "Add Error Handling",
+      "desc": "Handle edge cases and invalid inputs.",
+      "code": "try:\n    # your code\nexcept ValueError as e:\n    print(f'Error: {e}')",
+      "hint": "Think: what could go wrong? Handle each case."
+    },
+    {
+      "num": 4,
+      "title": "Test & Polish",
+      "desc": "Test with different inputs, fix bugs, clean up code.",
+      "code": "# Test with:\n# - Normal inputs\n# - Edge cases (empty, zero, negative)\n# - Invalid inputs",
+      "hint": "Test with inputs you DON'T expect, not just the happy path."
+    },
+    {
+      "num": 5,
+      "title": "Push to GitHub",
+      "desc": "Write README and push your project to GitHub.",
+      "code": "git add .\ngit commit -m 'feat: complete E-Commerce Platform'\ngit push origin main",
+      "hint": "A good README makes your project stand out to recruiters!"
+    }
+  ],
+  "extensions": [
+    "Add more features",
+    "Build a GUI version",
+    "Add a web interface with Flask",
+    "Write unit tests",
+    "Deploy to the cloud"
+  ],
+  "concepts_needed_links": [
+    {
+      "name": "Django",
+      "url": "/libraries",
+      "external": false
+    },
+    {
+      "name": "Stripe",
+      "url": null,
+      "external": false
+    },
+    {
+      "name": "PostgreSQL",
+      "url": null,
+      "external": false
+    },
+    {
+      "name": "REST",
+      "url": "/learn/apis",
+      "external": false
+    }
+  ]
+}

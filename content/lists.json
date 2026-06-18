@@ -1,0 +1,114 @@
+{
+  "title": "Lists & Tuples",
+  "icon": "📋",
+  "level": "intermediate",
+  "simple_definition": "Lists are ordered collections that can hold multiple items. Tuples are like lists but cannot be changed after creation.",
+  "technical_definition": "Lists are mutable, dynamic arrays. Tuples are immutable sequences. Both support indexing, slicing, and iteration.",
+  "analogy": "A list is like a shopping cart — you can add, remove, or change items. A tuple is like a sealed package — once created, you can't modify it.",
+  "syntax": "# List\nfruits = ['apple', 'banana', 'cherry']\nfruits.append('date')\nfruits[0] = 'apricot'\n\n# Tuple\ncoords = (10, 20)\n# coords[0] = 15  # Error! Tuples are immutable\n\n# Unpacking\nx, y = coords",
+  "example_desc": "Creating, modifying, and working with lists and tuples.",
+  "code_example": "# Lists\nnumbers = [1, 2, 3, 4, 5]\nprint(numbers[0])      # 1 (first item)\nprint(numbers[-1])     # 5 (last item)\nprint(numbers[1:3])    # [2, 3] (slicing)\n\n# List methods\nnumbers.append(6)\nnumbers.insert(0, 0)\nnumbers.remove(3)\nprint(numbers)         # [0, 1, 2, 4, 5, 6]\n\n# List comprehension\nsquares = [x**2 for x in range(5)]\nprint(squares)         # [0, 1, 4, 9, 16]\n\n# Tuples\npoint = (10, 20, 30)\nx, y, z = point\nprint(f'x={x}, y={y}, z={z}')\n\n# Tuple packing/unpacking\ndata = 'Alice', 25, 'NYC'\nname, age, city = data\nprint(f'{name} is {age} from {city}')",
+  "output": "1\n5\n[2, 3]\n[0, 1, 2, 4, 5, 6]\n[0, 1, 4, 9, 16]\nx=10, y=20, z=30\nAlice is 25 from NYC",
+  "logic_steps": [
+    "Lists use square brackets [], tuples use parentheses ()",
+    "Both are indexed starting from 0",
+    "Negative indices count from the end: -1 is last item",
+    "Slicing: list[start:end] (end is exclusive)",
+    "Lists are mutable: can add, remove, modify items",
+    "Tuples are immutable: cannot be changed after creation",
+    "List comprehensions: [expression for item in iterable]"
+  ],
+  "edge_cases": [
+    "Empty list: [] or list(), empty tuple: () or tuple()",
+    "Single-item tuple needs trailing comma: (1,) not (1)",
+    "Slicing beyond bounds doesn't error: [1,2,3][10:20] returns []"
+  ],
+  "common_mistakes": [
+    "Forgetting that tuples are immutable: point[0] = 5 raises TypeError",
+    "Single-item tuple without comma: (1) is int, not tuple",
+    "Modifying list while iterating: can cause unexpected behavior"
+  ],
+  "interview_tips": [
+    "Lists are O(1) for append, O(n) for insert at beginning",
+    "Use tuples for fixed data, lists for dynamic data",
+    "List comprehensions are faster than for loops",
+    "sorted() returns new list, list.sort() modifies in-place"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Create a list of 5 numbers and print the first and last",
+        "hint": "nums[0] and nums[-1]"
+      },
+      {
+        "question": "Reverse a list using slicing",
+        "hint": "lst[::-1]"
+      },
+      {
+        "question": "Create a tuple with 3 items and unpack them",
+        "hint": "t = (1,2,3); a,b,c = t"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Remove duplicates from a list while preserving order",
+        "hint": "Use dict.fromkeys() or seen set"
+      },
+      {
+        "question": "Flatten a nested list [[1,2],[3,4]] into [1,2,3,4]",
+        "hint": "List comprehension: [x for sublist in lst for x in sublist]"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Implement a function to rotate a list by k positions",
+        "hint": "lst[k:] + lst[:k]"
+      },
+      {
+        "question": "Find all pairs in a list that sum to a target",
+        "hint": "Use two pointers or hash map"
+      }
+    ]
+  },
+  "problem_first": "Suppose you want to store marks of 50 students.\n\nWithout lists:\nmark1 = 85\nmark2 = 90\nmark3 = 78\n... (47 more variables!)\n\nHow do you find the average? You'd write:\n(mark1+mark2+mark3+...+mark50) / 50\n\nWith a list:\nmarks = [85, 90, 78, 92, 88, ...]  # all 50 in ONE variable\naverage = sum(marks) / len(marks)  # 2 lines!\n\nLists make working with collections of data simple.",
+  "why_matters": "Lists are the most used data structure in Python:\n�� Data Science: datasets are lists of records\n🌐 Web: list of users, products, orders\n🤖 ML: training data, predictions are lists\n🎮 Games: inventory, leaderboard, enemies\n📱 Apps: todo items, messages, contacts\n\nIf you master lists, you master 50% of Python data handling.",
+  "important_points": [
+    "⭐ Lists are MUTABLE — you can add, remove, and change items after creation",
+    "⭐ Indexing starts at 0: lst[0]=first, lst[-1]=last",
+    "⭐ Slicing: lst[start:stop:step] — creates a NEW list, original unchanged",
+    "⭐ append() adds to END; insert(i, x) adds at position i; extend() adds multiple",
+    "⭐ remove() removes first occurrence by VALUE; pop(i) removes by INDEX",
+    "⭐ sorted() returns NEW sorted list; list.sort() modifies IN-PLACE",
+    "⭐ List comprehension [x for x in lst if condition] is faster than for+append",
+    "⭐ lst1 = lst2 copies REFERENCE (same object!); use lst2 = lst1.copy() for new list"
+  ],
+  "dry_run": {
+    "title": "Dry Run: lst = [3,1,4,1,5]; lst.sort(); print(lst)",
+    "steps": [
+      {
+        "step": 1,
+        "state": "lst = [3,1,4,1,5]",
+        "action": "List created with 5 elements at indices 0-4",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "lst.sort()",
+        "action": "Python sorts IN-PLACE using Timsort algorithm",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "lst = [1,1,3,4,5]",
+        "action": "List is now sorted ascending",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "print(lst)",
+        "action": "Print the sorted list",
+        "output": "[1, 1, 3, 4, 5]"
+      }
+    ]
+  }
+}

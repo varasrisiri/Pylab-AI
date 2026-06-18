@@ -1,0 +1,112 @@
+{
+  "title": "Data Types in Python",
+  "icon": "🔢",
+  "level": "beginner",
+  "simple_definition": "Data types define what kind of value a variable can hold — numbers, text, true/false, etc.",
+  "technical_definition": "Python has built-in data types: int, float, str, bool, None, and complex. All are objects with methods and attributes.",
+  "analogy": "Data types are like categories of items in a store. Numbers go in one section, text in another, true/false in another. Each category has its own rules.",
+  "syntax": "# Basic types\nnum = 42              # int\nprice = 19.99         # float\nname = 'Python'       # str\nis_active = True      # bool\nnothing = None        # NoneType\n\n# Type conversion\nstr(42)    # '42'\nint('42')  # 42\nfloat(42)  # 42.0",
+  "example_desc": "Working with different data types and type conversion.",
+  "code_example": "# Integer\nage = 25\nprint(f'Age: {age}, Type: {type(age)}')\n\n# Float\nprice = 99.99\nprint(f'Price: ${price}, Type: {type(price)}')\n\n# String\nname = 'Python'\nprint(f'Name: {name}, Type: {type(name)}')\n\n# Boolean\nis_valid = True\nprint(f'Valid: {is_valid}, Type: {type(is_valid)}')\n\n# None\nresult = None\nprint(f'Result: {result}, Type: {type(result)}')\n\n# Type conversion\nnum_str = '123'\nnum_int = int(num_str)\nprint(f'{num_str} + 10 = {num_int + 10}')",
+  "output": "Age: 25, Type: <class 'int'>\nPrice: $99.99, Type: <class 'float'>\nName: Python, Type: <class 'str'>\nValid: True, Type: <class 'bool'>\nResult: None, Type: <class 'NoneType'>\n123 + 10 = 133",
+  "logic_steps": [
+    "Python automatically infers the type from the value",
+    "int: whole numbers (positive, negative, zero)",
+    "float: decimal numbers",
+    "str: text enclosed in quotes (single or double)",
+    "bool: True or False (capitalized)",
+    "None: represents absence of value",
+    "Type conversion: int(), float(), str(), bool()"
+  ],
+  "edge_cases": [
+    "int('3.14') raises ValueError — use float() first",
+    "bool('False') returns True — any non-empty string is truthy",
+    "Division always returns float: 10 / 2 = 5.0"
+  ],
+  "common_mistakes": [
+    "Forgetting quotes around strings: name = Python (NameError)",
+    "Using lowercase for booleans: true instead of True",
+    "Trying to add string and int: '5' + 5 (TypeError)"
+  ],
+  "interview_tips": [
+    "Python 3 has unlimited precision integers (no overflow)",
+    "Strings are immutable — cannot be changed after creation",
+    "Truthy vs Falsy: 0, '', [], None, False are falsy; everything else is truthy",
+    "Use isinstance() to check types: isinstance(x, int)"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Create variables of each basic type and print their types",
+        "hint": "Use type() function"
+      },
+      {
+        "question": "Convert the string '42' to an integer and add 8",
+        "hint": "int('42') + 8"
+      },
+      {
+        "question": "Check if the string '0' is truthy or falsy",
+        "hint": "bool('0') — non-empty strings are truthy"
+      }
+    ],
+    "medium": [
+      {
+        "question": "What is the result of: int(3.9)? Explain.",
+        "hint": "int() truncates, doesn't round: result is 3"
+      },
+      {
+        "question": "Convert a list [1,2,3] to a string",
+        "hint": "str([1,2,3]) or ','.join(map(str, [1,2,3]))"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Explain the difference between == and is for comparing values",
+        "hint": "== compares values, is compares identity (memory address)"
+      },
+      {
+        "question": "What happens with: x = 256; y = 256; x is y vs x = 257; y = 257; x is y?",
+        "hint": "Python caches small integers (-5 to 256)"
+      }
+    ]
+  },
+  "problem_first": "Python needs to know WHAT kind of data you're working with.\n\n5 + 3 = 8 (numbers)\n'5' + '3' = '53' (strings — concatenation!)\n\nSame + operator, completely different behavior!\nThat's why data types matter.",
+  "why_matters": "Understanding data types prevents bugs:\n❌ '5' + 3 → TypeError (can't add string and int)\n✅ int('5') + 3 → 8 (convert first!)\n\nType errors are one of the most common Python bugs.",
+  "important_points": [
+    "⭐ Python has 8 built-in types: int, float, str, bool, list, tuple, dict, set",
+    "⭐ type() function returns the type of any value",
+    "⭐ isinstance(x, type) checks if x is of that type (preferred over type())",
+    "⭐ Type conversion: int(), float(), str(), bool(), list(), tuple(), set()",
+    "⭐ bool is a subclass of int: True==1, False==0",
+    "⭐ None is its own type (NoneType) — represents absence of value"
+  ],
+  "dry_run": {
+    "title": "Dry Run: x = int('42'); print(x + 8)",
+    "steps": [
+      {
+        "step": 1,
+        "state": "'42' is str",
+        "action": "int('42') converts string '42' to integer 42",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "x = 42 (int)",
+        "action": "x is now integer 42",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "x + 8",
+        "action": "42 + 8 = 50 (integer addition)",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "print(50)",
+        "action": "Output",
+        "output": "50"
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "title": "File Handling",
+  "icon": "folder",
+  "level": "intermediate",
+  "simple_definition": "File handling lets you read from and write to files — essential for working with real data.",
+  "technical_definition": "Python uses open() with context managers for safe file I/O. Supports text and binary modes.",
+  "analogy": "File handling is like opening a book — open it, read or write, then close it.",
+  "syntax": "with open('file.txt', 'r') as f:\n    content = f.read()\n\nwith open('file.txt', 'w') as f:\n    f.write('Hello!')\n\nwith open('file.txt', 'a') as f:\n    f.write('More')\n\nwith open('file.txt', 'r') as f:\n    lines = f.readlines()",
+  "example_desc": "Practical examples demonstrating File Handling.",
+  "code_example": "import os\n\n# Write\nwith open('test.txt', 'w') as f:\n    f.write('Alice,90\\n')\n    f.write('Bob,85\\n')\n    f.write('Charlie,92\\n')\n\n# Read all\nwith open('test.txt', 'r') as f:\n    content = f.read()\nprint(content)\n\n# Read lines\nwith open('test.txt', 'r') as f:\n    for line in f:\n        name, score = line.strip().split(',')\n        print(f'{name}: {score}')\n\n# Cleanup\nos.remove('test.txt')\nprint('Done')",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of File Handling",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "File Handling is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using File Handling",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using File Handling",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using File Handling",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "Your program processes student data.\nBut when the program closes, all data is LOST!\n\nWithout file handling:\nstudents = ['Alice', 'Bob']  # lost when program ends!\n\nWith file handling:\nwith open('students.txt', 'w') as f:\n    f.write('Alice\\nBob')\n# Data saved permanently! ✅\n\nFile handling = making data PERSISTENT.",
+  "why_matters": "File handling is essential for:\n📊 Data processing: read CSV, JSON, XML files\n📝 Logging: save error logs\n⚙️ Config: read settings from files\n💾 Persistence: save user data between sessions\n📤 Export: generate reports, PDFs",
+  "important_points": [
+    "⭐ Always use 'with open()' — it automatically closes the file even if error occurs",
+    "⭐ Modes: 'r'=read, 'w'=write(overwrite), 'a'=append, 'r+'=read+write",
+    "⭐ 'b' suffix for binary: 'rb', 'wb' — for images, PDFs, etc.",
+    "⭐ read() reads entire file; readline() reads one line; readlines() reads all lines as list",
+    "⭐ write() writes string; writelines() writes list of strings",
+    "⭐ encoding='utf-8' should always be specified for text files",
+    "⭐ os.path.exists() checks if file exists before opening"
+  ],
+  "dry_run": {
+    "title": "Dry Run: with open('test.txt','w') as f: f.write('Hello')",
+    "steps": [
+      {
+        "step": 1,
+        "state": "open('test.txt','w')",
+        "action": "Open/create test.txt in write mode",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "f = file object",
+        "action": "File object assigned to f",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "f.write('Hello')",
+        "action": "Write 'Hello' to file buffer",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "exit with block",
+        "action": "with block ends → f.close() called automatically",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "file saved",
+        "action": "test.txt now contains 'Hello' on disk",
+        "output": "File written!"
+      }
+    ]
+  }
+}

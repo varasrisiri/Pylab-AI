@@ -1,0 +1,138 @@
+{
+  "title": "Decorators",
+  "icon": "&#x1F3A8;",
+  "level": "advanced",
+  "simple_definition": "A decorator is a function that takes another function and adds extra behavior to it without changing the original function's code.",
+  "technical_definition": "Decorators are higher-order functions that use the @syntax sugar. They wrap a function, modifying its behavior. Python's functools.wraps preserves the original function's metadata.",
+  "analogy": "Think of a decorator like a gift wrapper. The gift (function) stays the same inside, but the wrapper (decorator) adds extra presentation. You can wrap the same gift in different wrappers.",
+  "syntax": "# Define decorator\ndef my_decorator(func):\n    def wrapper(*args, **kwargs):\n        # before\n        result = func(*args, **kwargs)\n        # after\n        return result\n    return wrapper\n\n# Apply decorator\n@my_decorator\ndef my_function():\n    pass\n\n# Equivalent to:\nmy_function = my_decorator(my_function)",
+  "example_desc": "Practical decorators for timing, logging, and access control.",
+  "code_example": "import time\nfrom functools import wraps\n\n# Timer decorator\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        end = time.time()\n        print(f'{func.__name__} took {end-start:.4f}s')\n        return result\n    return wrapper\n\n# Logger decorator\ndef logger(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f'Calling {func.__name__} with {args}, {kwargs}')\n        result = func(*args, **kwargs)\n        print(f'{func.__name__} returned {result}')\n        return result\n    return wrapper\n\n@timer\n@logger\ndef add_numbers(a, b):\n    time.sleep(0.01)  # simulate work\n    return a + b\n\nresult = add_numbers(3, 5)\nprint(f'Result: {result}')\n\n# Decorator with arguments\ndef repeat(times):\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            for _ in range(times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef say_hello(name):\n    print(f'Hello, {name}!')\n\nsay_hello('Python')",
+  "output": "Calling add_numbers with (3, 5), {}\nadd_numbers returned 8\nadd_numbers took 0.0101s\nResult: 8\nHello, Python!\nHello, Python!\nHello, Python!",
+  "logic_steps": [
+    "@decorator is syntactic sugar for: func = decorator(func)",
+    "The wrapper function receives the original function's arguments via *args, **kwargs",
+    "Code before func() runs BEFORE the original function",
+    "Code after func() runs AFTER the original function",
+    "@wraps(func) preserves __name__, __doc__ of the original function",
+    "Multiple decorators stack from bottom to top: @a @b means a(b(func))",
+    "Decorators with arguments need an extra layer of nesting"
+  ],
+  "edge_cases": [
+    "Without @wraps, the decorated function loses its __name__ and __doc__",
+    "Stacking decorators: @a @b @c applies c first, then b, then a",
+    "Class-based decorators must implement __call__ method"
+  ],
+  "common_mistakes": [
+    "Forgetting to return the wrapper function from the decorator",
+    "Not using *args, **kwargs in wrapper — breaks if original function has parameters",
+    "Calling func() instead of returning func() — loses the return value"
+  ],
+  "interview_tips": [
+    "@property, @classmethod, @staticmethod are built-in decorators — know them well",
+    "functools.lru_cache is a decorator for memoization — very useful for optimization",
+    "Decorators are used heavily in Flask (@app.route), Django, and pytest",
+    "Can you write a decorator without functools.wraps? What breaks?"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a decorator that prints 'Function started' and 'Function ended'",
+        "hint": "Print before and after calling func(*args, **kwargs)"
+      },
+      {
+        "question": "Write a decorator that converts the return value to uppercase",
+        "hint": "return func(*args, **kwargs).upper()"
+      },
+      {
+        "question": "Write a decorator that validates that all arguments are positive numbers",
+        "hint": "Check all args > 0 before calling func"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Write a caching decorator that stores results of expensive function calls",
+        "hint": "Use a dict: cache = {}, key = args"
+      },
+      {
+        "question": "Write a retry decorator that retries a function N times on exception",
+        "hint": "Use a for loop with try/except, raise after N failures"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Write a rate limiter decorator that allows only N calls per second",
+        "hint": "Track timestamps of calls, sleep if limit exceeded"
+      },
+      {
+        "question": "Write a decorator that enforces type checking on function arguments",
+        "hint": "Use func.__annotations__ to get expected types"
+      }
+    ]
+  },
+  "problem_first": "Suppose you want to add timing to 10 different functions.\n\nWithout decorators:\ndef func1():\n    start = time.time()\n    # actual code\n    print(time.time() - start)\n\ndef func2():\n    start = time.time()\n    # actual code  \n    print(time.time() - start)\n# ... repeat 8 more times! 😱\n\nWith a decorator:\n@timer\ndef func1(): # actual code\n\n@timer  \ndef func2(): # actual code\n\nWrite the timing logic ONCE, apply it ANYWHERE with @timer!",
+  "why_matters": "Decorators are used in every major Python framework:\n🌐 Flask: @app.route('/') defines URL routes\n🔐 Django: @login_required protects views\n🧪 pytest: @pytest.fixture sets up test data\n⚡ FastAPI: @app.get('/') creates API endpoints\n🔄 functools: @lru_cache adds memoization\n\nUnderstanding decorators = understanding modern Python frameworks.",
+  "important_points": [
+    "⭐ @decorator is syntactic sugar for: func = decorator(func)",
+    "⭐ The wrapper function MUST accept *args, **kwargs to work with any function",
+    "⭐ Use @functools.wraps(func) to preserve the original function's __name__ and __doc__",
+    "⭐ Multiple decorators stack bottom-up: @a @b means a(b(func))",
+    "⭐ Decorators with arguments need an EXTRA layer of nesting",
+    "⭐ @property, @classmethod, @staticmethod are built-in decorators",
+    "⭐ @functools.lru_cache is a decorator for memoization — very useful for optimization",
+    "⭐ Class-based decorators implement __call__ method"
+  ],
+  "dry_run": {
+    "title": "Dry Run: @timer applied to add(3, 5)",
+    "steps": [
+      {
+        "step": 1,
+        "state": "@timer on add",
+        "action": "Python executes: add = timer(add)",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "add = wrapper",
+        "action": "add now points to wrapper function",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "add(3, 5)",
+        "action": "Calls wrapper(3, 5) — not original add!",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "start = time()",
+        "action": "Record start time",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "func(3, 5)",
+        "action": "Call original add(3, 5) → returns 8",
+        "output": ""
+      },
+      {
+        "step": 6,
+        "state": "elapsed = time()-start",
+        "action": "Calculate elapsed time",
+        "output": ""
+      },
+      {
+        "step": 7,
+        "state": "print elapsed",
+        "action": "Print: 'add took 0.0001s'",
+        "output": "add took 0.0001s"
+      },
+      {
+        "step": 8,
+        "state": "return 8",
+        "action": "Return original result",
+        "output": "8"
+      }
+    ]
+  }
+}

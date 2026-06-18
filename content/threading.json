@@ -1,0 +1,123 @@
+{
+  "title": "Multithreading Basics",
+  "icon": "thread",
+  "level": "advanced",
+  "simple_definition": "Threading lets your program do multiple things at the same time — great for I/O tasks like downloading files.",
+  "technical_definition": "Python threading module creates threads. GIL limits CPU parallelism. Best for I/O-bound tasks.",
+  "analogy": "Threading is like multiple workers in a kitchen — each handles a different task simultaneously.",
+  "syntax": "import threading\n\ndef task(name):\n    print(f'Task {name} running')\n\nt1 = threading.Thread(target=task, args=('A',))\nt2 = threading.Thread(target=task, args=('B',))\nt1.start(); t2.start()\nt1.join(); t2.join()",
+  "example_desc": "Practical examples demonstrating Multithreading Basics.",
+  "code_example": "import threading\nimport time\n\ndef download(name, secs):\n    print(f'Downloading {name}...')\n    time.sleep(secs)\n    print(f'Done: {name}')\n\nstart = time.time()\nt1 = threading.Thread(target=download, args=('file1.zip', 1))\nt2 = threading.Thread(target=download, args=('file2.zip', 1))\nt1.start()\nt2.start()\nt1.join()\nt2.join()\nprint(f'Total time: {time.time()-start:.1f}s')\n\nlock = threading.Lock()\ncounter = 0\ndef increment():\n    global counter\n    with lock:\n        counter += 1\n\nthreads = [threading.Thread(target=increment) for _ in range(100)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f'Counter: {counter}')",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Multithreading Basics",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Multithreading Basics is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Multithreading Basics",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Multithreading Basics",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Multithreading Basics",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "You need to download 5 files. Each takes 2 seconds.\n\nWithout threading (sequential):\ndownload('file1')  # 2s\ndownload('file2')  # 2s\ndownload('file3')  # 2s\n# Total: 10 seconds! 😴\n\nWith threading (parallel):\nt1 = Thread(target=download, args=('file1',))\nt2 = Thread(target=download, args=('file2',))\nt1.start(); t2.start()\n# All 5 files download simultaneously!\n# Total: ~2 seconds! ⚡",
+  "why_matters": "Threading is used for:\n🌐 Web servers: handle multiple requests simultaneously\n📥 Downloads: download multiple files at once\n🖥️ GUI apps: keep UI responsive while processing\n📊 Data: process multiple datasets in parallel",
+  "important_points": [
+    "⭐ GIL (Global Interpreter Lock): Python threads can't run Python code truly in parallel",
+    "⭐ Threading is best for I/O-bound tasks (network, file, database)",
+    "⭐ Use multiprocessing for CPU-bound tasks (calculations, image processing)",
+    "⭐ Race conditions: multiple threads modifying same data → use Lock",
+    "⭐ thread.start() starts the thread; thread.join() waits for it to finish",
+    "⭐ asyncio is modern Python's preferred way for concurrent I/O",
+    "⭐ ThreadPoolExecutor from concurrent.futures is easier than raw threading"
+  ],
+  "dry_run": {
+    "title": "Dry Run: Two threads running simultaneously",
+    "steps": [
+      {
+        "step": 1,
+        "state": "t1 = Thread(target=f)",
+        "action": "Create thread object — not started yet",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "t1.start()",
+        "action": "OS creates new thread, starts executing f()",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "t2.start()",
+        "action": "OS creates second thread, starts executing g()",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "both running",
+        "action": "t1 and t2 run concurrently (interleaved by OS)",
+        "output": "Thread 1 running\nThread 2 running"
+      },
+      {
+        "step": 5,
+        "state": "t1.join()",
+        "action": "Main thread waits for t1 to finish",
+        "output": ""
+      },
+      {
+        "step": 6,
+        "state": "t2.join()",
+        "action": "Main thread waits for t2 to finish",
+        "output": "Both done!"
+      }
+    ]
+  }
+}

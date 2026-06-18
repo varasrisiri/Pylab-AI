@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Python Notebook - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+body{background:var(--bg-primary);}
+.nb-layout{display:flex;flex-direction:column;height:calc(100vh - 64px);}
+.nb-toolbar{display:flex;align-items:center;gap:.5rem;padding:.5rem 1.5rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);flex-shrink:0;flex-wrap:wrap;}
+.nb-title{font-weight:700;color:var(--text-heading);font-family:Fira Code,monospace;font-size:.9rem;margin-right:1rem;}
+.nb-btn{display:flex;align-items:center;gap:.35rem;padding:.4rem .85rem;border-radius:7px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap;}
+.nb-btn:hover{color:var(--accent-primary);border-color:var(--accent-primary);background:rgba(0,212,255,.07);}
+.nb-btn.run-all{background:var(--accent-secondary);color:#000;border-color:var(--accent-secondary);}
+.nb-btn.run-all:hover{box-shadow:var(--glow-secondary);transform:translateY(-1px);color:#000;}
+.nb-body{flex:1;overflow-y:auto;padding:1.5rem;max-width:1000px;margin:0 auto;width:100%;}
+.nb-body::-webkit-scrollbar{width:6px;}
+.cell{margin-bottom:1rem;border:1px solid var(--border-color);border-radius:12px;overflow:hidden;transition:border-color .2s;position:relative;}
+.cell:hover{border-color:var(--border-glow);}
+.cell.active{border-color:var(--accent-primary);box-shadow:var(--glow-primary);}
+.cell-header{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;background:rgba(0,0,0,.25);border-bottom:1px solid var(--border-color);}
+.cell-num{font-size:.72rem;color:var(--text-muted);font-family:Fira Code,monospace;min-width:50px;}
+.cell-type{font-size:.72rem;color:var(--accent-primary);font-weight:600;}
+.cell-actions{margin-left:auto;display:flex;gap:.3rem;}
+.cell-btn{background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:.85rem;padding:.15rem .35rem;border-radius:4px;transition:all .2s;}
+.cell-btn:hover{color:var(--accent-primary);background:rgba(0,212,255,.1);}
+.cell-editor{background:var(--bg-code);}
+.cell-textarea{width:100%;background:transparent;color:#abb2bf;border:none;padding:.85rem 1rem;font-family:Fira Code,monospace;font-size:.88rem;line-height:1.7;resize:none;outline:none;tab-size:4;min-height:60px;}
+.cell-output{border-top:1px solid var(--border-color);background:#011627;padding:.75rem 1rem;font-family:Fira Code,monospace;font-size:.85rem;line-height:1.6;white-space:pre-wrap;color:#abb2bf;display:none;}
+.cell-output.show{display:block;}
+.cell-output.error{color:#ff6b6b;background:rgba(255,71,87,.05);}
+.cell-output.success{border-left:3px solid var(--accent-secondary);}
+.cell-running{display:none;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(0,212,255,.05);border-top:1px solid var(--border-color);font-size:.8rem;color:var(--accent-primary);}
+.cell-running.show{display:flex;}
+.markdown-cell .cell-textarea{color:var(--text-secondary);}
+.markdown-output{padding:1rem;color:var(--text-secondary);line-height:1.8;display:none;}
+.markdown-output.show{display:block;}
+.nb-status{font-size:.75rem;color:var(--text-muted);margin-left:auto;font-family:Fira Code,monospace;}
+.add-cell-bar{display:flex;gap:.5rem;justify-content:center;padding:.5rem;opacity:0;transition:opacity .2s;}
+.add-cell-bar:hover{opacity:1;}
+.cell:hover + .add-cell-bar,.add-cell-bar:hover{opacity:1;}
+.kernel-indicator{display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--accent-secondary);}
+.kernel-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-secondary);animation:pulse-dot .8s infinite;}
+.kernel-dot.busy{background:var(--accent-warning);}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.nb-shortcuts{font-size:.72rem;color:var(--text-muted);padding:.3rem 1.5rem;background:var(--bg-secondary);border-top:1px solid var(--border-color);display:flex;gap:1.5rem;flex-wrap:wrap;}
+.cell-visualizer { border-top: 1px solid var(--border-color); background: var(--bg-secondary); display: flex; flex-direction: column; }
+.cell-visualizer .viz-playback-bar { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.75rem; background: var(--bg-card); }
+.cell-visualizer .viz-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); font-family: Fira Code, monospace; padding: 0.2rem 0.45rem; border-radius: 4px; cursor: pointer; font-size: 0.7rem; transition: all 0.2s; }
+.cell-visualizer .viz-btn:hover { background: var(--accent-primary); color: #000; border-color: var(--accent-primary); }
+.cell-visualizer .viz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.cell-visualizer input[type="range"] { flex: 1; accent-color: var(--accent-primary); cursor: pointer; }
+.viz-code-line { display: flex; padding: 0.05rem 0; border-radius: 3px; }
+.viz-line-num { width: 20px; color: var(--text-muted); text-align: right; padding-right: 0.5rem; user-select: none; font-size: 0.75rem; }
+.viz-line-content { flex: 1; white-space: pre; }
+.viz-code-line.active-line { background: rgba(0, 212, 255, 0.15); border-left: 2px solid var(--accent-primary); }
+.viz-code-line.active-line .viz-line-num { color: var(--accent-primary); font-weight: bold; }
+.viz-code-line.active-line .viz-line-content { color: #fff; }
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/visualizer" class="nav-link" style="color:var(--accent-primary)">⚡ Visualizer</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content" style="margin-top:64px;">
+<div class="nb-layout">
+
+  <!-- Toolbar -->
+  <div class="nb-toolbar">
+    <span class="nb-title">&#x1F4D3; PyLab Notebook</span>
+    <button class="nb-btn run-all" onclick="runAllCells()">&#x25B6;&#x25B6; Run All</button>
+    <button class="nb-btn" onclick="addCodeCell()">&#x2795; Code Cell</button>
+    <button class="nb-btn" onclick="addMarkdownCell()">&#x1F4DD; Markdown</button>
+    <button class="nb-btn" onclick="clearAllOutputs()">&#x1F9F9; Clear Outputs</button>
+    <button class="nb-btn" onclick="saveNotebook()">&#x1F4BE; Save</button>
+    <button class="nb-btn" onclick="loadTemplate('basics')">&#x1F4CB; Basics</button>
+    <button class="nb-btn" onclick="loadTemplate('loops')">&#x1F504; Loops</button>
+    <button class="nb-btn" onclick="loadTemplate('functions')">&#x1F9E9; Functions</button>
+    <button class="nb-btn" onclick="loadTemplate('oop')">&#x1F3D7; OOP</button>
+    <div class="kernel-indicator" style="margin-left:auto;">
+      <div class="kernel-dot" id="kernelDot"></div>
+      <span id="kernelStatus">Python 3 | Ready</span>
+    </div>
+    <span class="nb-status" id="nbStatus"></span>
+  </div>
+
+  <!-- Notebook Body -->
+  <div class="nb-body" id="nbBody">
+    <!-- Cells injected by JS -->
+  </div>
+
+  <!-- Shortcuts bar -->
+  <div class="nb-shortcuts">
+    <span>&#x2328;&#xFE0F; Shortcuts:</span>
+    <span><kbd style="background:var(--bg-card);border:1px solid var(--border-color);padding:.1rem .4rem;border-radius:4px;font-size:.7rem;">Ctrl+Enter</kbd> Run cell</span>
+    <span><kbd style="background:var(--bg-card);border:1px solid var(--border-color);padding:.1rem .4rem;border-radius:4px;font-size:.7rem;">Shift+Enter</kbd> Run + next</span>
+    <span><kbd style="background:var(--bg-card);border:1px solid var(--border-color);padding:.1rem .4rem;border-radius:4px;font-size:.7rem;">Tab</kbd> Indent</span>
+    <span><kbd style="background:var(--bg-card);border:1px solid var(--border-color);padding:.1rem .4rem;border-radius:4px;font-size:.7rem;">Ctrl+S</kbd> Save</span>
+  </div>
+
+</div>
+</main><script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+let cellCounter = 0;
+let executionCounter = 0;
+
+const TEMPLATES = {
+  basics: [
+    {type:'markdown', code:'# Python Basics\nWelcome to PyLab Notebook! Run each cell with **Ctrl+Enter**'},
+    {type:'code', code:'# Variables and Data Types\nname = "Alice"\nage = 25\nheight = 5.9\nis_student = True\n\nprint(f"Name: {name}")\nprint(f"Age: {age}")\nprint(f"Type of age: {type(age)}")'},
+    {type:'code', code:'# Arithmetic Operations\na, b = 15, 4\nprint(f"Add: {a+b}")\nprint(f"Subtract: {a-b}")\nprint(f"Multiply: {a*b}")\nprint(f"Divide: {a/b:.2f}")\nprint(f"Floor div: {a//b}")\nprint(f"Modulo: {a%b}")\nprint(f"Power: {a**b}")'},
+    {type:'code', code:'# String Operations\ns = "Hello, Python!"\nprint(s.upper())\nprint(s.lower())\nprint(s.replace("Python", "PyLab"))\nprint(len(s))\nprint(s[7:13])\nprint(s[::-1])'},
+    {type:'code', code:'# Lists\nfruits = ["apple", "banana", "cherry"]\nfruits.append("date")\nprint(fruits)\nprint(fruits[0], fruits[-1])\nprint(sorted(fruits))\nprint([f.upper() for f in fruits])'}
+  ],
+  loops: [
+    {type:'markdown', code:'# Loops in Python\nExplore for loops, while loops, and list comprehensions'},
+    {type:'code', code:'# For loop with range\nfor i in range(1, 6):\n    print(f"Count: {i}")'},
+    {type:'code', code:'# Loop over list\nfruits = ["apple", "banana", "cherry"]\nfor i, fruit in enumerate(fruits, 1):\n    print(f"{i}. {fruit}")'},
+    {type:'code', code:'# While loop\nn = 10\nwhile n > 0:\n    print(n, end=" ")\n    n -= 2\nprint("Done!")'},
+    {type:'code', code:'# List comprehension\nsquares = [x**2 for x in range(1, 11)]\nprint("Squares:", squares)\n\nevens = [x for x in range(20) if x % 2 == 0]\nprint("Evens:", evens)'},
+    {type:'code', code:'# Pattern printing\nn = 5\nfor i in range(1, n+1):\n    print("*" * i)\nprint()\nfor i in range(n, 0, -1):\n    print("*" * i)'}
+  ],
+  functions: [
+    {type:'markdown', code:'# Functions in Python\nLearn to write reusable, clean functions'},
+    {type:'code', code:'# Basic function\ndef greet(name, greeting="Hello"):\n    return f"{greeting}, {name}!"\n\nprint(greet("Alice"))\nprint(greet("Bob", "Hi"))'},
+    {type:'code', code:'# Multiple return values\ndef stats(numbers):\n    return min(numbers), max(numbers), sum(numbers)/len(numbers)\n\nlo, hi, avg = stats([85, 90, 78, 92, 88])\nprint(f"Min: {lo}, Max: {hi}, Avg: {avg:.1f}")'},
+    {type:'code', code:'# *args and **kwargs\ndef add_all(*nums):\n    return sum(nums)\n\ndef profile(**info):\n    for k, v in info.items():\n        print(f"  {k}: {v}")\n\nprint(add_all(1, 2, 3, 4, 5))\nprofile(name="Alice", age=25, city="NYC")'},
+    {type:'code', code:'# Lambda and higher-order functions\nnums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\ndoubled = list(map(lambda x: x*2, nums))\nevens = list(filter(lambda x: x%2==0, nums))\nprint("Doubled:", doubled)\nprint("Evens:", evens)'},
+    {type:'code', code:'# Recursion\ndef factorial(n):\n    if n <= 1: return 1\n    return n * factorial(n-1)\n\nprint([factorial(i) for i in range(8)])'}
+  ],
+  oop: [
+    {type:'markdown', code:'# Object-Oriented Programming\nClasses, objects, inheritance, and more'},
+    {type:'code', code:'# Basic class\nclass Animal:\n    def __init__(self, name, sound):\n        self.name = name\n        self.sound = sound\n    \n    def speak(self):\n        return f"{self.name} says {self.sound}"\n    \n    def __str__(self):\n        return f"Animal({self.name})"\n\ndog = Animal("Rex", "Woof!")\ncat = Animal("Whiskers", "Meow!")\nprint(dog.speak())\nprint(cat.speak())\nprint(dog)'},
+    {type:'code', code:'# Inheritance\nclass Dog(Animal):\n    def __init__(self, name, breed):\n        super().__init__(name, "Woof!")\n        self.breed = breed\n    \n    def fetch(self):\n        return f"{self.name} fetches the ball!"\n\nrex = Dog("Rex", "Labrador")\nprint(rex.speak())\nprint(rex.fetch())\nprint(isinstance(rex, Animal))'},
+    {type:'code', code:'# Encapsulation\nclass BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.__balance = balance\n    \n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return f"Deposited ${amount}"\n    \n    @property\n    def balance(self):\n        return self.__balance\n\nacc = BankAccount("Alice", 1000)\nprint(acc.deposit(500))\nprint(f"Balance: ${acc.balance}")'}
+  ]
+};
+
+function createCell(type='code', code='', num=null) {
+  cellCounter++;
+  const id = cellCounter;
+  const div = document.createElement('div');
+  div.className = 'cell' + (type === 'markdown' ? ' markdown-cell' : '');
+  div.id = 'cell-' + id;
+  div.setAttribute('data-type', type);
+  
+  div.innerHTML = `
+    <div class="cell-header">
+      <span class="cell-num">In [${num || ' '}]:</span>
+      <span class="cell-type">${type === 'code' ? '&#x1F4BB; Code' : '&#x1F4DD; Markdown'}</span>
+      <div class="cell-actions">
+        ${type === 'code' ? `<button class="cell-btn" id="vizBtn-${id}" onclick="visualizeCell(${id})" title="Visualize execution (dry run)" style="color:var(--accent-primary);font-weight:bold;margin-right:0.25rem;">⚡ Visualize</button>` : ''}
+        <button class="cell-btn" onclick="runCell(${id})" title="Run (Ctrl+Enter)">&#x25B6;</button>
+        <button class="cell-btn" onclick="moveCell(${id},-1)" title="Move Up">&#x2191;</button>
+        <button class="cell-btn" onclick="moveCell(${id},1)" title="Move Down">&#x2193;</button>
+        <button class="cell-btn" onclick="duplicateCell(${id})" title="Duplicate">&#x1F4CB;</button>
+        <button class="cell-btn" onclick="deleteCell(${id})" title="Delete" style="color:var(--accent-danger)">&#x1F5D1;</button>
+      </div>
+    </div>
+    <div class="cell-editor">
+      <textarea class="cell-textarea" id="ta-${id}" 
+        placeholder="${type === 'code' ? '# Write Python code here...' : '# Markdown text here...'}"
+        onkeydown="handleCellKey(event, ${id})"
+        oninput="autoResize(this)"
+      >${code}</textarea>
+    </div>
+    <div class="cell-running" id="running-${id}">
+      <div style="width:12px;height:12px;border-radius:50%;border:2px solid var(--accent-primary);border-top-color:transparent;animation:spin 0.8s linear infinite;"></div>
+      Running...
+    </div>
+    <div class="cell-output" id="out-${id}"></div>
+    
+    <!-- Cell Visualizer -->
+    <div class="cell-visualizer" id="viz-${id}" style="display:none;">
+      <div class="viz-playback-bar">
+        <button class="viz-btn" id="vizFirstBtn-${id}" onclick="cellVizGoToStep(${id}, 0)" title="First Step">|◀</button>
+        <button class="viz-btn" id="vizPrevBtn-${id}" onclick="cellVizPrevStep(${id})" title="Previous Step">◀</button>
+        <button class="viz-btn" id="vizPlayBtn-${id}" onclick="cellVizTogglePlay(${id})" title="Play / Pause">▶ Play</button>
+        <button class="viz-btn" id="vizNextBtn-${id}" onclick="cellVizNextStep(${id})" title="Next Step">▶</button>
+        <button class="viz-btn" id="vizLastBtn-${id}" onclick="cellVizGoToStep(${id}, -1)" title="Last Step">▶|</button>
+        <input type="range" id="vizRangeSlider-${id}" min="0" max="0" value="0" oninput="cellVizOnSliderChange(${id}, this.value)" style="margin:0 0.5rem;">
+        <span style="font-size:0.75rem;color:var(--text-muted);font-family:Fira Code,monospace;margin-right:0.5rem;white-space:nowrap;">Step <span id="currentStep-${id}">0</span>/<span id="totalSteps-${id}">0</span></span>
+        <button class="viz-btn" onclick="toggleCellVisualizer(${id})" style="margin-left:auto;color:var(--accent-danger)">✕ Close</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;border-top:1px solid var(--border-color);overflow:hidden;">
+        <div style="border-right:1px solid var(--border-color);padding:0.75rem;background:#011627;max-height:220px;overflow-y:auto;font-family:Fira Code,monospace;font-size:0.8rem;line-height:1.6;" id="vizCodeContainer-${id}"></div>
+        <div style="padding:0.75rem;background:var(--bg-code);max-height:220px;overflow-y:auto;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="flex:1;overflow-y:auto;margin-bottom:0.5rem;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.75rem;text-align:left;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border-color);color:var(--text-muted);font-size:0.7rem;text-transform:uppercase;">
+                  <th style="padding:0.2rem 0.4rem;">Var</th>
+                  <th style="padding:0.2rem 0.4rem;">Val</th>
+                </tr>
+              </thead>
+              <tbody id="vizVariablesBody-${id}">
+                <tr>
+                  <td colspan="2" class="no-vars" style="text-align:center;padding:0.5rem;color:var(--text-muted);font-style:italic;">No active variables.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);border-top:1px solid rgba(255,255,255,0.08);padding-top:0.4rem;">
+            <strong>Stdout:</strong>
+            <div id="vizStdoutBox-${id}" style="color:var(--accent-secondary);font-family:Fira Code,monospace;white-space:pre-wrap;margin-top:0.2rem;max-height:60px;overflow-y:auto;background:rgba(0,0,0,0.2);padding:0.25rem 0.5rem;border-radius:4px;">(none)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const ta = div.querySelector('textarea');
+  setTimeout(() => autoResize(ta), 10);
+  
+  div.addEventListener('click', () => setActiveCell(id));
+  return div;
+}
+
+function setActiveCell(id) {
+  document.querySelectorAll('.cell').forEach(c => c.classList.remove('active'));
+  const cell = document.getElementById('cell-' + id);
+  if (cell) cell.classList.add('active');
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.max(60, ta.scrollHeight) + 'px';
+}
+
+function handleCellKey(e, id) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta = document.getElementById('ta-' + id);
+    const s = ta.selectionStart;
+    ta.value = ta.value.substring(0, s) + '    ' + ta.value.substring(ta.selectionEnd);
+    ta.selectionStart = ta.selectionEnd = s + 4;
+    autoResize(ta);
+  }
+  if (e.ctrlKey && e.key === 'Enter') {
+    e.preventDefault();
+    runCell(id);
+  }
+  if (e.shiftKey && e.key === 'Enter') {
+    e.preventDefault();
+    runCell(id);
+    // Focus next cell or add new one
+    const cells = Array.from(document.querySelectorAll('.cell'));
+    const idx = cells.findIndex(c => c.id === 'cell-' + id);
+    if (idx < cells.length - 1) {
+      const nextId = cells[idx+1].id.replace('cell-','');
+      document.getElementById('ta-' + nextId)?.focus();
+    } else {
+      addCodeCell();
+    }
+  }
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    saveNotebook();
+  }
+}
+
+async function runCell(id) {
+  const ta = document.getElementById('ta-' + id);
+  const out = document.getElementById('out-' + id);
+  const running = document.getElementById('running-' + id);
+  const cell = document.getElementById('cell-' + id);
+  const type = cell.getAttribute('data-type');
+  
+  if (type === 'markdown') {
+    // Simple markdown rendering
+    const text = ta.value;
+    let html = text
+      .replace(/^# (.+)$/gm, '<h2 style="color:var(--text-heading);margin:.5rem 0">$1</h2>')
+      .replace(/^## (.+)$/gm, '<h3 style="color:var(--accent-primary);margin:.4rem 0">$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`(.+?)`/g, '<code style="background:rgba(0,0,0,.3);padding:.1rem .3rem;border-radius:3px;color:var(--accent-secondary)">$1</code>')
+      .replace(/\n/g, '<br>');
+    out.innerHTML = `<div class="markdown-output show" style="display:block;">${html}</div>`;
+    out.className = 'cell-output show';
+    return;
+  }
+  
+  const code = ta.value.trim();
+  if (!code) return;
+  
+  executionCounter++;
+  const execNum = executionCounter;
+  cell.querySelector('.cell-num').textContent = `In [${execNum}]:`;
+  
+  running.classList.add('show');
+  out.className = 'cell-output';
+  out.textContent = '';
+  setKernelBusy(true);
+  
+  try {
+    const res = await fetch('/api/run-code', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code, stdin:''})
+    });
+    const data = await res.json();
+    
+    if (data.error && data.error.trim()) {
+      out.textContent = data.error;
+      out.className = 'cell-output show error';
+    } else {
+      out.textContent = data.output || '(no output)';
+      out.className = 'cell-output show success';
+    }
+    
+    document.getElementById('nbStatus').textContent = `Last run: ${new Date().toLocaleTimeString()}`;
+  } catch(e) {
+    out.textContent = 'Error: ' + e.message;
+    out.className = 'cell-output show error';
+  } finally {
+    running.classList.remove('show');
+    setKernelBusy(false);
+  }
+}
+
+async function runAllCells() {
+  const cells = document.querySelectorAll('.cell');
+  for (const cell of cells) {
+    const id = cell.id.replace('cell-','');
+    await runCell(parseInt(id));
+    await new Promise(r => setTimeout(r, 100));
+  }
+  showToast('All cells executed!');
+}
+
+function setKernelBusy(busy) {
+  const dot = document.getElementById('kernelDot');
+  const status = document.getElementById('kernelStatus');
+  dot.classList.toggle('busy', busy);
+  status.textContent = busy ? 'Python 3 | Busy...' : 'Python 3 | Ready';
+}
+
+function addCodeCell(code='') {
+  const cell = createCell('code', code);
+  document.getElementById('nbBody').appendChild(cell);
+  cell.querySelector('textarea').focus();
+  cell.scrollIntoView({behavior:'smooth', block:'end'});
+}
+
+function addMarkdownCell(code='') {
+  const cell = createCell('markdown', code);
+  document.getElementById('nbBody').appendChild(cell);
+  cell.querySelector('textarea').focus();
+}
+
+function deleteCell(id) {
+  const cell = document.getElementById('cell-' + id);
+  if (document.querySelectorAll('.cell').length <= 1) {
+    showToast('Cannot delete last cell');
+    return;
+  }
+  cell.remove();
+}
+
+function duplicateCell(id) {
+  const ta = document.getElementById('ta-' + id);
+  const cell = document.getElementById('cell-' + id);
+  const type = cell.getAttribute('data-type');
+  const newCell = createCell(type, ta.value);
+  cell.after(newCell);
+}
+
+function moveCell(id, dir) {
+  const cell = document.getElementById('cell-' + id);
+  if (dir === -1 && cell.previousElementSibling) {
+    cell.parentNode.insertBefore(cell, cell.previousElementSibling);
+  } else if (dir === 1 && cell.nextElementSibling) {
+    cell.parentNode.insertBefore(cell.nextElementSibling, cell);
+  }
+}
+
+function clearAllOutputs() {
+  document.querySelectorAll('.cell-output').forEach(o => {
+    o.className = 'cell-output';
+    o.textContent = '';
+  });
+  executionCounter = 0;
+  document.querySelectorAll('.cell-num').forEach(n => n.textContent = 'In [ ]:');
+  showToast('Outputs cleared');
+}
+
+function loadTemplate(name) {
+  if (!TEMPLATES[name]) return;
+  if (document.querySelectorAll('.cell').length > 1) {
+    if (!confirm('Load template? This will replace current cells.')) return;
+  }
+  document.getElementById('nbBody').innerHTML = '';
+  cellCounter = 0;
+  TEMPLATES[name].forEach(t => {
+    const cell = createCell(t.type, t.code);
+    document.getElementById('nbBody').appendChild(cell);
+  });
+  showToast('Template loaded: ' + name);
+}
+
+function saveNotebook() {
+  const cells = [];
+  document.querySelectorAll('.cell').forEach(cell => {
+    const id = cell.id.replace('cell-','');
+    cells.push({
+      type: cell.getAttribute('data-type'),
+      code: document.getElementById('ta-' + id)?.value || ''
+    });
+  });
+  localStorage.setItem('pylab-notebook', JSON.stringify(cells));
+  showToast('Notebook saved! &#x1F4BE;');
+  document.getElementById('nbStatus').textContent = 'Saved ' + new Date().toLocaleTimeString();
+}
+
+function loadSavedNotebook() {
+  const saved = localStorage.getItem('pylab-notebook');
+  if (saved) {
+    try {
+      const cells = JSON.parse(saved);
+      cells.forEach(c => {
+        const cell = createCell(c.type, c.code);
+        document.getElementById('nbBody').appendChild(cell);
+      });
+      return true;
+    } catch(e) {}
+  }
+  return false;
+}
+
+const cellVizData = {};
+
+async function visualizeCell(id) {
+  const ta = document.getElementById('ta-' + id);
+  const code = ta.value.trim();
+  if (!code) return;
+
+  const btn = document.getElementById('vizBtn-' + id);
+  const running = document.getElementById('running-' + id);
+  
+  btn.disabled = true;
+  btn.textContent = '⚡ Tracing...';
+  running.classList.add('show');
+
+  try {
+    const res = await fetch('/api/visualize-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code})
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    const steps = data.steps || [];
+    if (steps.length === 0) {
+      showToast('No execution steps captured.', 'info');
+      return;
+    }
+
+    if (cellVizData[id] && cellVizData[id].playInterval) {
+      clearInterval(cellVizData[id].playInterval);
+    }
+    
+    cellVizData[id] = {
+      steps: steps,
+      currentIdx: -1,
+      isPlaying: false,
+      playInterval: null
+    };
+
+    const widget = document.getElementById('viz-' + id);
+    widget.style.display = 'block';
+
+    const container = document.getElementById('vizCodeContainer-' + id);
+    container.innerHTML = '';
+    const lines = code.split('\n');
+    lines.forEach((line, index) => {
+      const lineNum = index + 1;
+      const div = document.createElement('div');
+      div.className = 'viz-code-line';
+      div.id = `viz-line-${id}-${lineNum}`;
+      
+      const numSpan = document.createElement('span');
+      numSpan.className = 'viz-line-num';
+      numSpan.textContent = lineNum;
+      
+      const contentSpan = document.createElement('span');
+      contentSpan.className = 'viz-line-content';
+      contentSpan.textContent = line || ' ';
+      
+      div.appendChild(numSpan);
+      div.appendChild(contentSpan);
+      container.appendChild(div);
+    });
+
+    cellVizGoToStep(id, 0);
+    showToast('Trace loaded for Cell In[' + id + ']!', 'success');
+  } catch(e) {
+    showToast('Trace failed: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Visualize';
+    running.classList.remove('show');
+  }
+}
+
+function toggleCellVisualizer(id) {
+  const widget = document.getElementById('viz-' + id);
+  cellVizStopPlay(id);
+  widget.style.display = 'none';
+}
+
+function cellVizGoToStep(id, index) {
+  const data = cellVizData[id];
+  if (!data || !data.steps || data.steps.length === 0) return;
+
+  if (index === -1) {
+    index = data.steps.length - 1;
+  }
+
+  if (index < 0 || index >= data.steps.length) return;
+
+  data.currentIdx = index;
+
+  document.getElementById('currentStep-' + id).textContent = data.currentIdx + 1;
+  document.getElementById('totalSteps-' + id).textContent = data.steps.length;
+
+  const slider = document.getElementById('vizRangeSlider-' + id);
+  slider.max = data.steps.length - 1;
+  slider.value = data.currentIdx;
+
+  const step = data.steps[data.currentIdx];
+
+  const container = document.getElementById('vizCodeContainer-' + id);
+  container.querySelectorAll('.viz-code-line').forEach(el => el.classList.remove('active-line'));
+  const lineEl = document.getElementById(`viz-line-${id}-${step.line}`);
+  if (lineEl) {
+    lineEl.classList.add('active-line');
+    lineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  const varBody = document.getElementById('vizVariablesBody-' + id);
+  varBody.innerHTML = '';
+
+  const varKeys = Object.keys(step.locals || {});
+  if (varKeys.length === 0) {
+    varBody.innerHTML = `<tr><td colspan="2" class="no-vars" style="text-align:center;padding:0.5rem;color:var(--text-muted);font-style:italic;">No active variables.</td></tr>`;
+  } else {
+    varKeys.sort().forEach(key => {
+      const val = step.locals[key];
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
+      
+      const nameTd = document.createElement('td');
+      nameTd.style.cssText = 'padding:0.25rem 0.4rem;color:var(--accent-primary);';
+      nameTd.textContent = key;
+      
+      const valTd = document.createElement('td');
+      valTd.style.cssText = 'padding:0.25rem 0.4rem;color:var(--accent-secondary);';
+      valTd.textContent = typeof val === 'object' ? JSON.stringify(val) : String(val);
+      
+      tr.appendChild(nameTd);
+      tr.appendChild(valTd);
+      varBody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('vizStdoutBox-' + id).textContent = step.stdout || '(none)';
+
+  if (step.event === 'exception' && step.exception) {
+    const errorAlert = document.createElement('tr');
+    errorAlert.innerHTML = `<td colspan="2" style="color:#ff6b6b;background:rgba(255,107,107,0.1);font-weight:bold;text-align:center;padding:0.25rem;">🚨 ${step.exception}</td>`;
+    varBody.appendChild(errorAlert);
+    document.getElementById('vizStdoutBox-' + id).textContent += `\nError: ${step.exception}`;
+  }
+
+  document.getElementById('vizPrevBtn-' + id).disabled = (data.currentIdx === 0);
+  document.getElementById('vizFirstBtn-' + id).disabled = (data.currentIdx === 0);
+  document.getElementById('vizNextBtn-' + id).disabled = (data.currentIdx === data.steps.length - 1);
+  document.getElementById('vizLastBtn-' + id).disabled = (data.currentIdx === data.steps.length - 1);
+}
+
+function cellVizPrevStep(id) {
+  const data = cellVizData[id];
+  if (data && data.currentIdx > 0) {
+    cellVizGoToStep(id, data.currentIdx - 1);
+  }
+}
+
+function cellVizNextStep(id) {
+  const data = cellVizData[id];
+  if (data && data.currentIdx < data.steps.length - 1) {
+    cellVizGoToStep(id, data.currentIdx + 1);
+  } else {
+    cellVizStopPlay(id);
+  }
+}
+
+function cellVizOnSliderChange(id, val) {
+  cellVizGoToStep(id, parseInt(val));
+}
+
+function cellVizTogglePlay(id) {
+  const data = cellVizData[id];
+  if (!data) return;
+  if (data.isPlaying) {
+    cellVizStopPlay(id);
+  } else {
+    cellVizStartPlay(id);
+  }
+}
+
+function cellVizStartPlay(id) {
+  const data = cellVizData[id];
+  if (!data) return;
+  data.isPlaying = true;
+  document.getElementById('vizPlayBtn-' + id).innerHTML = '⏸ Pause';
+  
+  if (data.currentIdx === data.steps.length - 1) {
+    cellVizGoToStep(id, 0);
+  }
+  
+  data.playInterval = setInterval(() => {
+    cellVizNextStep(id);
+  }, 1000);
+}
+
+function cellVizStopPlay(id) {
+  const data = cellVizData[id];
+  if (!data) return;
+  data.isPlaying = false;
+  document.getElementById('vizPlayBtn-' + id).innerHTML = '▶ Play';
+  if (data.playInterval) {
+    clearInterval(data.playInterval);
+    data.playInterval = null;
+  }
+}
+
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  if (!loadSavedNotebook()) {
+    loadTemplate('basics');
+  }
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveNotebook(); }
+  });
+});
+</script>
+</body></html>

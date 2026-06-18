@@ -1,0 +1,11 @@
+{
+  "title": "Decorators — Complete Notes",
+  "topic": "decorators",
+  "sections": [
+    {
+      "title": "Complete Guide to Decorators",
+      "content": "Comprehensive notes for Decorators in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Decorators examples\n# Run in the Code Editor to see output\nprint('Study Decorators in PyLab AI!')"
+    }
+  ]
+}

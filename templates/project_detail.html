@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{{ project.title }} - PyLab AI Projects</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<style>
+.detail-layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px);gap:0;}
+.detail-sidebar{background:var(--bg-sidebar);border-right:1px solid var(--border-color);padding:1.5rem;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:1rem;}
+.detail-main{padding:2rem;max-width:900px;}
+.proj-hero-detail{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:20px;padding:2rem;margin-bottom:2rem;}
+.step-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;margin-bottom:1.25rem;overflow:hidden;transition:border-color .3s;}
+.step-card:hover{border-color:var(--border-glow);}
+.step-header{display:flex;align-items:center;gap:1rem;padding:1.25rem 1.5rem;cursor:pointer;}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--gradient-btn);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0;}
+.step-title{font-weight:700;color:var(--text-heading);font-size:1rem;}
+.step-desc{color:var(--text-muted);font-size:.82rem;margin-top:.2rem;}
+.step-toggle{margin-left:auto;color:var(--accent-primary);transition:transform .3s;}
+.step-toggle.open{transform:rotate(180deg);}
+.step-body{display:none;padding:0 1.5rem 1.5rem;border-top:1px solid var(--border-color);}
+.step-body.open{display:block;}
+.step-hint{background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.2);border-radius:10px;padding:.75rem 1rem;margin-top:.75rem;font-size:.85rem;color:var(--accent-secondary);}
+.github-box{background:linear-gradient(135deg,rgba(0,0,0,.3),rgba(0,0,0,.1));border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.5rem;}
+.github-btn{display:flex;align-items:center;gap:.6rem;background:#24292e;color:#fff;border:none;padding:.75rem 1.5rem;border-radius:10px;font-weight:700;cursor:pointer;font-size:.9rem;transition:all .3s;text-decoration:none;width:100%;justify-content:center;margin-bottom:.75rem;}
+.github-btn:hover{background:#2f363d;transform:translateY(-2px);color:#fff;}
+.github-steps{font-size:.82rem;color:var(--text-secondary);font-family:Fira Code,monospace;background:var(--bg-code);border-radius:8px;padding:1rem;margin-top:.75rem;}
+.ai-help-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.25rem;}
+.ai-help-input{width:100%;background:var(--bg-code);border:1px solid var(--border-color);color:var(--text-primary);padding:.6rem .85rem;border-radius:8px;font-family:Inter,sans-serif;font-size:.85rem;outline:none;margin-bottom:.6rem;}
+.ai-help-input:focus{border-color:var(--accent-primary);}
+.ai-help-result{background:var(--bg-code);border:1px solid var(--border-color);border-radius:8px;padding:.85rem;font-family:Fira Code,monospace;font-size:.8rem;color:#abb2bf;white-space:pre-wrap;display:none;max-height:250px;overflow-y:auto;margin-top:.6rem;}
+.ai-help-result.show{display:block;}
+.quick-q{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.6rem;}
+.qq{background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-muted);padding:.2rem .6rem;border-radius:10px;font-size:.75rem;cursor:pointer;transition:all .2s;}
+.qq:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
+.info-pill{display:flex;align-items:center;gap:.5rem;padding:.5rem .85rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:10px;font-size:.82rem;color:var(--text-secondary);}
+.progress-steps{display:flex;flex-direction:column;gap:.4rem;}
+.prog-step{display:flex;align-items:center;gap:.6rem;padding:.4rem .6rem;border-radius:8px;font-size:.82rem;color:var(--text-muted);cursor:pointer;transition:all .2s;}
+.prog-step:hover{background:var(--bg-card-hover);color:var(--accent-primary);}
+.prog-step.done{color:var(--accent-secondary);}
+.prog-step .dot{width:10px;height:10px;border-radius:50%;background:var(--border-color);flex-shrink:0;}
+.prog-step.done .dot{background:var(--accent-secondary);}
+@media(max-width:900px){.detail-layout{grid-template-columns:1fr;}.detail-sidebar{position:static;height:auto;}}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content" style="margin-top:64px;">
+<div class="detail-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="detail-sidebar">
+    <!-- Project Info -->
+    <div>
+      <div style="font-size:2.5rem;text-align:center;margin-bottom:.5rem;">{{ project.icon }}</div>
+      <div style="font-weight:800;color:var(--text-heading);text-align:center;font-size:1rem;margin-bottom:1rem;">{{ project.title }}</div>
+      <div class="info-pill"><span>&#x23F1;</span>{{ project.time }}</div>
+      <div class="info-pill" style="margin-top:.4rem;"><span>&#x1F4DA;</span>
+        <span class="badge badge-{{ project.level }}">{{ project.level|title }}</span>
+      </div>
+    </div>
+
+    <!-- Step Progress -->
+    <div>
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.6rem;font-weight:600;">&#x1F4CB; Steps</div>
+      <div class="progress-steps" id="stepProgress">
+        {% for step in project.steps %}
+        <div class="prog-step" id="prog-{{ step.num }}" onclick="openStep({{ step.num }})">
+          <div class="dot"></div>
+          <span>{{ step.num }}. {{ step.title }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- GitHub Box -->
+    <div class="github-box">
+      <div style="font-weight:700;color:var(--text-heading);margin-bottom:.75rem;font-size:.9rem;">&#x1F419; GitHub Setup</div>
+      <a href="https://github.com/new" target="_blank" class="github-btn">
+        &#x1F419; Create Repository
+      </a>
+      <div class="github-steps">git init<br>git add .<br>git commit -m "Initial commit"<br>git remote add origin &lt;url&gt;<br>git push -u origin main</div>
+      <button onclick="askGitHub()" class="btn btn-ghost btn-sm" style="width:100%;margin-top:.6rem;justify-content:center;">&#x1F916; GitHub Help</button>
+    </div>
+
+    <!-- Concepts Needed -->
+    <div>
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.6rem;font-weight:600;">&#x1F4DA; Concepts Needed</div>
+      <div style="display:flex;flex-direction:column;gap:.3rem;">
+        {% if project.concepts_needed_links %}
+          {% for c in project.concepts_needed_links %}
+            {% if c.url %}
+            <a href="{{ c.url }}" {% if c.external %}target="_blank"{% endif %} style="font-size:.82rem;color:var(--text-secondary);padding:.3rem .6rem;background:var(--bg-secondary);border-radius:8px;text-decoration:none;transition:all .2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+              {% if c.external %}&#x1F517;{% else %}&#x1F4D8;{% endif %} {{ c.name }}
+            </a>
+            {% else %}
+            <span style="font-size:.82rem;color:var(--text-muted);padding:.3rem .6rem;background:var(--bg-secondary);border-radius:8px;">
+              &#x1F4E6; {{ c.name }}
+            </span>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for concept in project.concepts_needed %}
+          <span style="font-size:.82rem;color:var(--text-muted);padding:.3rem .6rem;background:var(--bg-secondary);border-radius:8px;">
+            &#x1F4D8; {{ concept }}
+          </span>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <a href="/projects" class="btn btn-ghost btn-sm" style="justify-content:center;">&#x2190; All Projects</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="detail-main">
+
+    <!-- Hero -->
+    <div class="proj-hero-detail">
+      <div style="display:flex;align-items:flex-start;gap:1.25rem;flex-wrap:wrap;">
+        <span style="font-size:3rem;">{{ project.icon }}</span>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.5rem;">
+            <h1 style="font-size:1.8rem;font-weight:900;color:var(--text-heading);">{{ project.title }}</h1>
+            <span class="badge badge-{{ project.level }}">{{ project.level|title }}</span>
+          </div>
+          <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:1rem;">{{ project.desc }}</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            {% for tag in project.tags %}
+            <span style="background:rgba(0,212,255,.1);color:var(--accent-primary);border:1px solid rgba(0,212,255,.2);padding:.2rem .65rem;border-radius:12px;font-size:.75rem;">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What You'll Build -->
+    <div class="content-section" style="margin-bottom:1.25rem;">
+      <h2>&#x1F3AF; What You'll Build</h2>
+      <p style="color:var(--text-secondary);line-height:1.8;">{{ project.what_you_build }}</p>
+    </div>
+
+    <!-- What You'll Learn -->
+    <div class="content-section" style="margin-bottom:1.25rem;">
+      <h2>&#x1F9E0; What You'll Learn</h2>
+      <ul style="color:var(--text-secondary);padding-left:1.5rem;line-height:2.2;">
+        {% for item in project.what_you_learn %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Folder Structure -->
+    <div class="content-section" style="margin-bottom:1.25rem;">
+      <h2>&#x1F4C1; Project Structure</h2>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">structure</span></div>
+        <pre><code>{{ project.folder_structure }}</code></pre>
+      </div>
+    </div>
+
+    <!-- Step by Step -->
+    <h2 style="font-size:1.4rem;font-weight:800;color:var(--text-heading);margin-bottom:1.25rem;">&#x1F4CB; Step-by-Step Guide</h2>
+    {% for step in project.steps %}
+    <div class="step-card" id="step-{{ step.num }}">
+      <div class="step-header" onclick="toggleStep({{ step.num }})">
+        <div class="step-num">{{ step.num }}</div>
+        <div>
+          <div class="step-title">{{ step.title }}</div>
+          <div class="step-desc">{{ step.desc }}</div>
+        </div>
+        <div class="step-toggle" id="step-toggle-{{ step.num }}">&#x25BC;</div>
+      </div>
+      <div class="step-body" id="step-body-{{ step.num }}">
+        <div class="code-block" style="margin-top:.75rem;">
+          <div class="code-header"><span class="code-lang">python</span><button class="code-copy">Copy</button></div>
+          <pre><code class="language-python">{{ step.code }}</code></pre>
+        </div>
+        <div class="step-hint">&#x1F4A1; <strong>Tip:</strong> {{ step.hint }}</div>
+        <div style="display:flex;gap:.75rem;margin-top:.75rem;">
+          <button onclick="markStepDone({{ step.num }})" class="btn btn-success btn-sm">&#x2705; Mark Done</button>
+          <button onclick="askAboutStep('{{ project.title }}', '{{ step.title }}')" class="btn btn-ghost btn-sm">&#x1F916; Ask AI</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Extensions -->
+    <div class="content-section" style="margin-top:1.5rem;margin-bottom:1.25rem;">
+      <h2>&#x1F680; Take It Further</h2>
+      <p style="color:var(--text-secondary);margin-bottom:.75rem;">Finished the project? Here's how to make it even better:</p>
+      <ul style="color:var(--text-secondary);padding-left:1.5rem;line-height:2.2;">
+        {% for ext in project.extensions %}
+        <li>{{ ext }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- AI Help -->
+    <div class="ai-help-box">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+        <span style="font-size:1.5rem;">&#x1F916;</span>
+        <div>
+          <div style="font-weight:700;color:var(--text-heading);">AI Project Assistant</div>
+          <div style="color:var(--text-muted);font-size:.8rem;">Ask anything about this project</div>
+        </div>
+      </div>
+      <div class="quick-q">
+        <div class="qq" onclick="askProjectQ('How do I start this project?')">How to start?</div>
+        <div class="qq" onclick="askProjectQ('What is the folder structure?')">Folder structure</div>
+        <div class="qq" onclick="askProjectQ('How do I push to GitHub?')">GitHub setup</div>
+        <div class="qq" onclick="askProjectQ('I have an error, help me debug')">Debug help</div>
+        <div class="qq" onclick="askProjectQ('How do I add more features?')">Add features</div>
+      </div>
+      <input type="text" class="ai-help-input" id="aiHelpInput" placeholder="Ask anything about {{ project.title }}...">
+      <button onclick="askProjectHelp()" class="btn btn-primary btn-sm">&#x1F916; Ask AI</button>
+      <div class="ai-help-result" id="aiHelpResult"></div>
+    </div>
+
+    <!-- Navigation -->
+    <div style="display:flex;justify-content:space-between;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color);">
+      <a href="/projects" class="btn btn-ghost">&#x2190; All Projects</a>
+      <a href="https://github.com/new" target="_blank" class="btn btn-primary">&#x1F419; Create on GitHub &#x2197;</a>
+    </div>
+
+  </div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+const PROJECT_NAME = "{{ project.title }}";
+const completedSteps = JSON.parse(localStorage.getItem('proj-{{ slug }}-steps') || '[]');
+
+function toggleStep(num) {
+  const body = document.getElementById('step-body-' + num);
+  const toggle = document.getElementById('step-toggle-' + num);
+  const isOpen = body.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.step-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.step-toggle.open').forEach(t => t.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    toggle.classList.add('open');
+    body.querySelectorAll('pre code').forEach(el => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+    });
+  }
+}
+
+function openStep(num) {
+  // Close all first
+  document.querySelectorAll('.step-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.step-toggle').forEach(t => t.classList.remove('open'));
+  const body = document.getElementById('step-body-' + num);
+  const toggle = document.getElementById('step-toggle-' + num);
+  if (body) {
+    body.classList.add('open');
+    toggle.classList.add('open');
+    document.getElementById('step-' + num).scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function markStepDone(num) {
+  if (!completedSteps.includes(num)) completedSteps.push(num);
+  localStorage.setItem('proj-{{ slug }}-steps', JSON.stringify(completedSteps));
+  const prog = document.getElementById('prog-' + num);
+  if (prog) prog.classList.add('done');
+  showToast('Step ' + num + ' completed! ✅');
+  // Auto-open next step
+  const nextBody = document.getElementById('step-body-' + (num+1));
+  if (nextBody) {
+    setTimeout(() => openStep(num+1), 500);
+  }
+}
+
+async function askProjectHelp() {
+  const question = document.getElementById('aiHelpInput').value.trim();
+  if (!question) return;
+  await callAI(question);
+}
+
+function askProjectQ(q) {
+  document.getElementById('aiHelpInput').value = q;
+  askProjectHelp();
+}
+
+function askAboutStep(project, step) {
+  document.getElementById('aiHelpInput').value = 'Help me with step: ' + step;
+  askProjectHelp();
+}
+
+function askGitHub() {
+  document.getElementById('aiHelpInput').value = 'How do I push this project to GitHub?';
+  askProjectHelp();
+}
+
+async function callAI(question) {
+  const result = document.getElementById('aiHelpResult');
+  result.textContent = '&#x1F916; Thinking...';
+  result.classList.add('show');
+  try {
+    const res = await fetch('/api/ai-project-help', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({project: PROJECT_NAME, question, step:''})
+    });
+    const data = await res.json();
+    result.textContent = data.result;
+  } catch(e) {
+    result.textContent = 'Error: ' + e.message;
+  }
+}
+
+// Init: restore completed steps
+document.addEventListener('DOMContentLoaded', () => {
+  completedSteps.forEach(num => {
+    const prog = document.getElementById('prog-' + num);
+    if (prog) prog.classList.add('done');
+  });
+  // Open first step
+  toggleStep(1);
+  // Highlight code
+  document.querySelectorAll('pre code').forEach(el => {
+    if (typeof hljs !== 'undefined') hljs.highlightElement(el);
+  });
+});
+
+document.getElementById('aiHelpInput')?.addEventListener('keypress', e => {
+  if (e.key === 'Enter') askProjectHelp();
+});
+</script>
+</body></html>

@@ -1,0 +1,119 @@
+{
+  "title": "Dictionaries & Sets",
+  "icon": "📖",
+  "level": "intermediate",
+  "simple_definition": "Dictionaries store key-value pairs. Sets store unique items with no duplicates.",
+  "technical_definition": "Dictionaries are hash tables with O(1) average lookup. Sets are unordered collections of unique elements.",
+  "analogy": "A dictionary is like a phone book — you look up a name (key) to get a number (value). A set is like a bag of unique marbles — no duplicates allowed.",
+  "syntax": "# Dictionary\nperson = {'name': 'Alice', 'age': 25}\nprint(person['name'])  # 'Alice'\nperson['city'] = 'NYC'\n\n# Set\nunique = {1, 2, 3, 2, 1}\nprint(unique)  # {1, 2, 3}\nunique.add(4)",
+  "example_desc": "Working with dictionaries and sets for efficient data storage.",
+  "code_example": "# Dictionary\nstudent = {\n    'name': 'Bob',\n    'age': 20,\n    'grades': [85, 90, 92]\n}\n\nprint(student['name'])\nprint(student.get('email', 'N/A'))  # Safe access\n\n# Dictionary methods\nfor key, value in student.items():\n    print(f'{key}: {value}')\n\n# Sets\nnums1 = {1, 2, 3, 4}\nnums2 = {3, 4, 5, 6}\n\nprint(nums1 | nums2)  # Union: {1,2,3,4,5,6}\nprint(nums1 & nums2)  # Intersection: {3,4}\nprint(nums1 - nums2)  # Difference: {1,2}\n\n# Remove duplicates\nitems = [1, 2, 2, 3, 3, 3]\nunique_items = list(set(items))\nprint(unique_items)",
+  "output": "Bob\nN/A\nname: Bob\nage: 20\ngrades: [85, 90, 92]\n{1, 2, 3, 4, 5, 6}\n{3, 4}\n{1, 2}\n[1, 2, 3]",
+  "logic_steps": [
+    "Dictionaries use curly braces {} with key:value pairs",
+    "Keys must be immutable (strings, numbers, tuples)",
+    "Access values with dict[key] or dict.get(key, default)",
+    "Sets use {} but without key:value pairs",
+    "Sets automatically remove duplicates",
+    "Set operations: union (|), intersection (&), difference (-)"
+  ],
+  "edge_cases": [
+    "Empty dict: {} or dict(), empty set: set() (not {})",
+    "KeyError if key doesn't exist — use .get() for safe access",
+    "Sets are unordered — no indexing or slicing"
+  ],
+  "common_mistakes": [
+    "Using mutable keys: {[1,2]: 'value'} raises TypeError",
+    "Confusing {} (empty dict) with set() (empty set)",
+    "Modifying dict while iterating over it"
+  ],
+  "interview_tips": [
+    "Dicts are O(1) for lookup, insert, delete (average case)",
+    "Use dict.get() to avoid KeyError",
+    "Counter from collections for counting occurrences",
+    "defaultdict for automatic default values"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Create a dict with 3 key-value pairs and print all keys",
+        "hint": "dict.keys()"
+      },
+      {
+        "question": "Remove duplicates from a list using a set",
+        "hint": "list(set(my_list))"
+      },
+      {
+        "question": "Check if a key exists in a dictionary",
+        "hint": "'key' in dict"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Count frequency of each character in a string using a dict",
+        "hint": "Loop through string, increment dict[char]"
+      },
+      {
+        "question": "Find common elements between two lists using sets",
+        "hint": "set(list1) & set(list2)"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Implement a function to group anagrams using a dict",
+        "hint": "Use sorted(word) as key"
+      },
+      {
+        "question": "Find the first non-repeating character in a string",
+        "hint": "Use dict to count, then find first with count==1"
+      }
+    ]
+  },
+  "problem_first": "Suppose you want to store student information.\n\nWith a list:\nstudent = ['Alice', 25, 'A', 'NYC']\n# How do you know which index is what?\nprint(student[2])  # Is this grade or city? 🤔\n\nWith a dictionary:\nstudent = {'name':'Alice', 'age':25, 'grade':'A', 'city':'NYC'}\nprint(student['grade'])  # Crystal clear! ✅\n\nDictionaries give NAMES to your data — much more readable and maintainable.",
+  "why_matters": "Dictionaries are used everywhere:\n🌐 JSON (web APIs) is essentially a dictionary\n🗄️ Database records are dict-like structures\n🔐 Config files: settings stored as key-value pairs\n🤖 ML: feature names mapped to values\n📊 Counting: word frequency, character count\n\nJSON is the language of the web — and it's just a dictionary!",
+  "important_points": [
+    "⭐ Keys must be IMMUTABLE (strings, numbers, tuples) — lists cannot be keys",
+    "⭐ Values can be ANYTHING — including lists, dicts, functions",
+    "⭐ dict[key] raises KeyError if key missing; dict.get(key, default) is safe",
+    "⭐ Python 3.7+ dicts maintain INSERTION ORDER",
+    "⭐ in operator checks KEYS: 'name' in d → True/False",
+    "⭐ dict.items() returns (key,value) pairs; .keys() returns keys; .values() returns values",
+    "⭐ Counter from collections is a dict subclass for counting",
+    "⭐ defaultdict from collections provides default values for missing keys"
+  ],
+  "dry_run": {
+    "title": "Dry Run: d = {'a':1,'b':2}; d['c'] = 3; print(d.get('x', 0))",
+    "steps": [
+      {
+        "step": 1,
+        "state": "d = {'a':1,'b':2}",
+        "action": "Dict created with 2 key-value pairs",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "d['c'] = 3",
+        "action": "New key 'c' added with value 3",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "d = {'a':1,'b':2,'c':3}",
+        "action": "Dict now has 3 pairs",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "d.get('x', 0)",
+        "action": "Look for key 'x' — not found! Return default: 0",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "print(0)",
+        "action": "Print the default value",
+        "output": "0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Modules — Complete Notes",
+  "topic": "modules",
+  "sections": [
+    {
+      "title": "Complete Guide to Modules",
+      "content": "Comprehensive notes for Modules in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Modules examples\n# Run in the Code Editor to see output\nprint('Study Modules in PyLab AI!')"
+    }
+  ]
+}

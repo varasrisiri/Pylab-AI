@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;padding:2rem;}
+.dash-card{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:20px;padding:1.75rem;transition:all .3s;}
+.dash-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--border-glow);}
+.dash-card-wide{grid-column:1/-1;}
+.dash-stat{text-align:center;}
+.dash-stat-num{font-size:3rem;font-weight:900;font-family:Fira Code,monospace;line-height:1;}
+.dash-stat-label{font-size:.8rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:.4rem;}
+.progress-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+.topic-chip{display:inline-flex;align-items:center;gap:.35rem;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);color:var(--accent-secondary);padding:.3rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;margin:.2rem;}
+.topic-chip.pending{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.15);color:var(--text-muted);}
+.proj-done-item{display:flex;align-items:center;gap:.75rem;padding:.6rem .85rem;background:var(--bg-secondary);border-radius:10px;margin-bottom:.4rem;}
+.cal-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:.25rem;}
+.cal-mini-day{aspect-ratio:1;border-radius:4px;font-size:.6rem;display:flex;align-items:center;justify-content:center;}
+.cal-mini-day.active{background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;font-weight:700;}
+.cal-mini-day.empty{background:var(--bg-secondary);color:var(--text-muted);}
+.lb-row{display:flex;align-items:center;gap:1rem;padding:.7rem 1rem;border-radius:10px;transition:background .2s;}
+.lb-row:hover{background:var(--bg-card-hover);}
+.lb-rank{font-size:1.1rem;font-weight:900;width:32px;text-align:center;font-family:Fira Code,monospace;}
+.xp-level-bar{height:8px;background:var(--bg-secondary);border-radius:4px;overflow:hidden;margin:.5rem 0;}
+.xp-level-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ff8c00);border-radius:4px;transition:width 1s ease;}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div style="max-width:1200px;margin:0 auto;padding:2rem;">
+  <div style="margin-bottom:2rem;">
+    <h1 class="section-title">&#x1F4CA; My Dashboard</h1>
+    <p style="color:var(--text-secondary);">Track your learning progress, streak, and achievements.</p>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- Streak Card -->
+    <div class="dash-card dash-stat">
+      <div style="font-size:3rem;margin-bottom:.5rem;">&#x1F525;</div>
+      <div class="dash-stat-num" style="color:var(--accent-tertiary);">{{ streak }}</div>
+      <div class="dash-stat-label">Day Streak</div>
+      <div style="margin-top:1rem;">
+        <div class="xp-level-bar"><div class="xp-level-fill" id="xpBar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-muted);">
+          <span>{{ total_xp }} XP</span>
+          <span id="levelName">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topics Progress -->
+    <div class="dash-card dash-stat">
+      <div style="font-size:3rem;margin-bottom:.5rem;">&#x1F4D8;</div>
+      <div class="dash-stat-num" style="color:var(--accent-primary);">{{ topics_done|length }}/{{ topics_total }}</div>
+      <div class="dash-stat-label">Topics Completed</div>
+      <div style="margin-top:1rem;">
+        <div class="xp-level-bar">
+          <div class="xp-level-fill" style="width:{{ (topics_done|length / topics_total * 100)|int }}%;background:var(--gradient-accent);"></div>
+        </div>
+        <div style="font-size:.75rem;color:var(--text-muted);text-align:center;margin-top:.3rem;">{{ (topics_done|length / topics_total * 100)|int }}% complete</div>
+      </div>
+    </div>
+
+    <!-- Projects Done -->
+    <div class="dash-card dash-stat">
+      <div style="font-size:3rem;margin-bottom:.5rem;">&#x1F6E0;&#xFE0F;</div>
+      <div class="dash-stat-num" style="color:var(--accent-secondary);">{{ projects_done|length }}</div>
+      <div class="dash-stat-label">Projects Built</div>
+      <div style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+        <a href="/projects" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;">Browse Projects &#x2192;</a>
+        <button onclick="openCustomProjectModal()" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">🆕 Create Project</button>
+      </div>
+    </div>
+
+    <!-- XP & Days -->
+    <div class="dash-card dash-stat">
+      <div style="font-size:3rem;margin-bottom:.5rem;">&#x26A1;</div>
+      <div class="dash-stat-num" style="color:var(--accent-primary);">{{ total_xp }}</div>
+      <div class="dash-stat-label">Total XP Earned</div>
+      <div style="margin-top:.5rem;font-size:.85rem;color:var(--text-muted);">{{ total_days }} active days</div>
+    </div>
+
+    <!-- 30-Day Calendar -->
+    <div class="dash-card" style="grid-column:span 2;">
+      <h3 style="font-weight:700;color:var(--text-heading);margin-bottom:1rem;">&#x1F4C5; Activity Calendar (Last 30 Days)</h3>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;margin-bottom:.5rem;">
+        {% for d in ['S','M','T','W','T','F','S'] %}
+        <div style="text-align:center;font-size:.65rem;color:var(--text-muted);">{{ d }}</div>
+        {% endfor %}
+      </div>
+      <div class="cal-mini" id="calMini"></div>
+    </div>
+
+    <!-- Topics Completed -->
+    <div class="dash-card">
+      <h3 style="font-weight:700;color:var(--text-heading);margin-bottom:1rem;">&#x2705; Topics Completed</h3>
+      {% set all_topics = ['introduction','syntax','datatypes','operators','conditionals','loops','functions','lists','dictionaries','strings','filehandling','exceptions','modules','oop','decorators','generators','lambda','apis','threading'] %}
+      <div style="display:flex;flex-wrap:wrap;gap:.3rem;">
+        {% for t in all_topics %}
+          {% if t in topics_done %}
+          <span class="topic-chip">&#x2705; {{ t|title }}</span>
+          {% else %}
+          <a href="/learn/{{ t }}" class="topic-chip pending">&#x25CB; {{ t|title }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Projects Completed -->
+    <div class="dash-card">
+      <h3 style="font-weight:700;color:var(--text-heading);margin-bottom:1rem;">&#x1F3C6; Projects Completed</h3>
+      {% if projects_done %}
+        {% for p in projects_done[:8] %}
+        <div class="proj-done-item">
+          <span style="color:var(--accent-secondary);">&#x2705;</span>
+          <div style="flex:1;">
+            <div style="font-weight:600;color:var(--text-primary);font-size:.88rem;">{{ p.title }}</div>
+            <div style="font-size:.75rem;color:var(--text-muted);">{{ p.date[:10] if p.date else '' }}</div>
+          </div>
+          <a href="/projects/{{ p.slug }}" style="font-size:.75rem;color:var(--accent-primary);">View &#x2192;</a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="text-align:center;padding:2rem;color:var(--text-muted);">
+          <div style="font-size:2rem;margin-bottom:.5rem;">&#x1F6E0;&#xFE0F;</div>
+          <p>No projects completed yet.</p>
+          <a href="/projects" class="btn btn-primary btn-sm" style="margin-top:.75rem;">Start a Project</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="dash-card dash-card-wide">
+      <h3 style="font-weight:700;color:var(--text-heading);margin-bottom:1rem;">&#x1F3C6; Leaderboard</h3>
+      <div id="leaderboardList">
+        <div style="text-align:center;padding:1rem;color:var(--text-muted);">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="dash-card dash-card-wide">
+      <h3 style="font-weight:700;color:var(--text-heading);margin-bottom:1rem;">&#x1F680; Continue Learning</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+        <a href="/learn" class="btn btn-secondary" style="justify-content:center;">&#x1F4D8; Learn Topics</a>
+        <a href="/practice" class="btn btn-ghost" style="justify-content:center;">&#x1F4BB; Practice Problems</a>
+        <a href="/projects" class="btn btn-ghost" style="justify-content:center;">&#x1F6E0;&#xFE0F; Build Projects</a>
+        <a href="/notebook" class="btn btn-ghost" style="justify-content:center;">&#x1F4D3; Open Notebook</a>
+        <a href="/streak" class="btn btn-ghost" style="justify-content:center;">&#x1F525; View Streak</a>
+        <a href="/ai-mentor" class="btn btn-ghost" style="justify-content:center;">&#x1F916; AI Mentor</a>
+        <a href="/notes" class="btn btn-ghost" style="justify-content:center;">📓 Study Notes & PDFs</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Custom Project Creation Modal -->
+<div id="customProjectModal" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(8px);">
+  <div style="background:var(--gradient-card); border:1px solid var(--border-color); border-radius:24px; padding:2rem; width:90%; max-width:500px; box-shadow:var(--shadow-hover); position:relative; margin:auto;">
+    <span onclick="closeCustomProjectModal()" style="position:absolute; right:1.5rem; top:1rem; font-size:1.5rem; cursor:pointer; color:var(--text-muted); transition:color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='var(--text-muted)'">&times;</span>
+    <h2 style="font-weight:800; color:var(--text-heading); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; font-family:Inter, sans-serif;">🆕 Create Custom Project</h2>
+    <div style="display:flex; flex-direction:column; gap:1.2rem;">
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.75rem; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing: 0.5px;">Project Title</label>
+        <input type="text" id="cpTitle" placeholder="e.g. Personal Portfolio Website" style="background:var(--bg-code); border:1px solid var(--border-color); border-radius:10px; padding:0.7rem 1rem; color:var(--text-primary); outline:none; font-family:Inter, sans-serif; font-size:0.9rem;">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.75rem; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing: 0.5px;">Description</label>
+        <textarea id="cpDesc" placeholder="Briefly describe what this project will build..." rows="3" style="background:var(--bg-code); border:1px solid var(--border-color); border-radius:10px; padding:0.7rem 1rem; color:var(--text-primary); outline:none; resize:vertical; font-family:Inter,sans-serif; font-size:0.9rem;"></textarea>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.75rem; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing: 0.5px;">Difficulty Level</label>
+        <select id="cpLevel" style="background:var(--bg-code); border:1px solid var(--border-color); border-radius:10px; padding:0.7rem 1rem; color:var(--text-primary); outline:none; font-family:Inter, sans-serif; font-size:0.9rem;">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+        <button onclick="closeCustomProjectModal()" class="btn btn-ghost" style="flex:1; justify-content:center;">Cancel</button>
+        <button onclick="submitCustomProject()" class="btn btn-primary" style="flex:1; justify-content:center;">Create & Log</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+const LEVELS = [
+  {name:"Beginner",min:0,max:100},{name:"Learner",min:100,max:300},
+  {name:"Coder",min:300,max:600},{name:"Developer",min:600,max:1000},
+  {name:"Expert",min:1000,max:2000},{name:"Master",min:2000,max:5000},
+  {name:"Legend",min:5000,max:99999}
+];
+
+const totalXP = {{ total_xp }};
+const level = LEVELS.find(l => totalXP >= l.min && totalXP < l.max) || LEVELS[LEVELS.length-1];
+const nextLevel = LEVELS[LEVELS.indexOf(level)+1] || level;
+const pct = Math.min(((totalXP - level.min) / (nextLevel.min - level.min)) * 100, 100);
+document.getElementById('xpBar').style.width = pct + '%';
+document.getElementById('levelName').textContent = level.name;
+
+// Build calendar
+const history = {{ streak_history | tojson }};
+const activeDates = new Set(history.map(h => h.date));
+const cal = document.getElementById('calMini');
+const today = new Date();
+const start = new Date(today); start.setDate(today.getDate() - 29);
+const startDay = start.getDay();
+for (let i = 0; i < startDay; i++) {
+  const blank = document.createElement('div');
+  cal.appendChild(blank);
+}
+for (let i = 0; i < 30; i++) {
+  const d = new Date(start); d.setDate(start.getDate() + i);
+  const ds = d.toISOString().split('T')[0];
+  const div = document.createElement('div');
+  div.className = 'cal-mini-day ' + (activeDates.has(ds) ? 'active' : 'empty');
+  div.textContent = d.getDate();
+  div.title = ds;
+  cal.appendChild(div);
+}
+
+// Load leaderboard
+fetch('/api/leaderboard').then(r=>r.json()).then(data => {
+  const list = document.getElementById('leaderboardList');
+  if (!data.leaders || data.leaders.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--text-muted);">No data yet. Start learning to appear here!</div>';
+    return;
+  }
+  const rankIcons = ['&#x1F947;','&#x1F948;','&#x1F949;'];
+  list.innerHTML = data.leaders.map((l,i) => `
+    <div class="lb-row">
+      <div class="lb-rank" style="color:${i<3?['#ffd700','#c0c0c0','#cd7f32'][i]:'var(--text-muted)'}">${rankIcons[i]||i+1}</div>
+      <div style="flex:1;font-weight:600;color:var(--text-primary);">${l.user_id === 'guest' ? 'You (Guest)' : l.user_id}</div>
+      <div style="color:var(--accent-tertiary);font-weight:700;font-family:Fira Code,monospace;">${l.streak}&#x1F525;</div>
+      <div style="color:var(--accent-primary);font-size:.85rem;min-width:70px;text-align:right;">${l.xp} XP</div>
+    </div>
+  `).join('');
+});
+
+// Custom Project Controllers
+function openCustomProjectModal() {
+  document.getElementById('customProjectModal').style.display = 'flex';
+}
+
+function closeCustomProjectModal() {
+  document.getElementById('customProjectModal').style.display = 'none';
+  document.getElementById('cpTitle').value = '';
+  document.getElementById('cpDesc').value = '';
+  document.getElementById('cpLevel').value = 'beginner';
+}
+
+async function submitCustomProject() {
+  const title = document.getElementById('cpTitle').value.trim();
+  const description = document.getElementById('cpDesc').value.trim();
+  const level = document.getElementById('cpLevel').value;
+  
+  if (!title) {
+    showToast('Project title is required');
+    return;
+  }
+  
+  try {
+    const res = await fetch('/api/custom-project/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, description, level})
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'success') {
+      showToast(data.message);
+      closeCustomProjectModal();
+      // Reload stats after small delay to show update
+      setTimeout(() => location.reload(), 1200);
+    } else {
+      showToast(data.error || 'Failed to create project');
+    }
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+</script>
+</body></html>

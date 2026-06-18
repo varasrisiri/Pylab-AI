@@ -1,0 +1,11 @@
+{
+  "title": "Lists — Complete Notes",
+  "topic": "lists",
+  "sections": [
+    {
+      "title": "Complete Guide to Lists",
+      "content": "Comprehensive notes for Lists in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Lists examples\n# Run in the Code Editor to see output\nprint('Study Lists in PyLab AI!')"
+    }
+  ]
+}

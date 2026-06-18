@@ -1,0 +1,144 @@
+{
+  "title": "Strings Deep Dive",
+  "icon": "text",
+  "level": "intermediate",
+  "simple_definition": "Strings are sequences of characters. Python has 40+ built-in string methods for manipulation.",
+  "technical_definition": "Strings are immutable sequences of Unicode characters with rich method support and f-string formatting.",
+  "analogy": "A string is like a necklace — each bead is a character, accessible by position.",
+  "syntax": "s = 'Hello World'\ns.upper()       # HELLO WORLD\ns.lower()       # hello world\ns.split(' ')    # ['Hello', 'World']\ns.replace('o','0')  # Hell0 W0rld\ns.strip()       # remove whitespace\ns[0:5]          # Hello\nf'{s} Python'   # Hello World Python",
+  "example_desc": "Practical examples demonstrating Strings Deep Dive.",
+  "code_example": "text = 'Python Programming'\nprint(text.upper())\nprint(text.lower())\nprint(text.title())\nprint(text.replace('Python', 'Java'))\nprint(text.find('Pro'))\nprint('Python' in text)\nprint(text.startswith('Py'))\nwords = text.split(' ')\nprint(words)\nprint('-'.join(words))\npadded = '  hello  '\nprint(padded.strip())\nname, age = 'Alice', 25\nprint(f'{name} is {age} years old')\nprint(text[:6])\nprint(text[::-1])",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Strings Deep Dive",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Strings Deep Dive is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Strings Deep Dive",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Strings Deep Dive",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Strings Deep Dive",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "subtopics": [
+    {
+      "id": "string-basics",
+      "title": "String Basics & Indexing",
+      "icon": "🔤",
+      "explanation": "Strings are sequences of characters. Access individual characters with indexing. Slice to get substrings.",
+      "syntax": "s = 'Python'\ns[0]    # 'P' (first)\ns[-1]   # 'n' (last)\ns[1:4]  # 'yth' (slice)\ns[::-1] # 'nohtyP' (reverse)\nlen(s)  # 6",
+      "code": "s = 'Python Programming'\nprint(s[0])      # P\nprint(s[-1])     # g\nprint(s[7:18])   # Programming\nprint(s[:6])     # Python\nprint(s[::2])    # Pto rgamn\nprint(s[::-1])   # gnimmargorP nohtyP\nprint(len(s))    # 18\n\n# Strings are immutable\n# s[0] = 'J'  # TypeError!\n\n# Check membership\nprint('Python' in s)   # True\nprint('Java' in s)     # False\n\n# Iterate\nfor char in 'Hi!':\n    print(char, end=' ')",
+      "output": "P\ng\nProgramming\nPython\nPo rgamn\ngnimmargorP nohtyP\n18\nTrue\nFalse\nH i ! ",
+      "tip": "Remember: strings are immutable. You can't change a character — you create a new string."
+    },
+    {
+      "id": "string-methods",
+      "title": "String Methods",
+      "icon": "🛠️",
+      "explanation": "Python has 40+ built-in string methods. They all return new strings (strings are immutable).",
+      "syntax": "s.upper()          # UPPERCASE\ns.lower()          # lowercase\ns.title()          # Title Case\ns.strip()          # remove whitespace\ns.split(',')       # split to list\n','.join(lst)      # join list to string\ns.replace(a, b)    # replace\ns.find('x')        # index or -1\ns.startswith('x')  # True/False\ns.count('x')       # count occurrences",
+      "code": "text = '  Hello, World!  '\n\nprint(text.strip())           # remove spaces\nprint(text.upper())\nprint(text.lower())\nprint(text.title())\nprint(text.replace('World', 'Python'))\nprint(text.find('World'))\nprint(text.count('l'))\nprint(text.startswith('  H'))\nprint(text.endswith('!  '))\n\n# split and join\ncsv = 'Alice,Bob,Charlie,Dave'\nnames = csv.split(',')\nprint(names)\nprint(' | '.join(names))\n\n# Check methods\nprint('hello123'.isalnum())\nprint('hello'.isalpha())\nprint('123'.isdigit())\nprint('  '.isspace())",
+      "output": "Hello, World!\n  HELLO, WORLD!  \n  hello, world!  \n  Hello, World!  \n  Hello, Python!  \n9\n3\nTrue\nTrue\n['Alice', 'Bob', 'Charlie', 'Dave']\nAlice | Bob | Charlie | Dave\nTrue\nTrue\nTrue\nTrue",
+      "tip": "String methods return NEW strings — they don't modify the original. Always assign the result: s = s.strip()"
+    },
+    {
+      "id": "fstrings",
+      "title": "f-strings & Formatting",
+      "icon": "✨",
+      "explanation": "f-strings (Python 3.6+) are the modern way to embed variables in strings. Fast, readable, and powerful.",
+      "syntax": "name = 'Alice'\nage = 25\n\n# f-string\nprint(f'Name: {name}, Age: {age}')\n\n# Expressions inside {}\nprint(f'Next year: {age + 1}')\n\n# Format numbers\npi = 3.14159\nprint(f'Pi = {pi:.2f}')  # 2 decimal places\nprint(f'{1000000:,}')    # 1,000,000",
+      "code": "name = 'Alice'\nage = 25\nscore = 98.5678\nbig_num = 1234567\n\n# Basic f-string\nprint(f'Hello, {name}!')\nprint(f'{name} is {age} years old')\n\n# Expressions\nprint(f'Next year: {age + 1}')\nprint(f'Upper: {name.upper()}')\n\n# Number formatting\nprint(f'Score: {score:.2f}')    # 2 decimals\nprint(f'Score: {score:.0f}')    # no decimals\nprint(f'Big: {big_num:,}')      # comma separator\nprint(f'Hex: {255:#x}')         # hex\nprint(f'Padded: {name:>10}')    # right align\nprint(f'Padded: {name:<10}|')   # left align\n\n# Debug (Python 3.8+)\nx = 42\nprint(f'{x = }')  # x = 42",
+      "output": "Hello, Alice!\nAlice is 25 years old\nNext year: 26\nUpper: ALICE\nScore: 98.57\nScore: 99\nBig: 1,234,567\nHex: 0xff\nPadded:      Alice\nPadded: Alice     |\nx = 42",
+      "tip": "f-strings are 2x faster than .format() and much more readable. Always prefer f-strings in Python 3.6+."
+    }
+  ],
+  "problem_first": "Suppose you receive user data as text:\n'  Alice,25,NYC  '\n\nYou need to:\n1. Remove extra spaces\n2. Split by comma\n3. Get the name (first part)\n4. Convert to uppercase\n\nWithout string methods, this would be very complex.\nWith Python strings:\n\ndata = '  Alice,25,NYC  '\ndata = data.strip()           # 'Alice,25,NYC'\nparts = data.split(',')       # ['Alice', '25', 'NYC']\nname = parts[0].upper()       # 'ALICE'\n\nPython has 40+ built-in string methods for exactly this!",
+  "why_matters": "Strings are everywhere in programming:\n🌐 Web: parse URLs, HTML, JSON responses\n📊 Data: clean and process CSV data\n🔐 Security: validate passwords, sanitize input\n🤖 NLP: text processing, sentiment analysis\n📧 Email: parse and format messages\n\nMastering strings = mastering data processing.",
+  "important_points": [
+    "⭐ Strings are IMMUTABLE — you cannot change a character. s[0]='J' raises TypeError",
+    "⭐ String methods return NEW strings — they don't modify the original",
+    "⭐ Indexing starts at 0: s[0]=first, s[-1]=last, s[-2]=second from last",
+    "⭐ Slicing: s[start:stop:step] — stop is EXCLUDED",
+    "⭐ f-strings (Python 3.6+) are the fastest and most readable way to format strings",
+    "⭐ in operator checks substring: 'Python' in 'I love Python' → True",
+    "⭐ str.split() returns a list; str.join() combines a list into a string",
+    "⭐ strip() removes whitespace from both ends; lstrip()/rstrip() for one side"
+  ],
+  "dry_run": {
+    "title": "Dry Run: s = 'Hello'; print(s[1:4].upper())",
+    "steps": [
+      {
+        "step": 1,
+        "state": "s = 'Hello'",
+        "action": "String 'Hello' stored: H=0, e=1, l=2, l=3, o=4",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "s[1:4]",
+        "action": "Slice from index 1 to 3 (4 excluded): 'ell'",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "'ell'.upper()",
+        "action": "Convert to uppercase: 'ELL'",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "print('ELL')",
+        "action": "Output to screen",
+        "output": "ELL"
+      }
+    ]
+  }
+}

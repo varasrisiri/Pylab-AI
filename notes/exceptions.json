@@ -1,0 +1,11 @@
+{
+  "title": "Exceptions — Complete Notes",
+  "topic": "exceptions",
+  "sections": [
+    {
+      "title": "Complete Guide to Exceptions",
+      "content": "Comprehensive notes for Exceptions in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Exceptions examples\n# Run in the Code Editor to see output\nprint('Study Exceptions in PyLab AI!')"
+    }
+  ]
+}

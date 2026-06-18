@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ content.title if content else topic|title }} - PyLab AI Notes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a2e; line-height: 1.7; background: #fff; }
+.pdf-header { background: linear-gradient(135deg, #020d18, #041525); color: #fff; padding: 2rem; margin-bottom: 2rem; }
+.pdf-header h1 { font-size: 1.8rem; font-weight: 900; color: #00d4ff; margin-bottom: .5rem; }
+.pdf-header p { color: #8ab4c8; font-size: .9rem; }
+.pdf-meta { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+.pdf-badge { background: rgba(0,212,255,.15); border: 1px solid rgba(0,212,255,.3); color: #00d4ff; padding: .25rem .75rem; border-radius: 12px; font-size: .75rem; font-weight: 600; }
+.chapter { margin-bottom: 2.5rem; page-break-inside: avoid; }
+.chapter-title { font-size: 1.1rem; font-weight: 800; color: #020d18; background: #e8f4ff; border-left: 4px solid #00d4ff; padding: .6rem 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem; }
+.section { background: #f8fafc; border: 1px solid #e2eaf2; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; page-break-inside: avoid; }
+.section-heading { font-size: .95rem; font-weight: 700; color: #0066cc; margin-bottom: .6rem; }
+.section-content { color: #3a5068; line-height: 1.8; margin-bottom: .75rem; }
+pre { background: #1e2a3a; color: #abb2bf; padding: 1rem; border-radius: 8px; font-family: 'Courier New', monospace; font-size: .82rem; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: .75rem 0; }
+.output-box { background: #f0f4f8; border: 1px solid #d0dce8; border-radius: 6px; padding: .75rem 1rem; font-family: 'Courier New', monospace; font-size: .82rem; color: #2d4a6b; white-space: pre-wrap; margin-top: .5rem; }
+.output-label { font-size: .7rem; text-transform: uppercase; letter-spacing: 1px; color: #6a8aa0; margin-bottom: .3rem; font-weight: 600; }
+.tip-box { background: #e8fff4; border-left: 3px solid #00aa55; padding: .6rem 1rem; border-radius: 0 6px 6px 0; font-size: .85rem; color: #006633; margin-top: .75rem; }
+.warning-box { background: #fff8e8; border-left: 3px solid #ff8c00; padding: .6rem 1rem; border-radius: 0 6px 6px 0; font-size: .85rem; color: #7a4400; margin-bottom: .5rem; }
+.error-box { background: #fff0f0; border-left: 3px solid #cc0033; padding: .6rem 1rem; border-radius: 0 6px 6px 0; font-size: .85rem; color: #660011; margin-bottom: .5rem; }
+ul { padding-left: 1.5rem; color: #3a5068; line-height: 2; }
+.pdf-footer { text-align: center; padding: 1.5rem; color: #6a8aa0; font-size: .8rem; border-top: 1px solid #e2eaf2; margin-top: 2rem; }
+@media print {
+  body { font-size: 11px; }
+  .chapter { page-break-before: auto; }
+  pre { font-size: .75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="pdf-header">
+  <h1>&#x1F40D; {{ content.icon if content else '' }} {{ notes.title if notes else (content.title if content else topic|title) }}</h1>
+  <p>PyLab AI — Learn, Experiment, Master Python &#x2B50;</p>
+  <div class="pdf-meta">
+    {% if content %}<span class="pdf-badge">{{ content.level|title }}</span>{% endif %}
+    <span class="pdf-badge">Complete Notes</span>
+    <span class="pdf-badge">Code Examples</span>
+    <span class="pdf-badge">Practice Questions</span>
+  </div>
+</div>
+
+{% if notes and notes.chapters %}
+  {% for ch in notes.chapters %}
+  <div class="chapter">
+    <div class="chapter-title">{{ ch.title }}</div>
+    {% for sec in ch.sections %}
+    <div class="section">
+      <div class="section-heading">{{ sec.heading }}</div>
+      <p class="section-content">{{ sec.content }}</p>
+      {% if sec.code %}
+      <pre>{{ sec.code }}</pre>
+      {% endif %}
+      {% if sec.output %}
+      <div class="output-label">Output:</div>
+      <div class="output-box">{{ sec.output }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+{% elif content %}
+  <div class="chapter">
+    <div class="chapter-title">Chapter 1: Understanding {{ content.title }}</div>
+    <div class="section">
+      <div class="section-heading">Simple Definition</div>
+      <p class="section-content">{{ content.simple_definition }}</p>
+    </div>
+    <div class="section">
+      <div class="section-heading">Technical Definition</div>
+      <p class="section-content">{{ content.technical_definition }}</p>
+    </div>
+    {% if content.analogy %}
+    <div class="section">
+      <div class="section-heading">Real-World Analogy</div>
+      <p class="section-content">{{ content.analogy }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if content.why_matters %}
+  <div class="chapter">
+    <div class="chapter-title">Chapter 2: Logic Building & Why It Matters</div>
+    <div class="section">
+      <div class="section-heading">How Useful in Logic Building</div>
+      <p class="section-content" style="white-space: pre-line; line-height: 1.8;">{{ content.why_matters }}</p>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if content.logic_steps %}
+  <div class="chapter">
+    <div class="chapter-title">Chapter 3: Logic Execution Steps</div>
+    <div class="section">
+      <div class="section-heading">Step-by-Step Logic</div>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; color: #3a5068;">
+        {% for step in content.logic_steps %}
+        <li style="margin-bottom: 0.4rem;">{{ step }}</li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if content.important_points %}
+  <div class="chapter">
+    <div class="chapter-title">Chapter 4: Important Points & Best Practices</div>
+    <div class="section">
+      <div class="section-heading">Key Insights</div>
+      <ul style="padding-left: 1.5rem; line-height: 1.8; color: #3a5068;">
+        {% for pt in content.important_points %}
+        <li style="margin-bottom: 0.4rem;">{{ pt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="chapter">
+    <div class="chapter-title">Chapter 5: Syntax & Code</div>
+    <div class="section">
+      <div class="section-heading">Syntax</div>
+      <pre>{{ content.syntax }}</pre>
+    </div>
+    <div class="section">
+      <div class="section-heading">Code Example</div>
+      <p class="section-content">{{ content.example_desc }}</p>
+      <pre>{{ content.code_example }}</pre>
+      {% if content.output %}
+      <div class="output-label">Output:</div>
+      <div class="output-box">{{ content.output }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if content.subtopics is defined and content.subtopics %}
+  <div class="chapter">
+    <div class="chapter-title">Chapter 6: Subtopics Deep Dive</div>
+    {% for sub in content.subtopics %}
+    <div class="section">
+      <div class="section-heading">{{ sub.icon }} {{ sub.title }}</div>
+      <p class="section-content">{{ sub.explanation }}</p>
+      <pre>{{ sub.code }}</pre>
+      {% if sub.output is defined %}
+      <div class="output-label">Output:</div>
+      <div class="output-box">{{ sub.output }}</div>
+      {% endif %}
+      {% if sub.tip is defined %}
+      <div class="tip-box"><strong>Tip:</strong> {{ sub.tip }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="chapter">
+    <div class="chapter-title">Chapter 7: Practice Questions</div>
+    {% for q in content.practice.easy %}
+    <div class="section">
+      <div class="section-heading">Easy {{ loop.index }}: {{ q.question }}</div>
+      <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+    </div>
+    {% endfor %}
+    {% for q in content.practice.medium %}
+    <div class="section">
+      <div class="section-heading">Medium {{ loop.index }}: {{ q.question }}</div>
+      <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+    </div>
+    {% endfor %}
+    {% for q in content.practice.hard %}
+    <div class="section">
+      <div class="section-heading">Hard {{ loop.index }}: {{ q.question }}</div>
+      <p class="section-content"><strong>Hint:</strong> {{ q.hint }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="chapter">
+    <div class="chapter-title">Chapter 8: Interview Tips & Edge Cases</div>
+    <div class="section">
+      <div class="section-heading">Interview Tips</div>
+      <ul>{% for tip in content.interview_tips %}<li>{{ tip }}</li>{% endfor %}</ul>
+    </div>
+    <div class="section">
+      <div class="section-heading">Edge Cases</div>
+      {% for ec in content.edge_cases %}<div class="warning-box">{{ ec }}</div>{% endfor %}
+    </div>
+    <div class="section">
+      <div class="section-heading">Common Mistakes</div>
+      {% for m in content.common_mistakes %}<div class="error-box">{{ m }}</div>{% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<div class="pdf-footer">
+  PyLab AI — Learn, Experiment, Master Python &#x2B50; | pylab-ai.local<br>
+  Concept &#x2192; Understanding &#x2192; Logic &#x2192; Practice &#x2192; Mastery
+</div>
+
+<script>window.onload = function() { window.print(); }</script>
+</body></html>

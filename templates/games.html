@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding Games - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div class="section">
+  <div style="margin-bottom:2rem;">
+    <h1 class="section-title">&#x1F3AE; Coding Games</h1>
+    <p style="color:var(--text-secondary)">Learn Python while having fun. Test your knowledge with interactive challenges.</p>
+  </div>
+
+  <div class="games-grid">
+
+    <!-- Game 1: Predict Output -->
+    <div class="game-card">
+      <span class="game-icon">&#x1F52E;</span>
+      <div class="game-title">Predict the Output</div>
+      <div class="game-desc">Read Python code and predict what it will print. Tests your understanding of execution flow.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <span class="score-display" id="predictScore">Score: 0</span>
+        <span style="color:var(--text-muted);font-size:0.85rem" id="predictQ">Q: 1/5</span>
+      </div>
+      <button class="btn btn-primary" onclick="startGame('predict')" style="width:100%">&#x25B6; Play Now</button>
+      <div class="game-area" id="predictArea">
+        <div class="game-question" id="predictQuestion"></div>
+        <input type="text" class="game-input" id="predictInput" placeholder="Type the output...">
+        <button class="btn btn-primary btn-sm" onclick="checkPredict()">Submit Answer</button>
+        <div class="game-feedback" id="predictFeedback"></div>
+        <button class="btn btn-ghost btn-sm" onclick="nextPredict()" id="predictNext" style="display:none;margin-top:0.5rem;">Next Question &#x2192;</button>
+      </div>
+    </div>
+
+    <!-- Game 2: Debug the Code -->
+    <div class="game-card">
+      <span class="game-icon">&#x1F41B;</span>
+      <div class="game-title">Debug the Code</div>
+      <div class="game-desc">Find the bug in the Python code. Spot syntax errors, logic errors, and common mistakes.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <span class="score-display" id="debugScore">Score: 0</span>
+        <span style="color:var(--text-muted);font-size:0.85rem" id="debugQ">Q: 1/5</span>
+      </div>
+      <button class="btn btn-primary" onclick="startGame('debug')" style="width:100%">&#x25B6; Play Now</button>
+      <div class="game-area" id="debugArea">
+        <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:0.5rem;">Find the bug in this code:</p>
+        <div class="game-question" id="debugQuestion"></div>
+        <input type="text" class="game-input" id="debugInput" placeholder="Describe the bug or type the fix...">
+        <button class="btn btn-primary btn-sm" onclick="checkDebug()">Submit</button>
+        <div class="game-feedback" id="debugFeedback"></div>
+        <button class="btn btn-ghost btn-sm" onclick="nextDebug()" id="debugNext" style="display:none;margin-top:0.5rem;">Next &#x2192;</button>
+      </div>
+    </div>
+
+    <!-- Game 3: Number Guessing -->
+    <div class="game-card">
+      <span class="game-icon">&#x1F3B2;</span>
+      <div class="game-title">Number Guessing Game</div>
+      <div class="game-desc">The computer picks a number 1-100. Guess it in as few tries as possible. Uses binary search logic!</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <span class="score-display" id="guessAttempts">Attempts: 0</span>
+        <span style="color:var(--text-muted);font-size:0.85rem" id="guessRange">Range: 1-100</span>
+      </div>
+      <button class="btn btn-primary" onclick="startGuessing()" style="width:100%">&#x25B6; New Game</button>
+      <div class="game-area" id="guessArea">
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:0.75rem;" id="guessHint">I'm thinking of a number between 1 and 100...</p>
+        <input type="number" class="game-input" id="guessInput" placeholder="Enter your guess (1-100)" min="1" max="100">
+        <button class="btn btn-primary btn-sm" onclick="makeGuess()">Guess!</button>
+        <div class="game-feedback" id="guessFeedback"></div>
+      </div>
+    </div>
+
+    <!-- Game 4: Logic Puzzle -->
+    <div class="game-card">
+      <span class="game-icon">&#x1F9E9;</span>
+      <div class="game-title">Logic Puzzle</div>
+      <div class="game-desc">Solve Python logic puzzles. Fill in the missing code to make the output correct.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <span class="score-display" id="puzzleScore">Score: 0</span>
+        <span style="color:var(--text-muted);font-size:0.85rem" id="puzzleQ">Q: 1/4</span>
+      </div>
+      <button class="btn btn-primary" onclick="startGame('puzzle')" style="width:100%">&#x25B6; Play Now</button>
+      <div class="game-area" id="puzzleArea">
+        <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:0.5rem;">Fill in the blank to get the expected output:</p>
+        <div class="game-question" id="puzzleQuestion"></div>
+        <input type="text" class="game-input" id="puzzleInput" placeholder="Fill in the blank...">
+        <button class="btn btn-primary btn-sm" onclick="checkPuzzle()">Submit</button>
+        <div class="game-feedback" id="puzzleFeedback"></div>
+        <button class="btn btn-ghost btn-sm" onclick="nextPuzzle()" id="puzzleNext" style="display:none;margin-top:0.5rem;">Next &#x2192;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+<script>
+// ── Predict Output Game ───────────────────────────────────
+const predictQuestions = [
+  {code: "x = 5\ny = 3\nprint(x + y)", answer: "8"},
+  {code: "for i in range(3):\n    print(i)", answer: "0\n1\n2"},
+  {code: "s = 'hello'\nprint(s[1:4])", answer: "ell"},
+  {code: "lst = [1,2,3]\nprint(len(lst) * 2)", answer: "6"},
+  {code: "x = 10\nif x > 5:\n    print('big')\nelse:\n    print('small')", answer: "big"}
+];
+let predictIdx = 0, predictPoints = 0;
+
+function startGame(type) {
+  document.getElementById(type + 'Area').classList.add('active');
+  if (type === 'predict') showPredict();
+  if (type === 'debug') showDebug();
+  if (type === 'puzzle') showPuzzle();
+}
+
+function showPredict() {
+  const q = predictQuestions[predictIdx];
+  document.getElementById('predictQuestion').textContent = q.code.replace(/\\n/g, '\n');
+  document.getElementById('predictInput').value = '';
+  document.getElementById('predictFeedback').className = 'game-feedback';
+  document.getElementById('predictNext').style.display = 'none';
+  document.getElementById('predictQ').textContent = 'Q: ' + (predictIdx+1) + '/' + predictQuestions.length;
+}
+
+function checkPredict() {
+  const answer = document.getElementById('predictInput').value.trim();
+  const correct = predictQuestions[predictIdx].answer.replace(/\\n/g, '\n');
+  const fb = document.getElementById('predictFeedback');
+  if (answer === correct) {
+    predictPoints += 10;
+    fb.textContent = '&#x2705; Correct! +10 points';
+    fb.className = 'game-feedback correct';
+    document.getElementById('predictScore').textContent = 'Score: ' + predictPoints;
+  } else {
+    fb.textContent = '&#x274C; Wrong! Expected: ' + correct;
+    fb.className = 'game-feedback wrong';
+  }
+  document.getElementById('predictNext').style.display = 'inline-flex';
+}
+
+function nextPredict() {
+  predictIdx = (predictIdx + 1) % predictQuestions.length;
+  showPredict();
+}
+
+// ── Debug Game ────────────────────────────────────────────
+const debugQuestions = [
+  {code: "def add(a, b)\n    return a + b", bug: "Missing colon after def add(a, b)", fix: ":"},
+  {code: "lst = [1,2,3]\nprint(lst[3])", bug: "IndexError: index 3 out of range (valid: 0-2)", fix: "lst[2]"},
+  {code: "x = 5\nif x = 5:\n    print('five')", bug: "Use == for comparison, not =", fix: "=="},
+  {code: "for i in range(5)\n    print(i)", bug: "Missing colon after range(5)", fix: ":"},
+  {code: "name = 'Alice'\nprint('Hello ' + name + 5)", bug: "Cannot concatenate str and int", fix: "str(5)"}
+];
+let debugIdx = 0, debugPoints = 0;
+
+function showDebug() {
+  const q = debugQuestions[debugIdx];
+  document.getElementById('debugQuestion').textContent = q.code.replace(/\\n/g, '\n');
+  document.getElementById('debugInput').value = '';
+  document.getElementById('debugFeedback').className = 'game-feedback';
+  document.getElementById('debugNext').style.display = 'none';
+  document.getElementById('debugQ').textContent = 'Q: ' + (debugIdx+1) + '/' + debugQuestions.length;
+}
+
+function checkDebug() {
+  const answer = document.getElementById('debugInput').value.trim().toLowerCase();
+  const q = debugQuestions[debugIdx];
+  const fb = document.getElementById('debugFeedback');
+  const keywords = q.bug.toLowerCase().split(' ').filter(w => w.length > 3);
+  const correct = keywords.some(kw => answer.includes(kw));
+  if (correct) {
+    debugPoints += 10;
+    fb.textContent = '&#x2705; Correct! Bug: ' + q.bug;
+    fb.className = 'game-feedback correct';
+    document.getElementById('debugScore').textContent = 'Score: ' + debugPoints;
+  } else {
+    fb.textContent = '&#x274C; The bug was: ' + q.bug;
+    fb.className = 'game-feedback wrong';
+  }
+  document.getElementById('debugNext').style.display = 'inline-flex';
+}
+
+function nextDebug() {
+  debugIdx = (debugIdx + 1) % debugQuestions.length;
+  showDebug();
+}
+
+// ── Number Guessing ───────────────────────────────────────
+let secretNumber, attempts, low, high;
+
+function startGuessing() {
+  secretNumber = Math.floor(Math.random() * 100) + 1;
+  attempts = 0; low = 1; high = 100;
+  document.getElementById('guessArea').classList.add('active');
+  document.getElementById('guessHint').textContent = "I'm thinking of a number between 1 and 100...";
+  document.getElementById('guessInput').value = '';
+  document.getElementById('guessFeedback').className = 'game-feedback';
+  document.getElementById('guessAttempts').textContent = 'Attempts: 0';
+  document.getElementById('guessRange').textContent = 'Range: 1-100';
+}
+
+function makeGuess() {
+  const guess = parseInt(document.getElementById('guessInput').value);
+  if (!guess || guess < 1 || guess > 100) return;
+  attempts++;
+  document.getElementById('guessAttempts').textContent = 'Attempts: ' + attempts;
+  const fb = document.getElementById('guessFeedback');
+  if (guess === secretNumber) {
+    fb.textContent = '&#x1F389; Correct! You got it in ' + attempts + ' attempts! Binary search would take max 7 tries.';
+    fb.className = 'game-feedback correct';
+    document.getElementById('guessHint').textContent = '&#x1F3C6; You won!';
+  } else if (guess < secretNumber) {
+    low = guess + 1;
+    fb.textContent = '&#x2B06; Too low! Try higher.';
+    fb.className = 'game-feedback wrong';
+    document.getElementById('guessHint').textContent = 'Hint: number is between ' + low + ' and ' + high;
+    document.getElementById('guessRange').textContent = 'Range: ' + low + '-' + high;
+  } else {
+    high = guess - 1;
+    fb.textContent = '&#x2B07; Too high! Try lower.';
+    fb.className = 'game-feedback wrong';
+    document.getElementById('guessHint').textContent = 'Hint: number is between ' + low + ' and ' + high;
+    document.getElementById('guessRange').textContent = 'Range: ' + low + '-' + high;
+  }
+  document.getElementById('guessInput').value = '';
+}
+
+// ── Logic Puzzle ──────────────────────────────────────────
+const puzzles = [
+  {code: "result = [x**2 for x in range(___)]\nprint(result)\n# Expected: [0, 1, 4, 9, 16]", answer: "5", hint: "range(5) gives 0,1,2,3,4"},
+  {code: "def greet(name='___'):\n    return f'Hello, {name}!'\nprint(greet())\n# Expected: Hello, World!", answer: "World", hint: "Default parameter value"},
+  {code: "nums = [3,1,4,1,5]\nprint(sorted(nums)[___])\n# Expected: 5", answer: "-1", hint: "Last element of sorted list"},
+  {code: "s = 'Python'\nprint(s.___(2))\n# Expected: Py", answer: "[:2] or __getitem__(slice(None,2))", hint: "String slicing or use [:2]"}
+];
+let puzzleIdx = 0, puzzlePoints = 0;
+
+function showPuzzle() {
+  const q = puzzles[puzzleIdx];
+  document.getElementById('puzzleQuestion').textContent = q.code;
+  document.getElementById('puzzleInput').value = '';
+  document.getElementById('puzzleFeedback').className = 'game-feedback';
+  document.getElementById('puzzleNext').style.display = 'none';
+  document.getElementById('puzzleQ').textContent = 'Q: ' + (puzzleIdx+1) + '/' + puzzles.length;
+}
+
+function checkPuzzle() {
+  const answer = document.getElementById('puzzleInput').value.trim();
+  const q = puzzles[puzzleIdx];
+  const fb = document.getElementById('puzzleFeedback');
+  if (answer === q.answer || q.answer.includes(answer)) {
+    puzzlePoints += 15;
+    fb.textContent = '&#x2705; Correct! +15 points. ' + q.hint;
+    fb.className = 'game-feedback correct';
+    document.getElementById('puzzleScore').textContent = 'Score: ' + puzzlePoints;
+  } else {
+    fb.textContent = '&#x274C; Not quite. Hint: ' + q.hint;
+    fb.className = 'game-feedback wrong';
+  }
+  document.getElementById('puzzleNext').style.display = 'inline-flex';
+}
+
+function nextPuzzle() {
+  puzzleIdx = (puzzleIdx + 1) % puzzles.length;
+  showPuzzle();
+}
+
+document.getElementById('guessInput')?.addEventListener('keypress', e => { if(e.key==='Enter') makeGuess(); });
+</script>
+</body></html>

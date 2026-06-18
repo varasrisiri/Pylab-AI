@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyLab AI - Learn, Experiment, Master Python</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark" title="Dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light" title="Light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">&#x1F40D; AI-Powered Python Learning Platform</div>
+    <h1 class="hero-title">
+      Learn <span class="highlight">Python</span><br>
+      The <span class="highlight2">Right Way</span>
+    </h1>
+    <p class="hero-tagline">Learn, Experiment, Master Python <span style="color:var(--accent-tertiary)">&#x2B50;</span><span class="cursor">|</span></p>
+    <div class="hero-cta">
+      <a href="/learn" class="btn btn-primary">&#x1F680; Start Learning</a>
+      <a href="/practice" class="btn btn-secondary">&#x1F4BB; Practice Coding</a>
+      <a href="/ai-mentor" class="btn btn-ghost">&#x1F916; AI Mentor</a>
+    </div>
+    <div style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;">
+      <div style="text-align:center"><div class="stat-num" data-target="50" data-suffix="+">0+</div><div class="stat-label">Topics</div></div>
+      <div style="text-align:center"><div class="stat-num" data-target="200" data-suffix="+">0+</div><div class="stat-label">Problems</div></div>
+      <div style="text-align:center"><div class="stat-num" data-target="7" data-suffix="">0</div><div class="stat-label">Libraries</div></div>
+      <div style="text-align:center"><div class="stat-num" data-target="4" data-suffix="">0</div><div class="stat-label">Games</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section style="background:var(--bg-secondary);padding:3rem 2rem;text-align:center;border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);">
+  <div style="max-width:800px;margin:0 auto;">
+    <p style="font-size:0.8rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:1rem;">Our Learning Philosophy</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;font-size:1rem;font-weight:600;">
+      <span style="background:rgba(0,212,255,0.1);border:1px solid var(--border-color);padding:0.5rem 1rem;border-radius:20px;color:var(--accent-primary)">&#x1F4A1; Concept</span>
+      <span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.2);padding:0.5rem 1rem;border-radius:20px;color:var(--accent-secondary)">&#x1F9E0; Understanding</span>
+      <span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);padding:0.5rem 1rem;border-radius:20px;color:var(--accent-tertiary)">&#x2699;&#xFE0F; Logic</span>
+      <span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="background:rgba(255,165,0,0.1);border:1px solid rgba(255,165,0,0.2);padding:0.5rem 1rem;border-radius:20px;color:var(--accent-warning)">&#x1F3AF; Practice</span>
+      <span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2);padding:0.5rem 1rem;border-radius:20px;color:var(--accent-danger)">&#x1F3C6; Mastery</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Everything You Need to Master Python</h2>
+    <p class="section-subtitle">A complete ecosystem for learning, practicing, and mastering Python from zero to advanced.</p>
+  </div>
+  <div class="features-grid">
+    <a href="/learn" class="feature-card">
+      <span class="icon">&#x1F4D8;</span>
+      <h3>Learn Python</h3>
+      <p>From basics to advanced OOP, decorators, generators and more. Every concept explained with real-world analogies.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+    <a href="/practice" class="feature-card">
+      <span class="icon">&#x1F4BB;</span>
+      <h3>Practice Coding</h3>
+      <p>200+ problems from beginner to MNC interview level. Topic-wise, level-wise with hints and optimized solutions.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+    <a href="/ai-mentor" class="feature-card">
+      <span class="icon">&#x1F916;</span>
+      <h3>AI Mentor</h3>
+      <p>Paste your code and get instant explanations, error detection, hints, and optimization suggestions.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+    <a href="/games" class="feature-card">
+      <span class="icon">&#x1F3AE;</span>
+      <h3>Coding Games</h3>
+      <p>Learn while having fun. Predict output, debug code, solve logic puzzles and number games.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+    <a href="/libraries" class="feature-card">
+      <span class="icon">&#x1F4E6;</span>
+      <h3>Libraries Explorer</h3>
+      <p>NumPy, Pandas, Matplotlib, TensorFlow, Flask, Django, OpenCV — with syntax and mini projects.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+    <a href="/roadmap" class="feature-card">
+      <span class="icon">&#x1F5FA;&#xFE0F;</span>
+      <h3>Learning Roadmap</h3>
+      <p>Visual progression from beginner to advanced. Track your milestones and know what to learn next.</p>
+      <span class="arrow">&#x2192;</span>
+    </a>
+  </div>
+</section>
+
+<!-- INTERVIEW PREP -->
+<section style="background:var(--bg-secondary);padding:4rem 2rem;border-top:1px solid var(--border-color);">
+  <div style="max-width:900px;margin:0 auto;text-align:center;">
+    <h2 class="section-title">&#x1F3AF; MNC Interview Ready</h2>
+    <p style="color:var(--text-secondary);margin-bottom:2rem;">Prepare for Google, Amazon, Microsoft, and other top companies with curated Python interview questions.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+      <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:0.5rem">&#x1F4CA;</div><div style="font-weight:700;color:var(--text-heading)">Data Structures</div><div style="color:var(--text-muted);font-size:0.85rem">Arrays, Linked Lists, Trees</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:0.5rem">&#x1F504;</div><div style="font-weight:700;color:var(--text-heading)">Algorithms</div><div style="color:var(--text-muted);font-size:0.85rem">Sorting, Searching, DP</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:0.5rem">&#x1F9E9;</div><div style="font-weight:700;color:var(--text-heading)">OOP Concepts</div><div style="color:var(--text-muted);font-size:0.85rem">Classes, Inheritance, Polymorphism</div></div>
+      <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:0.5rem">&#x26A1;</div><div style="font-weight:700;color:var(--text-heading)">Optimization</div><div style="color:var(--text-muted);font-size:0.85rem">Time & Space Complexity</div></div>
+    </div>
+    <div style="margin-top:2rem"><a href="/practice?level=advanced" class="btn btn-primary">View Interview Questions &#x2192;</a></div>
+  </div>
+</section>
+
+</main>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand"><span style="font-size:2rem">&#x1F40D;</span><strong>PyLab AI</strong><p>Learn, Experiment, Master Python &#x2B50;</p></div>
+    <div class="footer-links"><a href="/learn">Learn Python</a><a href="/practice">Practice</a><a href="/ai-mentor">AI Mentor</a><a href="/games">Games</a><a href="/libraries">Libraries</a><a href="/roadmap">Roadmap</a></div>
+    <div class="footer-info"><p>Built for learners who want to truly understand Python</p><p class="footer-copy">Concept &#x2192; Understanding &#x2192; Logic &#x2192; Practice &#x2192; Mastery</p></div>
+  </div>
+</footer>
+<script src="/static/js/main.js?v=1.0.3"></script>
+</body></html>

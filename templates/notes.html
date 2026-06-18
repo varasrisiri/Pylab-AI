@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Notes - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.notes-hero{background:var(--gradient-hero);padding:4rem 2rem;text-align:center;border-bottom:1px solid var(--border-color);}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;max-width:1200px;margin:0 auto;padding:3rem 2rem;}
+.note-card{background:var(--gradient-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;text-decoration:none;display:block;transition:all .3s;position:relative;overflow:hidden;}
+.note-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:var(--border-glow);}
+.note-card-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;}
+.note-card-icon{font-size:2rem;}
+.note-card-title{font-size:1rem;font-weight:700;color:var(--text-heading);}
+.note-card-level{font-size:.72rem;}
+.note-card-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.6;margin-bottom:1rem;}
+.note-card-actions{display:flex;gap:.5rem;}
+.note-btn{padding:.35rem .85rem;border-radius:8px;font-size:.78rem;font-weight:600;text-decoration:none;transition:all .2s;border:1px solid;}
+.note-btn-read{background:rgba(0,212,255,.1);color:var(--accent-primary);border-color:rgba(0,212,255,.3);}
+.note-btn-read:hover{background:rgba(0,212,255,.2);}
+.note-btn-pdf{background:rgba(255,71,87,.1);color:var(--accent-danger);border-color:rgba(255,71,87,.3);}
+.note-btn-pdf:hover{background:rgba(255,71,87,.2);}
+.note-card-chapters{font-size:.75rem;color:var(--text-muted);margin-top:.5rem;}
+</style>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div class="notes-hero">
+<h1 style="font-size:2.5rem;font-weight:900;color:var(--text-heading);margin-bottom:.75rem;">&#x1F4D3; Python Notes</h1>
+<p style="color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto 1.5rem;">Complete chapter-wise notes for every topic. Read online or download as PDF.</p>
+<div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+<div style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:.6rem 1.25rem;font-size:.85rem;color:var(--accent-primary);">&#x1F4DA; 19 Topics</div>
+<div style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);border-radius:12px;padding:.6rem 1.25rem;font-size:.85rem;color:var(--accent-secondary);">&#x1F4DD; Chapter-wise</div>
+<div style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:.6rem 1.25rem;font-size:.85rem;color:var(--accent-tertiary);">&#x1F4C4; PDF Export</div>
+<div style="background:rgba(191,95,255,.1);border:1px solid rgba(191,95,255,.2);border-radius:12px;padding:.6rem 1.25rem;font-size:.85rem;color:#bf5fff;">&#x1F4BB; Code Examples</div>
+</div>
+</div>
+<div class="notes-grid">
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F40D;</span>
+    <div><div class="note-card-title">Introduction to Python</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">What is Python, setup, first program, why Python</p>
+  <div class="note-card-actions">
+    <a href="/notes/introduction" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/introduction" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x270F;&#xFE0F;</span>
+    <div><div class="note-card-title">Syntax & Variables</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">Variables, naming rules, assignment, multiple assignment</p>
+  <div class="note-card-actions">
+    <a href="/notes/syntax" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/syntax" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F522;</span>
+    <div><div class="note-card-title">Data Types</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">int, float, str, bool, None, type conversion</p>
+  <div class="note-card-actions">
+    <a href="/notes/datatypes" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/datatypes" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x2795;</span>
+    <div><div class="note-card-title">Operators</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">Arithmetic, comparison, logical, assignment, bitwise</p>
+  <div class="note-card-actions">
+    <a href="/notes/operators" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/operators" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x2753;</span>
+    <div><div class="note-card-title">Conditional Statements</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">if/elif/else, ternary, match-case, nested conditions</p>
+  <div class="note-card-actions">
+    <a href="/notes/conditionals" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/conditionals" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F504;</span>
+    <div><div class="note-card-title">Loops</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">for, while, break, continue, patterns, list comprehension</p>
+  <div class="note-card-actions">
+    <a href="/notes/loops" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/loops" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 4 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F9E9;</span>
+    <div><div class="note-card-title">Functions</div><span class="badge badge-beginner note-card-level">Beginner</span></div>
+  </div>
+  <p class="note-card-desc">def, parameters, *args, **kwargs, lambda, recursion</p>
+  <div class="note-card-actions">
+    <a href="/notes/functions" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/functions" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F4CB;</span>
+    <div><div class="note-card-title">Lists & Tuples</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">Indexing, slicing, methods, comprehensions, sorting</p>
+  <div class="note-card-actions">
+    <a href="/notes/lists" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/lists" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F4D6;</span>
+    <div><div class="note-card-title">Dictionaries & Sets</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">CRUD, methods, Counter, defaultdict, set operations</p>
+  <div class="note-card-actions">
+    <a href="/notes/dictionaries" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/dictionaries" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F524;</span>
+    <div><div class="note-card-title">Strings Deep Dive</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">Methods, f-strings, formatting, regex basics</p>
+  <div class="note-card-actions">
+    <a href="/notes/strings" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/strings" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F4C1;</span>
+    <div><div class="note-card-title">File Handling</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">open, read, write, append, CSV, JSON files</p>
+  <div class="note-card-actions">
+    <a href="/notes/filehandling" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/filehandling" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x26A0;&#xFE0F;</span>
+    <div><div class="note-card-title">Exception Handling</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">try/except/else/finally, custom exceptions, best practices</p>
+  <div class="note-card-actions">
+    <a href="/notes/exceptions" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/exceptions" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F4E6;</span>
+    <div><div class="note-card-title">Modules & Packages</div><span class="badge badge-intermediate note-card-level">Intermediate</span></div>
+  </div>
+  <p class="note-card-desc">import, standard library, pip, virtual environments</p>
+  <div class="note-card-actions">
+    <a href="/notes/modules" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/modules" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F3D7;&#xFE0F;</span>
+    <div><div class="note-card-title">OOP</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">Classes, inheritance, polymorphism, encapsulation, dunder methods</p>
+  <div class="note-card-actions">
+    <a href="/notes/oop" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/oop" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 5 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F3A8;</span>
+    <div><div class="note-card-title">Decorators</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">Function decorators, class decorators, @property, functools</p>
+  <div class="note-card-actions">
+    <a href="/notes/decorators" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/decorators" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 3 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x26A1;</span>
+    <div><div class="note-card-title">Generators</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">yield, generator expressions, itertools, lazy evaluation</p>
+  <div class="note-card-actions">
+    <a href="/notes/generators" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/generators" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x03BB;</span>
+    <div><div class="note-card-title">Lambda Functions</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">lambda, map, filter, reduce, functional programming</p>
+  <div class="note-card-actions">
+    <a href="/notes/lambda" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/lambda" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F310;</span>
+    <div><div class="note-card-title">APIs & JSON</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">requests, REST APIs, JSON parsing, error handling</p>
+  <div class="note-card-actions">
+    <a href="/notes/apis" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/apis" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+<div class="note-card">
+  <div class="note-card-top">
+    <span class="note-card-icon">&#x1F9F5;</span>
+    <div><div class="note-card-title">Multithreading</div><span class="badge badge-advanced note-card-level">Advanced</span></div>
+  </div>
+  <p class="note-card-desc">threading, locks, GIL, async/await basics</p>
+  <div class="note-card-actions">
+    <a href="/notes/threading" class="note-btn note-btn-read">&#x1F4D6; Read Notes</a>
+    <a href="/api/notes-pdf/threading" target="_blank" class="note-btn note-btn-pdf">&#x1F4C4; PDF</a>
+  </div>
+  <div class="note-card-chapters">&#x1F4DA; 2 chapters</div>
+</div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+</body></html>

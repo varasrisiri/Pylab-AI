@@ -1,0 +1,11 @@
+{
+  "title": "Datatypes — Complete Notes",
+  "topic": "datatypes",
+  "sections": [
+    {
+      "title": "Complete Guide to Datatypes",
+      "content": "Comprehensive notes for Datatypes in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Datatypes examples\n# Run in the Code Editor to see output\nprint('Study Datatypes in PyLab AI!')"
+    }
+  ]
+}

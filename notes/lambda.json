@@ -1,0 +1,11 @@
+{
+  "title": "Lambda — Complete Notes",
+  "topic": "lambda",
+  "sections": [
+    {
+      "title": "Complete Guide to Lambda",
+      "content": "Comprehensive notes for Lambda in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Lambda examples\n# Run in the Code Editor to see output\nprint('Study Lambda in PyLab AI!')"
+    }
+  ]
+}

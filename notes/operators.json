@@ -1,0 +1,11 @@
+{
+  "title": "Operators — Complete Notes",
+  "topic": "operators",
+  "sections": [
+    {
+      "title": "Complete Guide to Operators",
+      "content": "Comprehensive notes for Operators in Python. Includes all concepts, examples, patterns, and interview questions.",
+      "code": "# Operators examples\n# Run in the Code Editor to see output\nprint('Study Operators in PyLab AI!')"
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Python - PyLab AI</title>
+<link rel="stylesheet" href="/static/css/themes.css">
+<link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+<div class="bg-particles" id="bgParticles"></div>
+<nav class="navbar">
+  <div class="nav-brand"><span class="python-logo">&#x1F40D;</span><span class="brand-name">PyLab <span class="brand-ai">AI</span></span></div>
+    <div class="nav-links" id="navLinks">
+    <a href="/" class="nav-link">🏠 Home</a>
+    <a href="/learn" class="nav-link">📘 Learn</a>
+    <a href="/practice" class="nav-link">💻 Practice</a>
+    <a href="/projects" class="nav-link" style="color:var(--accent-secondary)">🛠️ Projects</a>
+    <a href="/ai-mentor" class="nav-link">🤖 AI Mentor</a>
+    <a href="/games" class="nav-link">🎮 Games</a>
+    <a href="/notebook" class="nav-link" style="color:var(--accent-secondary)">📓 Notebook</a>
+    <a href="/dashboard" class="nav-link" style="color:var(--accent-tertiary)">📊 Dashboard</a>
+    <a href="/streak" class="nav-link" style="color:var(--accent-tertiary)">🔥 Streak</a>
+    <a href="/notes" class="nav-link">📓 Notes</a>
+    <a href="/experiment" class="nav-link">🧪 Lab</a>
+    <a href="/libraries" class="nav-link">📦 Libraries</a>
+    <a href="/roadmap" class="nav-link">🗺️ Roadmap</a>
+  </div>
+  <div class="nav-actions">
+    <div class="theme-switcher" id="themeSwitcher">
+      <button class="theme-btn active" data-theme="dark">&#x1F319;</button>
+      
+      
+      
+      <button class="theme-btn" data-theme="light">&#x2600;&#xFE0F;</button>
+    </div>
+    <button class="hamburger" id="hamburger">&#x2630;</button>
+  </div>
+</nav>
+<main class="main-content">
+<div class="learn-layout">
+
+<!-- Sidebar -->
+<aside class="learn-sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">&#x1F7E2; Beginner</div>
+    <a href="/learn/introduction" class="sidebar-item"><span class="item-icon">&#x1F4CB;</span>Introduction</a>
+    <a href="/learn/syntax" class="sidebar-item"><span class="item-icon">&#x270F;&#xFE0F;</span>Syntax & Variables</a>
+    <a href="/learn/datatypes" class="sidebar-item"><span class="item-icon">&#x1F522;</span>Data Types</a>
+    <a href="/learn/operators" class="sidebar-item"><span class="item-icon">&#x2795;</span>Operators</a>
+    <a href="/learn/conditionals" class="sidebar-item"><span class="item-icon">&#x2753;</span>Conditionals</a>
+    <a href="/learn/loops" class="sidebar-item"><span class="item-icon">&#x1F504;</span>Loops</a>
+    <a href="/learn/functions" class="sidebar-item"><span class="item-icon">&#x1F9E9;</span>Functions</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">&#x1F7E1; Intermediate</div>
+    <a href="/learn/lists" class="sidebar-item"><span class="item-icon">&#x1F4CB;</span>Lists & Tuples</a>
+    <a href="/learn/dictionaries" class="sidebar-item"><span class="item-icon">&#x1F4D6;</span>Dictionaries & Sets</a>
+    <a href="/learn/strings" class="sidebar-item"><span class="item-icon">&#x1F524;</span>Strings (Deep)</a>
+    <a href="/learn/filehandling" class="sidebar-item"><span class="item-icon">&#x1F4C1;</span>File Handling</a>
+    <a href="/learn/exceptions" class="sidebar-item"><span class="item-icon">&#x26A0;&#xFE0F;</span>Exception Handling</a>
+    <a href="/learn/modules" class="sidebar-item"><span class="item-icon">&#x1F4E6;</span>Modules & Packages</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">&#x1F534; Advanced</div>
+    <a href="/learn/oop" class="sidebar-item"><span class="item-icon">&#x1F3D7;&#xFE0F;</span>OOP (Full Depth)</a>
+    <a href="/learn/decorators" class="sidebar-item"><span class="item-icon">&#x1F3A8;</span>Decorators</a>
+    <a href="/learn/generators" class="sidebar-item"><span class="item-icon">&#x26A1;</span>Generators & Iterators</a>
+    <a href="/learn/lambda" class="sidebar-item"><span class="item-icon">&#x03BB;</span>Lambda Functions</a>
+    <a href="/learn/apis" class="sidebar-item"><span class="item-icon">&#x1F310;</span>APIs & JSON</a>
+    <a href="/learn/threading" class="sidebar-item"><span class="item-icon">&#x1F9F5;</span>Multithreading</a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="learn-main">
+  <div style="margin-bottom:2rem;">
+    <h1 class="section-title">&#x1F4D8; Learn Python</h1>
+    <p style="color:var(--text-secondary)">Select a topic from the sidebar to start learning. Each topic follows our proven methodology.</p>
+  </div>
+
+  <!-- Philosophy Banner -->
+  <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;margin-bottom:2rem;">
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:1px;">Learning Methodology</p>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;font-size:0.85rem;font-weight:600;">
+      <span style="color:var(--accent-primary)">&#x1F4A1; Concept</span><span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="color:var(--accent-secondary)">&#x1F9E0; Understanding</span><span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="color:var(--accent-tertiary)">&#x2699;&#xFE0F; Logic</span><span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="color:var(--accent-warning)">&#x1F3AF; Practice</span><span style="color:var(--text-muted)">&#x2192;</span>
+      <span style="color:var(--accent-danger)">&#x1F3C6; Mastery</span>
+    </div>
+  </div>
+
+  <!-- Topic Grid -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;">
+
+    <a href="/learn/introduction" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F4CB;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Introduction</div><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">What is Python? Why learn it? Setup and first program.</p>
+    </a>
+
+    <a href="/learn/syntax" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x270F;&#xFE0F;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Syntax & Variables</div><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">Python syntax rules, variables, naming conventions.</p>
+    </a>
+
+    <a href="/learn/datatypes" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F522;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Data Types</div><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">int, float, str, bool, None — with type conversion.</p>
+    </a>
+
+    <a href="/learn/loops" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F504;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Loops</div><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">for, while, break, continue, nested loops.</p>
+    </a>
+
+    <a href="/learn/functions" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F9E9;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Functions</div><span class="badge badge-beginner">Beginner</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">def, parameters, return, *args, **kwargs, scope.</p>
+    </a>
+
+    <a href="/learn/oop" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F3D7;&#xFE0F;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">OOP</div><span class="badge badge-advanced">Advanced</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">Classes, objects, inheritance, polymorphism, encapsulation.</p>
+    </a>
+
+    <a href="/learn/decorators" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x1F3A8;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Decorators</div><span class="badge badge-advanced">Advanced</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">Function decorators, class decorators, @property, @staticmethod.</p>
+    </a>
+
+    <a href="/learn/generators" class="card" style="text-decoration:none;display:block;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <span style="font-size:1.5rem">&#x26A1;</span>
+        <div><div style="font-weight:700;color:var(--text-heading)">Generators</div><span class="badge badge-advanced">Advanced</span></div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.85rem">yield, generator expressions, lazy evaluation, itertools.</p>
+    </a>
+
+  </div>
+</div>
+</div>
+</main>
+<script src="/static/js/main.js?v=1.0.3"></script>
+</body></html>

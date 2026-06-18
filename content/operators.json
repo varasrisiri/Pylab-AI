@@ -1,0 +1,111 @@
+{
+  "title": "Operators",
+  "icon": "plus",
+  "level": "beginner",
+  "simple_definition": "Operators perform operations on values. Python has arithmetic, comparison, logical, and assignment operators.",
+  "technical_definition": "Python operators are symbols that perform operations on operands.",
+  "analogy": "Think of operators as verbs — they describe the action between two values.",
+  "syntax": "x + y  # add\nx - y  # subtract\nx * y  # multiply\nx / y  # divide\nx // y # floor divide\nx % y  # modulo\nx ** y # power\nx == y # equal\nx != y # not equal\nx > y  # greater\nx and y # logical and\nx or y  # logical or\nnot x   # logical not",
+  "example_desc": "Practical examples demonstrating Operators.",
+  "code_example": "a, b = 10, 3\nprint(a + b)   # 13\nprint(a - b)   # 7\nprint(a * b)   # 30\nprint(a / b)   # 3.333\nprint(a // b)  # 3\nprint(a % b)   # 1\nprint(a ** b)  # 1000\nprint(a > b)   # True\nprint(a == b)  # False\nprint(a > 5 and b < 5)  # True\nprint(a > 20 or b < 5)  # True",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Operators",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Operators is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Operators",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Operators",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Operators",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "How does Python calculate 2 + 3 * 4?\nIs it (2+3)*4 = 20 or 2+(3*4) = 14?\n\nAnswer: 14 — Python follows BODMAS/PEMDAS!\n\nOperators are the symbols that perform operations.\nKnowing operator precedence prevents calculation bugs.",
+  "why_matters": "Operators are in every single line of code:\n🔢 Arithmetic: calculate prices, scores, distances\n🔍 Comparison: validate input, check conditions\n🔗 Logical: combine conditions in if statements\n📝 Assignment: store and update values",
+  "important_points": [
+    "⭐ Operator precedence (high to low): ** → *,/,//,% → +,- → comparisons → not → and → or",
+    "⭐ // is FLOOR division (rounds down): 7//2 = 3, not 3.5",
+    "⭐ % is MODULO (remainder): 7%3 = 1",
+    "⭐ ** is POWER: 2**10 = 1024",
+    "⭐ == checks EQUALITY; = is ASSIGNMENT — very common mistake!",
+    "⭐ 'is' checks IDENTITY (same object); '==' checks EQUALITY (same value)",
+    "⭐ Walrus operator := (Python 3.8+): assigns and returns value in one expression"
+  ],
+  "dry_run": {
+    "title": "Dry Run: result = 2 + 3 * 4 ** 2",
+    "steps": [
+      {
+        "step": 1,
+        "state": "4 ** 2",
+        "action": "** has highest precedence: 4² = 16",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "3 * 16",
+        "action": "* next: 3 × 16 = 48",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "2 + 48",
+        "action": "+ last: 2 + 48 = 50",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "result = 50",
+        "action": "Assign 50 to result",
+        "output": "50"
+      }
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "title": "Exception Handling",
+  "icon": "warning",
+  "level": "intermediate",
+  "simple_definition": "Exception handling lets your program deal with errors gracefully instead of crashing.",
+  "technical_definition": "Python uses try/except/else/finally blocks. Exceptions are objects inheriting from BaseException.",
+  "analogy": "Exception handling is like a safety net — catch errors before they crash your program.",
+  "syntax": "try:\n    risky_code()\nexcept ValueError as e:\n    print(f'Value error: {e}')\nexcept ZeroDivisionError:\n    print('Cannot divide by zero')\nexcept Exception as e:\n    print(f'Error: {e}')\nelse:\n    print('No error!')\nfinally:\n    print('Always runs')",
+  "example_desc": "Practical examples demonstrating Exception Handling.",
+  "code_example": "def safe_divide(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        return 'Cannot divide by zero'\n    except TypeError:\n        return 'Invalid types'\n    else:\n        return result\n    finally:\n        print('Division attempted')\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n\nclass AgeError(Exception):\n    pass\n\ndef validate_age(age):\n    if age < 0 or age > 150:\n        raise AgeError(f'Invalid age: {age}')\n    return age\n\ntry:\n    validate_age(-5)\nexcept AgeError as e:\n    print(f'Caught: {e}')",
+  "output": "# Run the code to see output",
+  "logic_steps": [
+    "Understand the core concept of Exception Handling",
+    "Read the syntax carefully",
+    "Trace through the example step by step",
+    "Identify the inputs and outputs",
+    "Practice with the exercises below"
+  ],
+  "edge_cases": [
+    "Always test with edge cases: empty input, None, zero",
+    "Check for type errors when mixing data types",
+    "Consider what happens with very large or very small values"
+  ],
+  "common_mistakes": [
+    "Not reading error messages carefully",
+    "Skipping the basics and jumping to complex code",
+    "Not testing code with different inputs"
+  ],
+  "interview_tips": [
+    "Exception Handling is commonly tested in Python interviews",
+    "Understand the time and space complexity",
+    "Know the built-in alternatives",
+    "Be ready to explain your reasoning"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Write a basic example using Exception Handling",
+        "hint": "Start with the syntax shown above"
+      },
+      {
+        "question": "Modify the example to use different values",
+        "hint": "Change the inputs and observe the output"
+      },
+      {
+        "question": "Combine this concept with a loop or function",
+        "hint": "Wrap the code in a for loop or def"
+      }
+    ],
+    "medium": [
+      {
+        "question": "Solve a real-world problem using Exception Handling",
+        "hint": "Think about where this is used in practice"
+      },
+      {
+        "question": "Handle edge cases and errors",
+        "hint": "Add try/except or input validation"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Optimize a solution using Exception Handling",
+        "hint": "Think about time complexity"
+      },
+      {
+        "question": "Combine with other Python concepts",
+        "hint": "Use OOP, decorators, or generators together"
+      }
+    ]
+  },
+  "problem_first": "Your program asks user to enter a number.\nUser types 'hello' instead.\n\nWithout exception handling:\nnum = int(input())  # ValueError: invalid literal!\n# Program CRASHES! 💥\n\nWith exception handling:\ntry:\n    num = int(input())\nexcept ValueError:\n    print('Please enter a valid number')\n# Program continues gracefully ✅",
+  "why_matters": "Exception handling is what separates amateur code from production code:\n🌐 Web apps: handle bad requests without crashing\n📁 File ops: handle missing files gracefully\n�� APIs: handle network errors\n🗄️ Databases: handle connection failures\n\nA program that crashes on bad input is not production-ready.",
+  "important_points": [
+    "⭐ try block: code that might raise an exception",
+    "⭐ except block: runs if exception occurs — catches and handles it",
+    "⭐ else block: runs ONLY if NO exception occurred",
+    "⭐ finally block: ALWAYS runs — use for cleanup (close files, connections)",
+    "⭐ raise keyword: manually raise an exception",
+    "⭐ Custom exceptions: inherit from Exception class",
+    "⭐ except Exception as e: catches ALL exceptions — use sparingly",
+    "⭐ Never use bare except: — always specify the exception type"
+  ],
+  "dry_run": {
+    "title": "Dry Run: safe_divide(10, 0)",
+    "steps": [
+      {
+        "step": 1,
+        "state": "try block",
+        "action": "Enter try block, execute result = 10 / 0",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "ZeroDivisionError!",
+        "action": "Python raises ZeroDivisionError exception",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "except ZeroDivisionError",
+        "action": "Exception caught! Jump to except block",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "return error msg",
+        "action": "Return 'Cannot divide by zero'",
+        "output": ""
+      },
+      {
+        "step": 5,
+        "state": "finally",
+        "action": "finally block ALWAYS runs: print('Attempted')",
+        "output": "Attempted\nCannot divide by zero"
+      }
+    ]
+  }
+}

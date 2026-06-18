@@ -1,0 +1,110 @@
+{
+  "title": "Python Syntax & Variables",
+  "icon": "✏️",
+  "level": "beginner",
+  "simple_definition": "Python syntax is the set of rules that define how Python code is written. Variables are containers that store data values.",
+  "technical_definition": "Python uses indentation-based syntax with dynamic typing. Variables are references to objects in memory, created via assignment without explicit type declaration.",
+  "analogy": "Think of syntax as grammar rules in English. Just like you need proper grammar to write sentences, you need proper syntax to write Python code. Variables are like labeled boxes where you store things.",
+  "syntax": "# Variable assignment\nname = 'Alice'\nage = 25\nis_student = True\n\n# Multiple assignment\nx, y, z = 1, 2, 3\n\n# Naming rules\n# Valid: my_var, _private, var123\n# Invalid: 123var, my-var, class",
+  "example_desc": "Creating and using variables with different data types.",
+  "code_example": "# Variables\nname = 'Bob'\nage = 30\nheight = 5.9\nis_employed = True\n\nprint(f'Name: {name}')\nprint(f'Age: {age}')\nprint(f'Height: {height}ft')\nprint(f'Employed: {is_employed}')\n\n# Variable reassignment\nage = 31\nprint(f'New age: {age}')\n\n# Type checking\nprint(type(name))  # <class 'str'>\nprint(type(age))   # <class 'int'>",
+  "output": "Name: Bob\nAge: 30\nHeight: 5.9ft\nEmployed: True\nNew age: 31\n<class 'str'>\n<class 'int'>",
+  "logic_steps": [
+    "Python reads the assignment from right to left: value → variable",
+    "Variables are created the moment you assign a value",
+    "Python automatically determines the type (dynamic typing)",
+    "You can reassign variables to different values or even different types",
+    "Variable names are case-sensitive: Name and name are different"
+  ],
+  "edge_cases": [
+    "Variable names cannot start with a number: 1var is invalid",
+    "Reserved keywords cannot be used as variable names: class, def, if, etc.",
+    "Variables can be reassigned to different types: x = 5; x = 'hello' is valid"
+  ],
+  "common_mistakes": [
+    "Using hyphens in variable names: my-var (use my_var instead)",
+    "Starting variable names with numbers: 1st_place (use first_place)",
+    "Using reserved keywords: class = 'Math' causes SyntaxError"
+  ],
+  "interview_tips": [
+    "Python uses dynamic typing — type is determined at runtime",
+    "Variables are references to objects, not containers",
+    "Multiple variables can reference the same object",
+    "Use snake_case for variable names (PEP 8 style guide)"
+  ],
+  "practice": {
+    "easy": [
+      {
+        "question": "Create variables for your name, age, and city. Print them.",
+        "hint": "name = 'Your Name'; print(name)"
+      },
+      {
+        "question": "Swap two variables without using a third variable",
+        "hint": "Use tuple unpacking: a, b = b, a"
+      },
+      {
+        "question": "Create a variable and check its type using type()",
+        "hint": "x = 10; print(type(x))"
+      }
+    ],
+    "medium": [
+      {
+        "question": "What happens when you assign x = y = z = 10? Explain.",
+        "hint": "All three variables reference the same object"
+      },
+      {
+        "question": "Create variables with valid and invalid names, explain why",
+        "hint": "Valid: my_var, _private; Invalid: 1var, my-var"
+      }
+    ],
+    "hard": [
+      {
+        "question": "Explain the difference between x = [1,2] and y = x vs y = x.copy()",
+        "hint": "First creates a reference, second creates a new object"
+      },
+      {
+        "question": "What is the id() function and how does it relate to variables?",
+        "hint": "id() returns memory address of the object"
+      }
+    ]
+  },
+  "problem_first": "Every language has rules — Python's rules are simpler than most.\n\nJava: public static void main(String[] args) { System.out.println(\"Hello\"); }\nC++:  #include<iostream> int main(){ std::cout<<\"Hello\"; return 0; }\nPython: print('Hello')\n\nPython's syntax is designed to be readable and minimal.",
+  "why_matters": "Clean syntax = fewer bugs, faster development, easier collaboration.\nPython's readability is why it's the #1 language for beginners AND professionals.",
+  "important_points": [
+    "⭐ Indentation is MANDATORY in Python — use 4 spaces consistently",
+    "⭐ No semicolons needed at end of lines (optional but discouraged)",
+    "⭐ Comments start with # — Python ignores everything after #",
+    "⭐ Variable names: lowercase_with_underscores (snake_case) per PEP 8",
+    "⭐ Python is CASE-SENSITIVE: name, Name, NAME are three different variables",
+    "⭐ Multiple assignment: a, b, c = 1, 2, 3 (tuple unpacking)"
+  ],
+  "dry_run": {
+    "title": "Dry Run: x, y = 5, 10; x, y = y, x",
+    "steps": [
+      {
+        "step": 1,
+        "state": "x=5, y=10",
+        "action": "Assign x=5 and y=10",
+        "output": ""
+      },
+      {
+        "step": 2,
+        "state": "x,y = y,x",
+        "action": "Python evaluates RIGHT side first: (y,x) = (10,5)",
+        "output": ""
+      },
+      {
+        "step": 3,
+        "state": "x=10, y=5",
+        "action": "Assign: x gets 10, y gets 5 — swapped!",
+        "output": ""
+      },
+      {
+        "step": 4,
+        "state": "print(x,y)",
+        "action": "Output",
+        "output": "10 5"
+      }
+    ]
+  }
+}
