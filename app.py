@@ -1728,6 +1728,17 @@ def ai_answer_question(question, topic=""):
     if topic_data:
         return format_perfect_explanation(topic_data, question)
 
+    if GEMINI_AVAILABLE:
+        prompt = (
+            f"You are a friendly Python tutor. Answer the student's question: '{question}'.\n"
+            f"Provide a clear, detailed, and structured explanation. If appropriate, write simple, clean code examples, "
+            f"include a quick line-by-line trace of how it executes, and list a common mistake to avoid. "
+            f"Structure your response nicely using markdown and emojis."
+        )
+        result = call_gemini(prompt)
+        if result:
+            return result
+
     # Generic answer for unknown questions
     return f"""ðŸ¤– **PyLab AI Mentor â€” Answer**
 
@@ -1793,18 +1804,18 @@ When comparing two concepts, ask:
 5. ðŸ’¡ Add print() statements to trace values
 
 **Most common Python errors:**
-- IndentationError â†’ Wrong spaces/tabs
-- NameError â†’ Variable not defined
-- TypeError â†’ Wrong data type
-- IndexError â†’ List index out of range
-- SyntaxError â†’ Missing colon, bracket, or quote"""
+- IndentationError → Wrong spaces/tabs
+- NameError → Variable not defined
+- TypeError → Wrong data type
+- IndexError → List index out of range
+- SyntaxError → Missing colon, bracket, or quote"""
 
     return """Here's how to approach this:
 
-1. ðŸ’¡ Think about what you already know
-2. ðŸ” Break the problem into smaller parts
-3. ðŸ’» Try writing code in the **Editor** tab
-4. ðŸ¤– Paste your attempt here for specific feedback
+1. 💡 Think about what you already know
+2. 🛠 Break the problem into smaller parts
+3. 💻 Try writing code in the **Editor** tab
+4. 🤖 Paste your attempt here for specific feedback
 
 **Remember:** The best way to learn Python is by doing!
 Try the **Experiment Lab** for hands-on practice."""
@@ -1871,6 +1882,18 @@ def ai_dry_run(code):
     """Generate a line-by-line dry run of the given code."""
     if not code.strip():
         return "âŒ Please paste your code first, then click Dry Run."
+
+    if GEMINI_AVAILABLE:
+        prompt = (
+            f"You are a Python execution trace engine. Analyze the following code and write a step-by-step dry run. "
+            f"For each statement executed, write the line number, the code, and explain exactly what Python is doing "
+            f"(what variables are assigned, condition checks, outputs). "
+            f"Also show the final state of all variables at the end. Keep it structured and easy for beginners.\n\n"
+            f"Code:\n```python\n{code}\n```"
+        )
+        result = call_gemini(prompt)
+        if result:
+            return result
 
     lines = code.strip().split("\n")
     result = ["ðŸ§  **DRY RUN â€” Step-by-Step Execution**", "",
@@ -2012,6 +2035,52 @@ def ai_perfect_explanation(topic):
     data = TOPIC_EXPLANATIONS.get(topic.lower(), None)
     if data:
         return format_perfect_explanation(data)
+
+    if GEMINI_AVAILABLE:
+        prompt = (
+            f"You are a friendly Python tutor. Generate a comprehensive 10-step explanation for the topic '{topic}' "
+            f"following this exact Markdown format. Use emojis and clear structure:\n\n"
+            f"🤖 **PyLab AI Mentor — Perfect Explanation**\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**1. 💡 THE PROBLEM FIRST**\n"
+            f"[Describe a realistic problem why we need this topic/concept. Keep it beginner friendly]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**2. 🧠 SIMPLE IDEA**\n"
+            f"[Explain the core concept in 1-2 simple sentences for a child]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**3. 🏠 REAL-LIFE EXAMPLE**\n"
+            f"[Give 3-4 real-world analogies with emojis]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**4. 📜 SYNTAX**\n"
+            f"```python\n"
+            f"[Show the abstract syntax/signature]\n"
+            f"```\n\n"
+            f"**5. 💻 CODE EXAMPLE**\n"
+            f"```python\n"
+            f"[Provide a working, simple code example]\n"
+            f"```\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**6. 🔍 LINE-BY-LINE BREAKDOWN**\n"
+            f"[Explain each line of the code example above]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**7. 🧠 DRY RUN (Step-by-Step Execution)**\n"
+            f"[Simulate how Python executes the code example line by line showing variable states/outputs]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**8. ⚠️ COMMON MISTAKES**\n"
+            f"[List 2-3 common syntax or logical errors with code blocks showing what NOT to do]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**9. 🧩 PRACTICE QUESTIONS**\n"
+            f"Easy: [Question]\n"
+            f"Medium: [Question]\n"
+            f"Hard: [Question]\n\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"**10. 🚀 WHY THIS MATTERS**\n"
+            f"[Describe real-world use cases (e.g. game dev, database, web apps, machine learning)]"
+        )
+        result = call_gemini(prompt)
+        if result:
+            return result
+
     return ai_answer_question(f"Explain {topic}", topic)
 
 
