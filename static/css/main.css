@@ -286,3 +286,13 @@ a:hover { color: var(--accent-secondary); }
 .ud-item:hover { background: rgba(0,212,255,.07); color: var(--accent-primary); }
 .ud-logout { color: var(--accent-danger) !important; }
 .ud-logout:hover { background: rgba(255,71,87,.08) !important; }
+
+/* Global text input contrast fixes for all themes */
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea:not(#codeInput) {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+}
