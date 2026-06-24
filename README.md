@@ -56,3 +56,10 @@ This repository includes a [`render.yaml`](render.yaml) blueprint config. To dep
 2. Click **New +** &rarr; **Blueprint**.
 3. Connect your repository.
 4. Input the environment variables when prompted and click **Apply**.
+
+---
+
+## 📄 License
+© 2026 Sirigibathina Lakshmi Varasri.  
+Licensed under Apache 2.0.
+
