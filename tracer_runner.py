@@ -13,7 +13,12 @@ def serialize_val(v, depth=0):
     if isinstance(v, dict):
         return {str(ki): serialize_val(vi, depth + 1) for ki, vi in v.items()}
     if isinstance(v, (set, tuple)):
-        return [serialize_val(x, depth + 1) for x in list(v)]
+        class_name = "tuple" if isinstance(v, tuple) else "set"
+        return {
+            "__class__": class_name,
+            "__value__": [serialize_val(x, depth + 1) for x in list(v)],
+            "__id__": id(v)
+        }
     if hasattr(v, '__dict__'):
         obj_dict = {}
         for k_field, v_field in v.__dict__.items():
@@ -111,27 +116,44 @@ def run_trace(code_str, stdin_str=""):
             val = inputs[input_idx]
             input_idx += 1
             return val
+        if not stdin_str.strip():
+            raise EOFError(
+                "StandardInputError: Your code called input(), but the 'Standard Input (stdin)' "
+                "box below the editor was empty. Please enter your input values (e.g. '15 5') in the stdin box."
+            )
         return "" # Safe fallback instead of raising EOFError
 
     import builtins
     custom_builtins = builtins.__dict__.copy()
     custom_builtins["input"] = mock_input
+
+    def secure_open(file, *args, **kwargs):
+        import os
+        abs_path = os.path.abspath(str(file))
+        base_name = os.path.basename(abs_path).lower()
+        if base_name in ['.env', 'database.db', 'app.py', 'tracer_runner.py'] or '.git' in abs_path:
+            raise PermissionError("Access restricted for security.")
+        return builtins.open(file, *args, **kwargs)
+
+    custom_builtins["open"] = secure_open
     
     globals_dict = {"__builtins__": custom_builtins}
-    locals_dict = {}
     
     error_msg = None
     try:
         compiled = compile(code_str, '<string>', 'exec')
         sys.settrace(tracer.trace_calls)
-        exec(compiled, globals_dict, locals_dict)
+        exec(compiled, globals_dict)
     except Exception as e:
         # Get line number of exception inside `<string>`
-        tb = sys.exc_info()[2]
         exc_line = 1
-        for frame, lineno in traceback.walk_tb(tb):
-            if frame.f_code.co_filename == '<string>':
-                exc_line = lineno
+        if hasattr(e, 'lineno') and e.lineno is not None:
+            exc_line = e.lineno
+        else:
+            tb = sys.exc_info()[2]
+            for frame, lineno in traceback.walk_tb(tb):
+                if frame.f_code.co_filename == '<string>':
+                    exc_line = lineno
         
         # Append exception details to trace
         tracer.steps.append({

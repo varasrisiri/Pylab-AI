@@ -334,7 +334,11 @@
 
   <div style="display:flex;justify-content:space-between;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color);">
     <a href="/learn" class="btn btn-ghost">&#x2190; All Topics</a>
-    <button onclick="markTopicComplete('{{ topic }}')" id="completeBtn" class="btn btn-success">&#x2705; Mark Complete</button>
+    {% if completed %}
+    <button id="completeBtn" class="btn btn-success" style="background: var(--accent-secondary); color: rgb(0, 0, 0);" disabled>✅ Completed!</button>
+    {% else %}
+    <button onclick="markTopicComplete('{{ topic }}')" id="completeBtn" class="btn btn-success">✅ Mark Complete</button>
+    {% endif %}
     <div style="display:flex;gap:.75rem;">
       <a href="/editor?topic={{ topic }}" class="btn btn-secondary">&#x1F4BB; Code Editor</a>
       <a href="/practice?topic={{ topic }}" class="btn btn-primary">Practice {{ content.title }} &#x2192;</a>
@@ -372,7 +376,7 @@ function markTopicComplete(topic) {
     body: JSON.stringify({topic: topic})
   }).then(r => r.json()).then(d => {
     const btn = document.getElementById('completeBtn');
-    btn.textContent = '&#x2705; Completed!';
+    btn.innerHTML = '✅ Completed!';
     btn.style.background = 'var(--accent-secondary)';
     btn.style.color = '#000';
     btn.disabled = true;

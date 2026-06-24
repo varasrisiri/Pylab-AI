@@ -296,3 +296,72 @@ input::placeholder, textarea::placeholder {
     color: var(--text-muted) !important;
     opacity: 0.8 !important;
 }
+
+/* 📓 Notebook Handwritten Notes Theme */
+.notebook-notes-theme {
+    background: #fffdf5 !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+    background-size: 100% 1.6rem !important;
+    line-height: 1.6rem !important;
+    font-family: 'Kalam', 'Caveat', 'Comic Sans MS', cursive, sans-serif !important;
+    font-size: 0.95rem !important;
+    color: #1a2a3a !important;
+    padding: 1rem 1.25rem 1rem 1.75rem !important;
+    border-left: 3px solid var(--notes-margin, #ff7b7b) !important;
+    box-shadow: inset 3px 0 10px rgba(0,0,0,0.02), 0 4px 15px rgba(0,0,0,0.05) !important;
+    border-radius: 8px !important;
+    white-space: pre-wrap !important;
+    overflow-y: auto;
+}
+.notebook-notes-theme code {
+    background: var(--notes-highlight, rgba(255, 235, 59, 0.45)) !important;
+    color: #1a2a3a !important;
+    padding: 0 4px !important;
+    border-radius: 3px !important;
+    font-family: 'Kalam', cursive, monospace !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    border: none !important;
+}
+.notebook-notes-theme pre {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.notebook-notes-theme h3, .notebook-notes-theme strong {
+    color: var(--notes-accent, #2c3e50) !important;
+    font-weight: 700 !important;
+}
+
+/* Notebook Sub-theme Color Palettes by Concept */
+.notes-theme-explain {
+    --notes-highlight: rgba(76, 175, 80, 0.3); /* Green highlight */
+    --notes-margin: #4caf50; /* Green margin */
+    --notes-accent: #2e7d32; /* Dark green text accents */
+}
+.notes-theme-dryrun {
+    --notes-highlight: rgba(255, 235, 59, 0.45); /* Yellow highlight */
+    --notes-margin: #ff7b7b; /* Red/pink margin */
+    --notes-accent: #b71c1c; /* Crimson text accents */
+}
+.notes-theme-error {
+    --notes-highlight: rgba(244, 67, 54, 0.3); /* Red highlight */
+    --notes-margin: #f44336; /* Red margin */
+    --notes-accent: #c62828; /* Dark red text accents */
+}
+.notes-theme-improve {
+    --notes-highlight: rgba(33, 150, 243, 0.3); /* Blue highlight */
+    --notes-margin: #2196f3; /* Blue margin */
+    --notes-accent: #1565c0; /* Dark blue text accents */
+}
+.notes-theme-optimize {
+    --notes-highlight: rgba(156, 39, 176, 0.3); /* Purple highlight */
+    --notes-margin: #9c27b0; /* Purple margin */
+    --notes-accent: #6a1b9a; /* Dark purple text accents */
+}
+.notes-theme-hint {
+    --notes-highlight: rgba(255, 152, 0, 0.3); /* Orange highlight */
+    --notes-margin: #ff9800; /* Orange margin */
+    --notes-accent: #e65100; /* Dark orange text accents */
+}

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session, Response, make_response, redirect, url_for, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 import json, os, sqlite3, re, subprocess, sys, tempfile, threading, io, hashlib, secrets, datetime
 from functools import wraps
 import requests
@@ -105,6 +106,7 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 GOOGLE_SCRIPT_URL = os.environ.get("GOOGLE_SCRIPT_URL", "")
 SUPABASE_CONFIGURED = bool(SUPABASE_URL and SUPABASE_KEY and not SUPABASE_URL.startswith("https://your-project"))
+app.config['USE_SUPABASE'] = os.environ.get("USE_SUPABASE", "true").lower() in ("true", "1") and SUPABASE_CONFIGURED
 
 def get_supabase_headers():
     return {
@@ -293,10 +295,74 @@ def trigger_webhook_activity(username, email, action):
     }
     threading.Thread(target=process_activity_log, args=(payload,), daemon=True).start()
 
+def log_code_run_to_supabase(username, project_name, success):
+    if app.config.get('USE_SUPABASE'):
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/code_runs"
+            headers = get_supabase_headers()
+            data = {
+                "username": username,
+                "project_name": project_name,
+                "success": success,
+                "ran_at": datetime.datetime.utcnow().isoformat() + "Z"
+            }
+            requests.post(url, headers=headers, json=data, timeout=5)
+        except Exception as e:
+            print(f"Failed to log code run to Supabase: {e}")
+
+def log_user_session_to_supabase(username):
+    if app.config.get('USE_SUPABASE'):
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/user_sessions"
+            headers = get_supabase_headers()
+            data = {
+                "username": username,
+                "started_at": datetime.datetime.utcnow().isoformat() + "Z"
+            }
+            requests.post(url, headers=headers, json=data, timeout=5)
+        except Exception as e:
+            print(f"Failed to log user session to Supabase: {e}")
+
+def log_ai_hint_usage_to_supabase(username, project_name):
+    if app.config.get('USE_SUPABASE'):
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/ai_hint_usage"
+            headers = get_supabase_headers()
+            data = {
+                "username": username,
+                "project_name": project_name,
+                "hint_used_at": datetime.datetime.utcnow().isoformat() + "Z"
+            }
+            requests.post(url, headers=headers, json=data, timeout=5)
+        except Exception as e:
+            print(f"Failed to log AI hint usage to Supabase: {e}")
+
+def log_project_progress_to_supabase(username, project_name, completed, time_spent_mins):
+    if app.config.get('USE_SUPABASE'):
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/project_progress"
+            headers = get_supabase_headers()
+            data = {
+                "username": username,
+                "project_name": project_name,
+                "completed": completed,
+                "time_spent_mins": time_spent_mins
+            }
+            requests.post(url, headers=headers, json=data, timeout=5)
+        except Exception as e:
+            print(f"Failed to log project progress to Supabase: {e}")
+
 # ── Auth helpers ──
 
 def hash_password(password: str, salt: str) -> str:
+    """Old SHA-256 + salt helper (kept for fallback validation)."""
     return hashlib.sha256((salt + password).encode()).hexdigest()
+
+def check_user_password(stored_hash: str, salt: str, password: str) -> bool:
+    """Verify password using either modern Werkzeug hash or legacy SHA-256+salt."""
+    if "$" in stored_hash or stored_hash.startswith("scrypt:") or stored_hash.startswith("pbkdf2:"):
+        return check_password_hash(stored_hash, password)
+    return stored_hash == hash_password(password, salt)
 
 def login_required(f):
     @wraps(f)
@@ -329,7 +395,7 @@ def login():
         # 1. Attempt Supabase Authentication
         if SUPABASE_CONFIGURED:
             user = get_supabase_user(username)
-            if user and user.get("password_hash") == hash_password(password, user.get("salt")):
+            if user and check_user_password(user.get("password_hash", ""), user.get("salt", ""), password):
                 uid = sync_user_to_sqlite(
                     user["username"], 
                     user["email"], 
@@ -341,6 +407,7 @@ def login():
                 session["user_id"] = user["username"]
                 session["uid"] = uid
                 trigger_webhook_activity(user["username"], user["email"], "login")
+                log_user_session_to_supabase(user["username"])
                 next_url = request.args.get("next", url_for("home"))
                 return redirect(next_url)
             else:
@@ -353,10 +420,11 @@ def login():
                       (username, username))
             user = c.fetchone()
             conn.close()
-            if user and user[2] == hash_password(password, user[3]):
+            if user and check_user_password(user[2], user[3], password):
                 session["user_id"] = user[1]
                 session["uid"] = user[0]
                 trigger_webhook_activity(user[1], user[4], "login")
+                log_user_session_to_supabase(user[1])
                 next_url = request.args.get("next", url_for("home"))
                 return redirect(next_url)
             error = "Invalid username or password."
@@ -380,8 +448,8 @@ def register():
         elif password != confirm:
             error = "Passwords do not match."
         else:
-            salt = secrets.token_hex(16)
-            pw_hash = hash_password(password, salt)
+            salt = "pbkdf2"  # dummy value to satisfy database NOT NULL constraint
+            pw_hash = generate_password_hash(password)
             
             # 1. Register with Supabase if configured
             if SUPABASE_CONFIGURED:
@@ -443,8 +511,8 @@ def forgot_password():
                 if not user:
                     error = "No account found with that username or email."
                 else:
-                    new_salt = secrets.token_hex(16)
-                    new_hash = hash_password(new_password, new_salt)
+                    new_salt = "pbkdf2"
+                    new_hash = generate_password_hash(new_password)
                     if update_supabase_password(user["username"], new_hash, new_salt):
                         sync_user_to_sqlite(user["username"], user["email"], new_hash, new_salt, user.get("display_name"), user.get("bio"))
                         success = "Password reset! You can now log in."
@@ -459,8 +527,8 @@ def forgot_password():
                 if not user:
                     error = "No account found with that username or email."
                 else:
-                    new_salt = secrets.token_hex(16)
-                    new_hash = hash_password(new_password, new_salt)
+                    new_salt = "pbkdf2"
+                    new_hash = generate_password_hash(new_password)
                     c.execute("UPDATE users SET password_hash=?, salt=? WHERE id=?",
                               (new_hash, new_salt, user[0]))
                     conn.commit()
@@ -564,11 +632,11 @@ def change_password():
     c = conn.cursor()
     c.execute("SELECT password_hash, salt FROM users WHERE username=?", (user_id,))
     row = c.fetchone()
-    if not row or row[0] != hash_password(current, row[1]):
+    if not row or not check_user_password(row[0], row[1], current):
         conn.close()
         return redirect(url_for("profile", msg="Current password is incorrect.", msg_type="error", panel="password"))
-    new_salt = secrets.token_hex(16)
-    new_hash = hash_password(new_pw, new_salt)
+    new_salt = "pbkdf2"
+    new_hash = generate_password_hash(new_pw)
     
     # Update Supabase password if configured
     if SUPABASE_CONFIGURED:
@@ -589,7 +657,7 @@ def delete_account():
     c = conn.cursor()
     c.execute("SELECT password_hash, salt FROM users WHERE username=?", (user_id,))
     row = c.fetchone()
-    if not row or row[0] != hash_password(confirm_pw, row[1]):
+    if not row or not check_user_password(row[0], row[1], confirm_pw):
         conn.close()
         return redirect(url_for("profile", msg="Incorrect password. Account not deleted.", msg_type="error", panel="danger"))
         
@@ -615,7 +683,13 @@ def topic_detail(topic):
     content = load_topic(topic)
     if not content:
         return render_template("404.html"), 404
-    return render_template("topic.html", topic=topic, content=content)
+    user_id = session.get("user_id", "guest")
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT completed FROM progress WHERE user_id=? AND topic=? AND completed=1", (user_id, topic))
+    completed = bool(c.fetchone())
+    conn.close()
+    return render_template("topic.html", topic=topic, content=content, completed=completed)
 
 @app.route("/practice")
 def practice():
@@ -669,8 +743,10 @@ def get_topic_code():
     # Dynamic generation using Gemini if available
     if GEMINI_AVAILABLE:
         prompt = (
-            f"You are a Python instructor. Generate a short, clean, beginner-friendly Python code example "
-            f"(max 10-15 lines) that clearly demonstrates the concept of '{topic}'. "
+            f"You are a Python instructor. Generate a complete, valid, self-contained, and fully executable "
+            f"Python code example that clearly demonstrates the concept of '{topic}'. "
+            f"IMPORTANT: The code must run successfully without any NameError or SyntaxError. "
+            f"Do not call any undefined functions, do not use place-holders, and write all necessary helper functions in full. "
             f"Write highly commented code so a student can understand it step by step. "
             f"Output ONLY the raw Python code, without markdown formatting, backticks, or other text."
         )
@@ -731,6 +807,11 @@ def ai_mentor_api():
         result = ai_perfect_explanation(topic or code)
     else:
         result = real_ai_response(code, action)
+
+    if action == "hint":
+        project_name = data.get("project_name") or data.get("project") or topic or ""
+        log_ai_hint_usage_to_supabase(session.get("user_id", "guest"), project_name)
+
     return jsonify({"result": result})
 
 @app.route("/api/progress", methods=["POST"])
@@ -763,12 +844,23 @@ def game_predict():
     answer = data.get("answer", "").strip()
     correct = data.get("correct", "").strip()
     return jsonify({"correct": answer == correct, "expected": correct})
-
 @app.route("/api/run-code", methods=["POST"])
 def run_code():
     data = request.json
     code = data.get("code", "")
     stdin_data = data.get("stdin", "")
+    project_name = data.get("project_name") or data.get("project") or ""
+
+    # Block GUI libraries to prevent infinite mainloop timeouts
+    gui_libs = ["tkinter", "turtle", "pygame", "pyqt5", "pyqt6", "pyside2", "pyside6", "wx"]
+    for lib in gui_libs:
+        if re.search(r"\bimport\s+" + lib + r"\b|\bfrom\s+" + lib + r"\b", code, re.IGNORECASE):
+            err_msg = f"GUI Error: The '{lib}' library is not supported in the web playground because it requires a local window manager. Please write console/terminal Python scripts instead!"
+            log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+            return jsonify({
+                "output": "",
+                "error": err_msg
+            })
 
     # Security: block ALL dangerous patterns — no whitelisting
     blocked_patterns = [
@@ -776,19 +868,35 @@ def run_code():
         r"\bimport\s+shutil\b", r"\bimport\s+pathlib\b", r"\bimport\s+socket\b",
         r"\bimport\s+ctypes\b", r"\bimport\s+multiprocessing\b",
         r"\bfrom\s+os\b", r"\bfrom\s+sys\b", r"\bfrom\s+subprocess\b",
-        r"\b__import__\s*\(", r"\bopen\s*\(", r"\bexec\s*\(", r"\beval\s*\(",
+        r"\b__import__\s*\(", r"\bexec\s*\(", r"\beval\s*\(",
         r"\bcompile\s*\(", r"\bgetattr\s*\(", r"\bglobals\s*\(", r"\blocals\s*\(",
         r"\b__builtins__\b", r"\b__class__\b.*\b__bases__\b",
     ]
     for pattern in blocked_patterns:
         if re.search(pattern, code, re.IGNORECASE):
-            return jsonify({"output": "", "error": f"SecurityError: Unsafe operation detected. Use only standard Python constructs."})
+            err_msg = "SecurityError: Unsafe operation detected. Use only standard Python constructs."
+            log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+            return jsonify({"output": "", "error": err_msg})
 
 
     try:
         tmp_path = None
+        secure_prefix = (
+            "import os as _os\n"
+            "def open(file, *args, **kwargs):\n"
+            "    _abs = _os.path.abspath(str(file))\n"
+            "    _base = _os.path.basename(_abs).lower()\n"
+            "    if _base in ['.env', 'database.db', 'app.py', 'tracer_runner.py'] or '.git' in _abs:\n"
+            "        raise PermissionError(\"Access restricted for security.\")\n"
+            "    return __builtins__.open(file, *args, **kwargs)\n\n"
+            "def input(prompt=''):\n"
+            "    try:\n"
+            "        return __builtins__.input(prompt)\n"
+            "    except EOFError:\n"
+            "        raise EOFError(\"StandardInputError: Your code called input(), but the 'Standard Input (stdin)' box below the editor was empty. Please enter your input values (e.g. '15 5') in the stdin box.\") from None\n\n"
+        )
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, encoding="utf-8") as f:
-            f.write(code)
+            f.write(secure_prefix + code)
             tmp_path = f.name
 
         result = subprocess.run(
@@ -802,29 +910,47 @@ def run_code():
         output = result.stdout
         error = result.stderr
 
-        # Clean up traceback path for cleaner display
+        # Clean up traceback path for cleaner display and adjust line numbers
         if error:
             error = error.replace(tmp_path, "main.py")
+            def repl(match):
+                line_num = int(match.group(1)) - 14
+                return f'File "main.py", line {max(1, line_num)}'
+            error = re.sub(r'File "main.py", line (\d+)', repl, error)
 
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, not bool(error))
         return jsonify({"output": output, "error": error})
 
     except subprocess.TimeoutExpired:
-        return jsonify({"output": "", "error": "TimeoutError: Code took too long (>10s). Check for infinite loops."})
+        err_msg = "TimeoutError: Code took too long (>10s). Check for infinite loops."
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+        return jsonify({"output": "", "error": err_msg})
     except Exception as e:
-        return jsonify({"output": "", "error": str(e)})
+        err_msg = str(e)
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+        return jsonify({"output": "", "error": err_msg})
     finally:
         try:
             if tmp_path:
                 os.unlink(tmp_path)
         except:
             pass
-
-
 @app.route("/api/visualize-code", methods=["POST"])
 def visualize_code():
     data = request.json or {}
     code = data.get("code", "")
     stdin = data.get("stdin", "")
+    project_name = data.get("project_name") or data.get("project") or ""
+
+    # Block GUI libraries to prevent infinite mainloop timeouts
+    gui_libs = ["tkinter", "turtle", "pygame", "pyqt5", "pyqt6", "pyside2", "pyside6", "wx"]
+    for lib in gui_libs:
+        if re.search(r"\bimport\s+" + lib + r"\b|\bfrom\s+" + lib + r"\b", code, re.IGNORECASE):
+            log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+            return jsonify({
+                "steps": [],
+                "error": f"GUI Error: The '{lib}' library is not supported in PyLab's web visualizer because it requires a desktop display to render graphics. Please write standard console-based Python scripts."
+            })
 
     # Security: block ALL dangerous patterns (same check as run-code)
     blocked_patterns = [
@@ -832,12 +958,13 @@ def visualize_code():
         r"\bimport\s+shutil\b", r"\bimport\s+pathlib\b", r"\bimport\s+socket\b",
         r"\bimport\s+ctypes\b", r"\bimport\s+multiprocessing\b",
         r"\bfrom\s+os\b", r"\bfrom\s+sys\b", r"\bfrom\s+subprocess\b",
-        r"\b__import__\s*\(", r"\bopen\s*\(", r"\bexec\s*\(", r"\beval\s*\(",
+        r"\b__import__\s*\(", r"\bexec\s*\(", r"\beval\s*\(",
         r"\bcompile\s*\(", r"\bgetattr\s*\(", r"\bglobals\s*\(", r"\blocals\s*\(",
         r"\b__builtins__\b", r"\b__class__\b.*\b__bases__\b",
     ]
     for pattern in blocked_patterns:
         if re.search(pattern, code, re.IGNORECASE):
+            log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
             return jsonify({"steps": [], "error": f"SecurityError: Unsafe operation detected. Use only standard Python constructs."})
 
     try:
@@ -852,28 +979,92 @@ def visualize_code():
             encoding="utf-8"
         )
         
+        error_msg = None
         if result.returncode != 0:
-            return jsonify({"steps": [], "error": result.stderr or f"Tracer exit code: {result.returncode}"})
+            error_msg = result.stderr or f"Tracer exit code: {result.returncode}"
 
-        try:
-            parsed = json.loads(result.stdout)
-            steps = parsed.get("steps", [])
-            lines = code.split("\n")
-            for step in steps:
-                lineno = step.get("line")
-                if 1 <= lineno <= len(lines):
-                    line_code = lines[lineno - 1]
+        parsed = None
+        if not error_msg:
+            try:
+                parsed = json.loads(result.stdout)
+                if parsed.get("error"):
+                    error_msg = parsed["error"]
+            except json.JSONDecodeError:
+                error_msg = f"Tracer output parse error: {result.stdout[:500]}"
+
+        # If there is an error, get explanation and correction from Gemini if available
+        if error_msg:
+            log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
+            suggested_code = None
+            suggested_explanation = None
+            if GEMINI_AVAILABLE:
+                try:
+                    prompt = (
+                        f"You are the PyLab AI Python Mentor. The user tried to execute the following Python code:\n"
+                        f"```python\n{code}\n```\n\n"
+                        f"However, it failed with the following execution error:\n"
+                        f"```\n{error_msg}\n```\n\n"
+                        f"Please do two things:\n"
+                        f"1. Explain why this error occurred in a clear, beginner-friendly way (1-2 sentences max).\n"
+                        f"2. Provide a corrected, fully-working version of the code that will execute successfully and can be visualized.\n\n"
+                        f"Return your response ONLY as a JSON object with keys 'explanation' and 'corrected_code'.\n"
+                        f"Do not include any Markdown wrapper, code blocks, or text outside the JSON."
+                    )
+                    ai_res = call_gemini(prompt)
+                    if ai_res:
+                        clean_res = re.sub(r"^```(?:json)?\s*|```$", "", ai_res.strip(), flags=re.MULTILINE)
+                        ai_data = json.loads(clean_res)
+                        suggested_code = ai_data.get("corrected_code")
+                        suggested_explanation = ai_data.get("explanation")
+                except Exception as e:
+                    print(f"Failed to get AI correction: {e}")
+            
+            return jsonify({
+                "steps": [],
+                "error": error_msg,
+                "suggested_code": suggested_code,
+                "suggested_explanation": suggested_explanation
+            })
+
+        # Generate line-by-line explanations using Gemini
+        ai_explanations = {}
+        if GEMINI_AVAILABLE:
+            try:
+                prompt = (
+                    f"You are the PyLab AI Python Instructor. Analyze this Python code:\n"
+                    f"```python\n{code}\n```\n\n"
+                    f"Generate a clear, friendly, one-sentence explanation for each line of the code.\n"
+                    f"Return ONLY a JSON object mapping 1-based line numbers (as strings) to their respective explanations.\n"
+                    f"Do not include any Markdown wrapper, code blocks, or text outside the JSON."
+                )
+                ai_res = call_gemini(prompt)
+                if ai_res:
+                    clean_res = re.sub(r"^```(?:json)?\s*|```$", "", ai_res.strip(), flags=re.MULTILINE)
+                    ai_explanations = json.loads(clean_res)
+            except Exception as e:
+                print(f"Failed to get AI explanations: {e}")
+
+        steps = parsed.get("steps", [])
+        lines = code.split("\n")
+        for step in steps:
+            lineno = step.get("line")
+            if 1 <= lineno <= len(lines):
+                line_code = lines[lineno - 1]
+                explanation = ai_explanations.get(str(lineno))
+                if not explanation:
                     explanation = analyze_line(line_code.strip(), step.get("locals", {}).copy(), lineno)
-                    step["explanation"] = explanation
-                else:
-                    step["explanation"] = "Executing line..."
-            return jsonify(parsed)
-        except json.JSONDecodeError:
-            return jsonify({"steps": [], "error": f"Tracer output parse error: {result.stdout[:500]}"})
+                step["explanation"] = explanation
+            else:
+                step["explanation"] = "Executing line..."
+        
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, True)
+        return jsonify(parsed)
 
     except subprocess.TimeoutExpired:
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
         return jsonify({"steps": [], "error": "TimeoutError: Visualizer took too long (>5s). Check for infinite loops."})
     except Exception as e:
+        log_code_run_to_supabase(session.get("user_id", "guest"), project_name, False)
         return jsonify({"steps": [], "error": str(e)})
 
 
@@ -1027,6 +1218,7 @@ def ai_project_help():
     question = data.get("question", "")
     step = data.get("step", "")
     result = generate_project_help(project_name, question, step)
+    log_ai_hint_usage_to_supabase(session.get("user_id", "guest"), project_name)
     return jsonify({"result": result})
 
 
@@ -1396,6 +1588,15 @@ def complete_project():
             c.execute("INSERT INTO streaks (user_id, date, xp) VALUES (?,?,20)", (user_id, today))
         conn.commit()
         conn.close()
+        
+        # Log to Supabase project_progress table
+        time_spent = 0
+        try:
+            time_spent = int(data.get("time_spent_mins") or data.get("time_spent") or 0)
+        except (ValueError, TypeError):
+            pass
+        log_project_progress_to_supabase(user_id, title or slug, True, time_spent)
+        
         return jsonify({"status":"completed","xp_earned":20,"message":"Project completed! +20 XP"})
     conn.close()
     return jsonify({"status":"already_done","message":"Already completed!"})
@@ -1884,11 +2085,15 @@ def ai_dry_run(code):
 
     if GEMINI_AVAILABLE:
         prompt = (
-            f"You are the PyLab AI Execution Tracer. Analyze the following code and write a step-by-step dry run.\n"
-            f"For each statement executed, write the line number, code line, and explain exactly what Python is doing in 1 short sentence.\n"
-            f"Include variable states, conditional evaluations, and stdout outputs.\n"
-            f"CRITICAL: Keep explanations brief and visual using emojis. Never write long paragraphs.\n"
-            f"Also show the final state of all variables in a simple list, and conclude with a quick, fun logic challenge question based on the code!\n\n"
+            f"You are the PyLab AI Execution Tracer. Analyze the following code and write a step-by-step dry run in a friendly, handwritten teacher-notes style.\n"
+            f"Keep explanations extremely simple, clear, and beginner-friendly.\n"
+            f"Format requirements:\n"
+            f"1. Start with a title: '📝 **Dry Run Notes:**'\n"
+            f"2. Trace through the execution step-by-step. For each executed step, start with '✏️ **Step [N] (Line [L]):** [Short explanation of what happens]'\n"
+            f"3. Keep each step to 1-2 very short sentences. Use arrows (→) to show values flow. Use simple checkmarks (✅) and crosses (❌) for conditions. Highlight key values with bold font.\n"
+            f"4. Show the final variable values under a header: '⭐ **Final Variables:**'\n"
+            f"5. Conclude with a fun, short challenge question under: '🎯 **Quick Question:**'\n"
+            f"6. CRITICAL: Never output long, complicated, nested bullet lists. Keep it clean and visually spaced like a real notebook page!\n\n"
             f"Code:\n```python\n{code}\n```"
         )
         result = call_gemini(prompt)

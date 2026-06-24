@@ -5,7 +5,7 @@
 <title>Code Editor - PyLab AI</title>
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Kalam:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
@@ -28,7 +28,7 @@ body{overflow:hidden;}
 .run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .ctrl-btn{background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-color);padding:.4rem .85rem;border-radius:8px;cursor:pointer;font-size:.82rem;transition:all .2s;}
 .ctrl-btn:hover{color:var(--accent-primary);border-color:var(--accent-primary);}
-.line-numbers{background:var(--bg-code);color:var(--text-muted);padding:1.25rem .5rem 1.25rem .75rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;text-align:right;user-select:none;border-right:1px solid var(--border-color);min-width:40px;overflow:hidden;flex-shrink:0;}
+.line-numbers{background:var(--bg-code);color:var(--text-muted);padding:1.25rem .5rem 1.25rem .75rem;font-family:Fira Code,monospace;font-size:.9rem;line-height:1.8;text-align:right;user-select:none;border-right:1px solid var(--border-color);min-width:40px;overflow:hidden;flex-shrink:0;white-space:pre;}
 .editor-inner{display:flex;flex:1;overflow:hidden;}
 .status-bar{display:flex;align-items:center;gap:1rem;padding:.3rem 1rem;background:var(--bg-secondary);border-top:1px solid var(--border-color);font-size:.75rem;color:var(--text-muted);font-family:Fira Code,monospace;flex-shrink:0;}
 .status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-secondary);}
@@ -52,11 +52,23 @@ body{overflow:hidden;}
 #vizPlayBtn { background: var(--accent-secondary); color: #000; border-color: var(--accent-secondary); font-weight: bold; }
 #vizPlayBtn:hover { box-shadow: var(--glow-secondary); }
 .viz-playback-bar input[type="range"] { flex: 1; accent-color: var(--accent-primary); cursor: pointer; }
-.viz-content { flex: 1; display: grid; grid-template-rows: 1.2fr 1fr; overflow: hidden; }
+.viz-content {
+  flex: 1;
+  display: grid;
+  grid-template-rows: 1.2fr 1fr;
+  overflow: hidden;
+  --bg-code: #011627;
+  --text-primary: #e8f4f8;
+  --text-secondary: #8ab4c8;
+  --text-muted: #4a7a94;
+  --accent-primary: #00d4ff;
+  --accent-secondary: #00ff88;
+  --border-color: rgba(0, 212, 255, 0.15);
+}
 .viz-code-section { display: flex; flex-direction: column; border-bottom: 1px solid var(--border-color); overflow: hidden; }
 .viz-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); padding: 0.4rem 1rem; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--border-color); letter-spacing: 0.05em; }
 .viz-code-wrapper { flex: 1; overflow-y: auto; font-family: Fira Code, monospace; font-size: 0.85rem; line-height: 1.7; background: #011627; padding: 1rem; position: relative; }
-.viz-code-line { display: flex; padding: 0.1rem 0; border-radius: 4px; }
+.viz-code-line { display: flex; padding: 0.1rem 0; border-radius: 4px; color: var(--text-secondary); }
 .viz-line-num { width: 30px; color: var(--text-muted); text-align: right; padding-right: 0.75rem; user-select: none; font-size: 0.8rem; }
 .viz-line-content { flex: 1; white-space: pre; }
 .viz-code-line.active-line { background: rgba(0, 212, 255, 0.15); border-left: 3px solid var(--accent-primary); }

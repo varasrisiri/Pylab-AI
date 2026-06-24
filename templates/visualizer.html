@@ -135,6 +135,8 @@
     border-right: 1px solid var(--border-color);
     min-width: 45px;
     flex-shrink: 0;
+    white-space: pre;
+    overflow: hidden;
 }
 #editorCodeArea {
     flex: 1;
@@ -179,6 +181,22 @@
     gap: 1.5rem;
     margin-top: 2rem;
     animation: fadeInUp 0.4s ease;
+    /* Force dark theme for the active dry run session to ensure visibility and contrast */
+    --bg-primary: #020d18;
+    --bg-secondary: #041525;
+    --bg-card: #061e30;
+    --bg-card-hover: #0a2a42;
+    --bg-code: #011627;
+    --accent-primary: #00d4ff;
+    --accent-secondary: #00ff88;
+    --accent-tertiary: #ffd700;
+    --text-primary: #e8f4f8;
+    --text-secondary: #8ab4c8;
+    --text-muted: #4a7a94;
+    --text-code: #00ff88;
+    --text-heading: #00d4ff;
+    --border-color: rgba(0, 212, 255, 0.15);
+    --border-glow: rgba(0, 212, 255, 0.4);
 }
 @media (max-width: 992px) {
     .session-panel {
@@ -283,6 +301,17 @@
     cursor: pointer;
 }
 
+/* Force dark aesthetic theme variables on components that have hardcoded dark backgrounds */
+#graphicalVizCanvas, .viz-code-display, .terminal-screen {
+    --text-primary: #e8f4f8;
+    --text-secondary: #8ab4c8;
+    --text-muted: #4a7a94;
+    --accent-primary: #00d4ff;
+    --accent-secondary: #00ff88;
+    --accent-warning: #ffa502;
+    --border-color: rgba(0, 212, 255, 0.15);
+}
+
 /* Code Display Section */
 .viz-code-display {
     background: #011627;
@@ -298,6 +327,7 @@
     border-radius: 4px;
     padding: 0.1rem 0;
     transition: all 0.25s;
+    color: var(--text-secondary); /* Ensures clear visibility for inactive code lines */
 }
 .viz-row-num {
     width: 35px;
@@ -327,21 +357,37 @@
 
 /* Explanation Card block */
 .explanation-card {
-    background: rgba(0, 212, 255, 0.05);
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
+    background: #fffdf5 !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+    background-size: 100% 1.6rem !important;
+    line-height: 1.6rem !important;
+    font-family: 'Kalam', 'Caveat', 'Comic Sans MS', cursive, sans-serif !important;
+    font-size: 0.95rem !important;
+    color: #1a2a3a !important;
+    padding: 1.25rem 1.5rem 1.25rem 2rem !important;
     margin: 1.25rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--text-primary);
+    border-left: 4px solid #ff7b7b !important;
+    box-shadow: inset 3px 0 10px rgba(0,0,0,0.02), 0 4px 15px rgba(0,0,0,0.05) !important;
+    border-radius: 12px !important;
     animation: fadeIn 0.3s ease;
+}
+.explanation-card code {
+    background: rgba(255, 235, 59, 0.45) !important;
+    color: #1a2a3a !important;
+    padding: 0 4px !important;
+    border-radius: 3px !important;
+    font-family: 'Kalam', cursive, monospace !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    border: none !important;
 }
 .explanation-title {
     font-weight: 700;
-    color: var(--accent-primary);
+    color: #2c3e50 !important;
     margin-bottom: 0.4rem;
     font-size: 0.85rem;
+    font-family: 'Kalam', cursive, sans-serif !important;
+    text-transform: uppercase;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     display: flex;
@@ -722,6 +768,148 @@
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
 }
+/* Debugger Modal Overlay */
+.viz-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 13, 24, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.viz-modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+.viz-modal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: var(--shadow-hover);
+    overflow: hidden;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.viz-modal-overlay.open .viz-modal-card {
+    transform: translateY(0);
+}
+.viz-modal-header {
+    background: var(--bg-secondary);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+}
+.viz-modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-danger);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.viz-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.viz-modal-close:hover {
+    color: var(--text-primary);
+}
+.viz-modal-body {
+    padding: 1.5rem;
+    max-height: 450px;
+    overflow-y: auto;
+}
+.error-msg-raw {
+    font-family: Fira Code, monospace;
+    font-size: 0.88rem;
+    background: rgba(255, 71, 87, 0.08);
+    border: 1px dashed rgba(255, 71, 87, 0.3);
+    padding: 0.85rem;
+    border-radius: 8px;
+    color: #ff4757;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+.ai-suggestion-box {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+.ai-suggestion-box h4 {
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.ai-explanation-text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+.ai-suggested-code-block {
+    background: #011627 !important;
+    color: #e8f4f8 !important;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.viz-modal-footer {
+    background: var(--bg-secondary);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+.viz-modal-btn {
+    padding: 0.55rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    border: none;
+}
+.viz-modal-btn.btn-close {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+.viz-modal-btn.btn-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+.viz-modal-btn.btn-load {
+    background: var(--accent-primary);
+    color: #000;
+}
+.viz-modal-btn.btn-load:hover {
+    box-shadow: var(--glow-primary);
+    transform: translateY(-1px);
+}
 </style>
 {% endblock %}
 
@@ -802,9 +990,10 @@
                 <input type="range" id="stepRangeSlider" class="playback-slider" min="0" max="0" value="0" oninput="onSliderDrag(this.value)">
                 
                 <select id="speedSelector" class="speed-select" onchange="changePlaySpeed(this.value)">
-                    <option value="1500">Normal (1.5s)</option>
-                    <option value="800">Fast (0.8s)</option>
-                    <option value="2500">Slow (2.5s)</option>
+                    <option value="2000">Normal (2.0s)</option>
+                    <option value="1000">Fast (1.0s)</option>
+                    <option value="3500">Slow (3.5s)</option>
+                    <option value="5000">Very Slow (5.0s)</option>
                 </select>
             </div>
 
@@ -859,6 +1048,28 @@
             </div>
         </div>
     </div>
+    <!-- Debugger & Auto-Correction Modal -->
+    <div id="errorAnalysisModal" class="viz-modal-overlay">
+        <div class="viz-modal-card">
+            <div class="viz-modal-header">
+                <h3>🚨 PyLab AI Debugger</h3>
+                <button class="viz-modal-close" onclick="closeErrorModal()">&times;</button>
+            </div>
+            <div class="viz-modal-body">
+                <div class="error-msg-raw" id="modalErrorMsgRaw"></div>
+                <div class="ai-suggestion-box" id="modalAiSuggestionBox" style="display:none;">
+                    <h4>💡 PyLab Mentor Explanation</h4>
+                    <p class="ai-explanation-text" id="modalAiExplanationText"></p>
+                    <h4>🛠️ Corrected Code Suggestion</h4>
+                    <pre><code class="ai-suggested-code-block" id="modalAiSuggestedCodeBlock"></code></pre>
+                </div>
+            </div>
+            <div class="viz-modal-footer">
+                <button class="viz-modal-btn btn-close" onclick="closeErrorModal()">Keep Editing</button>
+                <button class="viz-modal-btn btn-load" id="modalBtnLoadCorrectedCode" onclick="applySuggestedCode()" style="display:none;">Apply & Visualize Fix ✨</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -868,7 +1079,7 @@ let steps = [];
 let currentStepIdx = -1;
 let autoPlayActive = false;
 let playInterval = null;
-let playIntervalDuration = 1500;
+let playIntervalDuration = 2000;
 let previousLocals = {};
 
 function clearVisualizerEditor() {
@@ -948,7 +1159,7 @@ async function startVisualizerSession() {
         const data = await res.json();
 
         if (data.error) {
-            showToast(data.error, 'error');
+            showErrorModal(data.error, data.suggested_explanation, data.suggested_code);
             return;
         }
 
@@ -975,6 +1186,69 @@ async function startVisualizerSession() {
         sessionBtn.innerHTML = '⚡ Start Visualizing';
     }
 }
+
+let suggestedCodeToApply = null;
+
+function showErrorModal(errorMsg, aiExplanation, suggestedCode) {
+    document.getElementById('modalErrorMsgRaw').textContent = errorMsg;
+    
+    const aiBox = document.getElementById('modalAiSuggestionBox');
+    const expText = document.getElementById('modalAiExplanationText');
+    const codeBlock = document.getElementById('modalAiSuggestedCodeBlock');
+    const loadBtn = document.getElementById('modalBtnLoadCorrectedCode');
+    
+    if (aiExplanation || suggestedCode) {
+        aiBox.style.display = 'block';
+        if (aiExplanation) {
+            expText.textContent = aiExplanation;
+            expText.style.display = 'block';
+        } else {
+            expText.style.display = 'none';
+        }
+        
+        if (suggestedCode) {
+            codeBlock.textContent = suggestedCode;
+            codeBlock.style.display = 'block';
+            loadBtn.style.display = 'block';
+            suggestedCodeToApply = suggestedCode;
+        } else {
+            codeBlock.style.display = 'none';
+            loadBtn.style.display = 'none';
+            suggestedCodeToApply = null;
+        }
+    } else {
+        aiBox.style.display = 'none';
+        loadBtn.style.display = 'none';
+        suggestedCodeToApply = null;
+    }
+    
+    document.getElementById('errorAnalysisModal').classList.add('open');
+}
+
+function closeErrorModal() {
+    document.getElementById('errorAnalysisModal').classList.remove('open');
+}
+
+function applySuggestedCode() {
+    if (suggestedCodeToApply) {
+        document.getElementById('editorCodeArea').value = suggestedCodeToApply;
+        updateGutterLines();
+        closeErrorModal();
+        showToast('Suggested code loaded! Click "Start Visualizing" again.', 'success');
+    }
+}
+
+// Close modal when clicking outside the card
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('errorAnalysisModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeErrorModal();
+            }
+        });
+    }
+});
 
 function renderCodeView(code) {
     const block = document.getElementById('vizCodeBlock');
@@ -1030,8 +1304,15 @@ function goToStep(index) {
         activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Set Explanation
-    document.getElementById('stepExplanationText').textContent = step.explanation || `Executing line ${step.line}...`;
+    const rawExplanation = step.explanation || `Executing line ${step.line}...`;
+    let parsedExplanation = rawExplanation
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code>$1</code>');
+    document.getElementById('stepExplanationText').innerHTML = parsedExplanation;
 
     // Render local variables watch list
     renderVariables(step.locals || {});
@@ -1355,7 +1636,50 @@ function drawStateCanvas(step) {
             card.appendChild(header);
 
             // RENDER BY TYPE:
-            if (obj.type === 'list' || Array.isArray(obj.value)) {
+            // RENDER BY TYPE:
+            if (obj.type === 'tuple' || obj.type === 'set') {
+                // RENDER TUPLE OR SET
+                const container = document.createElement('div');
+                container.style.display = 'inline-flex';
+                container.style.alignItems = 'center';
+                container.style.gap = '0.3rem';
+                container.style.fontFamily = 'Fira Code, monospace';
+                container.style.fontSize = '0.95rem';
+                container.style.color = '#fff';
+
+                const opening = obj.type === 'tuple' ? '(' : '{';
+                const closing = obj.type === 'tuple' ? ')' : '}';
+                
+                const openSpan = document.createElement('span');
+                openSpan.style.color = obj.color.border;
+                openSpan.style.fontWeight = 'bold';
+                openSpan.textContent = opening + ' ';
+                container.appendChild(openSpan);
+
+                const values = (obj.value && obj.value.__value__) ? obj.value.__value__ : [];
+                values.forEach((cellVal, idx) => {
+                    const valSpan = document.createElement('span');
+                    valSpan.style.color = 'var(--text-primary)';
+                    valSpan.textContent = typeof cellVal === 'object' ? JSON.stringify(cellVal) : String(cellVal);
+                    container.appendChild(valSpan);
+
+                    if (idx < values.length - 1) {
+                        const comma = document.createElement('span');
+                        comma.style.color = 'var(--text-muted)';
+                        comma.textContent = ', ';
+                        container.appendChild(comma);
+                    }
+                });
+
+                const closeSpan = document.createElement('span');
+                closeSpan.style.color = obj.color.border;
+                closeSpan.style.fontWeight = 'bold';
+                closeSpan.textContent = ' ' + closing;
+                container.appendChild(closeSpan);
+
+                card.appendChild(container);
+
+            } else if (obj.type === 'list' || Array.isArray(obj.value)) {
                 // RENDER LIST/ARRAY
                 const arrayDiv = document.createElement('div');
                 arrayDiv.className = 'viz-array';
@@ -1403,7 +1727,7 @@ function drawStateCanvas(step) {
                 scrollWrapper.appendChild(arrayDiv);
                 card.appendChild(scrollWrapper);
 
-            } else if (obj.value.hasOwnProperty('value') && (obj.value.hasOwnProperty('next') || obj.value.hasOwnProperty('left'))) {
+            } else if (obj.value.hasOwnProperty('value') && obj.value.hasOwnProperty('next')) {
                 // RENDER LINKED NODE(S)
                 const listContainer = document.createElement('div');
                 listContainer.className = 'viz-linked-list';
@@ -1473,6 +1797,92 @@ function drawStateCanvas(step) {
                 });
 
                 card.appendChild(listContainer);
+
+            } else if (obj.value.hasOwnProperty('left') || obj.value.hasOwnProperty('right')) {
+                // RENDER TREE
+                const treeContainer = document.createElement('div');
+                treeContainer.className = 'viz-tree-container';
+                treeContainer.style.display = 'flex';
+                treeContainer.style.flexDirection = 'column';
+                treeContainer.style.alignItems = 'center';
+                treeContainer.style.padding = '0.5rem';
+                treeContainer.style.width = '100%';
+
+                // Recursive function to build tree DOM node
+                function buildTreeDOM(node) {
+                    if (!node || typeof node !== 'object') return null;
+
+                    const nodeWrapper = document.createElement('div');
+                    nodeWrapper.className = 'viz-tree-node';
+                    nodeWrapper.style.display = 'flex';
+                    nodeWrapper.style.flexDirection = 'column';
+                    nodeWrapper.style.alignItems = 'center';
+                    nodeWrapper.style.position = 'relative';
+
+                    // Node value circle
+                    const circle = document.createElement('div');
+                    circle.className = 'viz-node-circle';
+                    circle.style.borderColor = obj.color.border;
+                    circle.style.boxShadow = `0 0 10px ${obj.color.shadow}`;
+                    circle.style.width = '48px';
+                    circle.style.height = '48px';
+                    circle.style.borderRadius = '50%';
+                    circle.style.background = 'rgba(255, 255, 255, 0.05)';
+                    circle.style.border = '2px solid';
+                    circle.style.display = 'flex';
+                    circle.style.alignItems = 'center';
+                    circle.style.justifyContent = 'center';
+                    circle.style.fontFamily = 'Fira Code, monospace';
+                    circle.style.fontWeight = 'bold';
+                    
+                    const valDisplay = node.hasOwnProperty('value') ? node.value : 
+                                       (node.hasOwnProperty('val') ? node.val : 
+                                       (node.hasOwnProperty('data') ? node.data : '?'));
+                                       
+                    circle.innerHTML = `<span style="font-size: 0.9rem; color: #fff;">${valDisplay}</span>`;
+                    nodeWrapper.appendChild(circle);
+
+                    // Check children
+                    const hasLeft = node.hasOwnProperty('left') && node.left;
+                    const hasRight = node.hasOwnProperty('right') && node.right;
+
+                    if (hasLeft || hasRight) {
+                        const childrenRow = document.createElement('div');
+                        childrenRow.className = 'viz-tree-children';
+                        childrenRow.style.display = 'flex';
+                        childrenRow.style.justifyContent = 'center';
+                        childrenRow.style.gap = '1.5rem';
+                        childrenRow.style.marginTop = '1rem';
+                        childrenRow.style.borderTop = '1px dashed rgba(255,255,255,0.1)';
+                        childrenRow.style.paddingTop = '0.5rem';
+
+                        if (hasLeft) {
+                            const leftDOM = buildTreeDOM(node.left);
+                            if (leftDOM) childrenRow.appendChild(leftDOM);
+                        } else {
+                            const spacer = document.createElement('div');
+                            spacer.style.width = '30px';
+                            childrenRow.appendChild(spacer);
+                        }
+
+                        if (hasRight) {
+                            const rightDOM = buildTreeDOM(node.right);
+                            if (rightDOM) childrenRow.appendChild(rightDOM);
+                        } else {
+                            const spacer = document.createElement('div');
+                            spacer.style.width = '30px';
+                            childrenRow.appendChild(spacer);
+                        }
+
+                        nodeWrapper.appendChild(childrenRow);
+                    }
+
+                    return nodeWrapper;
+                }
+
+                const treeDOM = buildTreeDOM(obj.value);
+                if (treeDOM) treeContainer.appendChild(treeDOM);
+                card.appendChild(treeContainer);
 
             } else {
                 // RENDER DICTIONARY OR CUSTOM OBJECT

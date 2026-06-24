@@ -5,7 +5,7 @@
 <title>AI Mentor - PyLab AI</title>
 <link rel="stylesheet" href="/static/css/themes.css">
 <link rel="stylesheet" href="/static/css/main.css?v=1.0.3">
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Kalam:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
@@ -219,7 +219,20 @@ async function sendQuestion() {
   if (!question) return;
   input.value = '';
   addChatMsg(question, 'user');
+
+  // Add temporary thinking message
+  const area = document.getElementById('chatArea');
+  const thinkingDiv = document.createElement('div');
+  thinkingDiv.className = 'chat-msg ai';
+  thinkingDiv.innerHTML = '🤖 <em>Analyzing your question...</em> <div class="loading-dots"><span></span><span></span><span></span></div>';
+  area.appendChild(thinkingDiv);
+  area.scrollTop = area.scrollHeight;
+
   const res = await callAIRaw({action:'ask', question, topic:''});
+  
+  // Remove thinking message
+  thinkingDiv.remove();
+  
   addChatMsg(res, 'ai');
 }
 
@@ -233,7 +246,19 @@ function addChatMsg(text, type) {
   const area = document.getElementById('chatArea');
   const div = document.createElement('div');
   div.className = 'chat-msg ' + type;
-  div.textContent = text;
+  if (type === 'ai') {
+    let parsedHtml = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/`(.*?)`/g, '<code>$1</code>')
+      .replace(/\n/g, '<br>');
+    div.innerHTML = parsedHtml;
+  } else {
+    div.textContent = text;
+  }
   area.appendChild(div);
   area.scrollTop = area.scrollHeight;
 }
@@ -247,6 +272,21 @@ async function callAI(payload, title) {
   dots.style.display = 'inline-flex';
   area.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);">&#x1F9E0; Analyzing your code...</div>';
 
+  area.classList.remove('notebook-notes-theme', 'notes-theme-explain', 'notes-theme-dryrun', 'notes-theme-error', 'notes-theme-improve', 'notes-theme-optimize', 'notes-theme-hint');
+
+  const actionThemes = {
+    explain: 'notes-theme-explain',
+    dryrun: 'notes-theme-dryrun',
+    error: 'notes-theme-error',
+    improve: 'notes-theme-improve',
+    optimize: 'notes-theme-optimize',
+    hint: 'notes-theme-hint'
+  };
+
+  if (actionThemes[payload.action]) {
+    area.classList.add('notebook-notes-theme', actionThemes[payload.action]);
+  }
+
   try {
     const res = await fetch('/api/ai-mentor', {
       method: 'POST',
@@ -254,8 +294,22 @@ async function callAI(payload, title) {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
-    area.textContent = data.result || 'No response';
-    if (typeof hljs !== 'undefined') {
+    
+    if (data.result) {
+      let parsedHtml = data.result
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>');
+      area.innerHTML = parsedHtml;
+    } else {
+      area.textContent = 'No response';
+    }
+
+    if (typeof hljs !== 'undefined' && !actionThemes[payload.action]) {
       area.querySelectorAll('code').forEach(el => hljs.highlightElement(el));
     }
   } catch(e) {
@@ -280,13 +334,16 @@ async function callAIRaw(payload) {
 }
 
 function showResponsePlaceholder(msg) {
-  document.getElementById('responseArea').innerHTML =
-    `<div style="padding:2rem;text-align:center;color:var(--accent-warning);">${msg}</div>`;
+  const area = document.getElementById('responseArea');
+  area.className = 'response-area';
+  area.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--accent-warning);">${msg}</div>`;
 }
 
 function clearCode() { document.getElementById('codeInput').value = ''; }
 function clearResponse() {
-  document.getElementById('responseArea').innerHTML = '<div class="response-placeholder"><span class="big-icon">&#x1F916;</span><div style="color:var(--text-muted)">Response cleared</div></div>';
+  const area = document.getElementById('responseArea');
+  area.className = 'response-area';
+  area.innerHTML = '<div class="response-placeholder"><span class="big-icon">&#x1F916;</span><div style="color:var(--text-muted)">Response cleared</div></div>';
 }
 function copyResponse() {
   navigator.clipboard.writeText(document.getElementById('responseArea').innerText)
