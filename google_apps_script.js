@@ -1,65 +1,63 @@
 /**
- * Google Apps Script Webhook handler
- * Automatically appends incoming activities from PyLab into the spreadsheet
+ * Google Apps Script Webhook handler (Multi-Table Version)
+ * Automatically creates tabs and logs incoming behavior analytics from PyLab.
  *
- * To Setup:
- * 1. Open a Google Sheet.
+ * To Setup/Update:
+ * 1. Open your Google Sheet.
  * 2. Go to Extensions -> Apps Script.
  * 3. Delete any code in Code.gs and paste this script.
- * 4. Save the project (e.g. name it "PyLab Log Webhook").
- * 5. Click Deploy -> New deployment.
- * 6. Under select type, select "Web app".
- * 7. Set Description to "PyLab Activity Logger".
- * 8. Set Execute as: "Me" (your email).
- * 9. Set Who has access: "Anyone".
- * 10. Click Deploy and copy the Web App URL.
- * 11. Put that URL into the GOOGLE_SCRIPT_URL field in your PyLab .env file.
+ * 4. Save the project.
+ * 5. Click Deploy -> Manage deployments.
+ * 6. Click the pencil icon next to your active deployment and choose Version: "New version".
+ * 7. Click Deploy and copy the Web App URL (if it changes).
+ * 8. Verify the URL is in your PyLab .env file as GOOGLE_SCRIPT_URL.
  */
 
 function doPost(e) {
   try {
     // Parse the payload sent from the Flask backend
     var jsonString = e.postData.contents;
-    var data = JSON.parse(jsonString);
+    var payload = JSON.parse(jsonString);
     
-    // Get the active spreadsheet sheet named "Sheet1" (or the first active sheet)
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    // Support either structured table format or direct backward-compatible format
+    var table = payload.table || "activity_logs";
+    var data = payload.data || payload;
     
-    // If the sheet is completely empty, append header columns first
+    // Get targeted tab/sheet name
+    var sheetName = getSheetNameForTable(table);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(sheetName);
+    
+    // If the tab doesn't exist, create it dynamically
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+    }
+    
+    // If the tab has no rows, add standard formatted headers
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(["User", "Email", "Action", "Timestamp"]);
+      var headers = getHeadersForTable(table);
+      sheet.appendRow(headers);
       
-      // Style headers: bold and background color
-      var headerRange = sheet.getRange(1, 1, 1, 4);
+      // Style headers: bold and slate background with cyan text
+      var headerRange = sheet.getRange(1, 1, 1, headers.length);
       headerRange.setFontWeight("bold");
       headerRange.setBackground("#0f172a");
       headerRange.setFontColor("#00d4ff");
     }
     
-    // Extract variables with support for various key case stylings
-    var user = data.username || data.User || "anonymous";
-    var email = data.email || data.Email || "N/A";
-    var action = data.action || data.Action || "unknown";
-    var timestamp = data.timestamp || data.Timestamp || new Date().toISOString();
-    
-    // Format timestamp representation slightly for readability in the sheet
-    if (timestamp.includes("T")) {
-      // Reformat standard ISO dates for Sheet cell ease
-      timestamp = timestamp.replace("T", " ").split(".")[0];
-    }
-    
-    // Append the row values
-    sheet.appendRow([user, email, action, timestamp]);
+    // Map data values and append the log entry row
+    var rowValues = getRowValues(table, data);
+    sheet.appendRow(rowValues);
     
     // Auto-fit column widths
-    for (var col = 1; col <= 4; col++) {
+    for (var col = 1; col <= rowValues.length; col++) {
       sheet.autoResizeColumn(col);
     }
     
     // Return a successful JSON response
     return ContentService.createTextOutput(JSON.stringify({
       "status": "success",
-      "message": "Activity log appended to Google Sheet successfully!"
+      "message": "Appended record to " + sheetName + " tab successfully!"
     })).setMimeType(ContentService.MimeType.JSON);
     
   } catch(error) {
@@ -71,7 +69,82 @@ function doPost(e) {
   }
 }
 
-// Simple test function to run and authorize sheet permissions in standard execution
+// ── Helper Mapping Functions ──
+
+function getSheetNameForTable(table) {
+  switch (table) {
+    case "activity_logs": return "Activity Logs";
+    case "code_runs": return "Code Runs";
+    case "user_sessions": return "User Sessions";
+    case "ai_hint_usage": return "AI Hint Usage";
+    case "project_progress": return "Project Progress";
+    default: return "Activity Logs";
+  }
+}
+
+function getHeadersForTable(table) {
+  switch (table) {
+    case "activity_logs": return ["User", "Email", "Action", "Timestamp"];
+    case "code_runs": return ["User", "Project Name", "Success", "Ran At"];
+    case "user_sessions": return ["User", "Started At"];
+    case "ai_hint_usage": return ["User", "Project Name", "Hint Used At"];
+    case "project_progress": return ["User", "Project Name", "Completed", "Time Spent (Mins)"];
+    default: return ["User", "Email", "Action", "Timestamp"];
+  }
+}
+
+function getRowValues(table, data) {
+  var user = data.username || data.User || "anonymous";
+  
+  function formatDate(dStr) {
+    if (!dStr) return new Date().toISOString().replace("T", " ").split(".")[0];
+    return dStr.replace("T", " ").split(".")[0];
+  }
+  
+  switch (table) {
+    case "activity_logs":
+      return [
+        user,
+        data.email || "N/A",
+        data.action || "unknown",
+        formatDate(data.timestamp)
+      ];
+    case "code_runs":
+      return [
+        user,
+        data.project_name || "unknown",
+        data.success !== undefined ? String(data.success) : "N/A",
+        formatDate(data.ran_at)
+      ];
+    case "user_sessions":
+      return [
+        user,
+        formatDate(data.started_at)
+      ];
+    case "ai_hint_usage":
+      return [
+        user,
+        data.project_name || "unknown",
+        formatDate(data.hint_used_at)
+      ];
+    case "project_progress":
+      return [
+        user,
+        data.project_name || "unknown",
+        data.completed !== undefined ? String(data.completed) : "N/A",
+        data.time_spent_mins !== undefined ? String(data.time_spent_mins) : "0"
+      ];
+    default:
+      return [
+        user,
+        data.email || "N/A",
+        data.action || "unknown",
+        formatDate(data.timestamp)
+      ];
+  }
+}
+
+// Simple test function to run and authorize spreadsheet permissions
 function testSetup() {
   Logger.log("Apps Script spreadsheet permissions verified!");
 }

@@ -267,6 +267,24 @@ def sync_user_to_sqlite(username, email, password_hash, salt, display_name=None,
         print(f"Failed to sync user to SQLite: {e}")
         return 9999
 
+def log_to_google_sheets(table, data):
+    """Log behavior tracking records asynchronously to Google Sheets Webhook."""
+    if not GOOGLE_SCRIPT_URL or GOOGLE_SCRIPT_URL.startswith("https://script.google.com/macros/s/your-script"):
+        return
+    
+    payload = {
+        "table": table,
+        "data": data
+    }
+    
+    def post_worker():
+        try:
+            requests.post(GOOGLE_SCRIPT_URL, json=payload, timeout=10)
+        except Exception as e:
+            print(f"Failed to log to Google Sheets table {table}: {e}")
+            
+    threading.Thread(target=post_worker, daemon=True).start()
+
 def process_activity_log(payload):
     """Sync activity logs asynchronously: post to Supabase and Apps Script."""
     username = payload.get("username")
@@ -282,7 +300,12 @@ def process_activity_log(payload):
         supabase_log_activity(username, email, action, timestamp)
         
     # 2. Log to Google Sheet
-    send_to_google_sheet_webhook(username, email, action, timestamp)
+    log_to_google_sheets("activity_logs", {
+        "username": username,
+        "email": email,
+        "action": action,
+        "timestamp": timestamp
+    })
     return True
 
 def trigger_webhook_activity(username, email, action):
@@ -296,58 +319,69 @@ def trigger_webhook_activity(username, email, action):
     threading.Thread(target=process_activity_log, args=(payload,), daemon=True).start()
 
 def log_code_run_to_supabase(username, project_name, success):
+    ran_at = datetime.datetime.utcnow().isoformat() + "Z"
+    data = {
+        "username": username,
+        "project_name": project_name,
+        "success": success,
+        "ran_at": ran_at
+    }
+    log_to_google_sheets("code_runs", data)
+    
     if app.config.get('USE_SUPABASE'):
         try:
             url = f"{SUPABASE_URL}/rest/v1/code_runs"
             headers = get_supabase_headers()
-            data = {
-                "username": username,
-                "project_name": project_name,
-                "success": success,
-                "ran_at": datetime.datetime.utcnow().isoformat() + "Z"
-            }
             requests.post(url, headers=headers, json=data, timeout=5)
         except Exception as e:
             print(f"Failed to log code run to Supabase: {e}")
 
 def log_user_session_to_supabase(username):
+    started_at = datetime.datetime.utcnow().isoformat() + "Z"
+    data = {
+        "username": username,
+        "started_at": started_at
+    }
+    log_to_google_sheets("user_sessions", data)
+    
     if app.config.get('USE_SUPABASE'):
         try:
             url = f"{SUPABASE_URL}/rest/v1/user_sessions"
             headers = get_supabase_headers()
-            data = {
-                "username": username,
-                "started_at": datetime.datetime.utcnow().isoformat() + "Z"
-            }
             requests.post(url, headers=headers, json=data, timeout=5)
         except Exception as e:
             print(f"Failed to log user session to Supabase: {e}")
 
 def log_ai_hint_usage_to_supabase(username, project_name):
+    hint_used_at = datetime.datetime.utcnow().isoformat() + "Z"
+    data = {
+        "username": username,
+        "project_name": project_name,
+        "hint_used_at": hint_used_at
+    }
+    log_to_google_sheets("ai_hint_usage", data)
+    
     if app.config.get('USE_SUPABASE'):
         try:
             url = f"{SUPABASE_URL}/rest/v1/ai_hint_usage"
             headers = get_supabase_headers()
-            data = {
-                "username": username,
-                "project_name": project_name,
-                "hint_used_at": datetime.datetime.utcnow().isoformat() + "Z"
-            }
             requests.post(url, headers=headers, json=data, timeout=5)
         except Exception as e:
             print(f"Failed to log AI hint usage to Supabase: {e}")
 
 def log_project_progress_to_supabase(username, project_name, completed, time_spent_mins):
+    data = {
+        "username": username,
+        "project_name": project_name,
+        "completed": completed,
+        "time_spent_mins": time_spent_mins
+    }
+    log_to_google_sheets("project_progress", data)
+    
     if app.config.get('USE_SUPABASE'):
         try:
             url = f"{SUPABASE_URL}/rest/v1/project_progress"
             headers = get_supabase_headers()
-            data = {
-                "username": username,
-                "project_name": project_name,
-                "completed": completed,
-                "time_spent_mins": time_spent_mins
-            }
             requests.post(url, headers=headers, json=data, timeout=5)
         except Exception as e:
             print(f"Failed to log project progress to Supabase: {e}")
