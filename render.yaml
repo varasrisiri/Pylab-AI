@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: pylab-ai-tracking
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: USE_SUPABASE
+        value: "true"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: GOOGLE_SCRIPT_URL
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
